@@ -1,0 +1,52 @@
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/crosstalk.css">
+  <script src='/_ah/channel/jsapi'></script>
+
+  <script type="text/javascript" src="/js/jquery-1.4.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.color.js"></script>
+  <script type="text/javascript" src="/js/json2.js"></script>
+  <script type="text/javascript" src="/js/crosstalk.js"></script>
+</head>
+<body>
+<div id="comet-token" class="invisible">${cometToken}</div>
+<div id="room-id" class="invisible">${room.id}</div>
+<div id="header">
+  <h1>cross<span>talk</span></h1>
+  <div class="mid">
+    <h2>${room.name}</h2>
+  </div>
+</div>
+<div id="footer">
+  <div id="youlabel">You</div>
+  <textarea id="talkbox">
+  </textarea>
+  <input id="post-message" class="button" type="button" value="Post message">
+</div>
+<div id="center">
+  <div id="right">
+    <div class="weak-title">
+      Current contributors
+    </div>
+    <div class="current-contributor-avatars">
+      ${occupants}
+    </div>
+    <div class="weak-title">
+      + 1 lurkers
+    </div>
+    <div class="strong-title">
+      Also pulling tweets from:
+    </div>
+    <div id="hashtags" class="weak-title">
+      <div class="hashtag">#webstock</div>
+      <div class="hashtag">#dataviz</div>
+      <div><input id="add-hashtag" class="button" type="button" value="Add a term"></div>
+    </div>
+  </div>
+  <div id="viewport">
+    <div id="stream">
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+* {
+  margin: 0;
+}
+
+.invisible {
+  display: none;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: small;
+
+  /*background-color: #eee;*/
+  /*background-color: #c8d6ff;*/
+  /*background: -webkit-gradient(*/
+    /*linear,*/
+    /*left top,*/
+    /*left bottom,*/
+    /*color-stop(0.0, #c6c6c6),*/
+    /*color-stop(0.5, #fefefe),*/
+    /*color-stop(1.0, #c6c6c6)*/
+  /*);*/
+}
+
+h1 {
+  float: left;
+  font-family: "ChunkFive", monospace;
+  font-size: 18px;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+  padding: 10px 20px;
+  color: #fff;
+}
+
+h1 span {
+  color: #fff;
+}
+
+#header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 80px;
+
+  background: #4c5258;
+}
+
+#header h2 {
+  position: absolute;
+  top: 30px;
+  left: 120px;
+  color: white;
+  font-weight: bold;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 130px;
+
+  background: #4c5258;
+}
+
+#center {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 130px;
+
+  -webkit-box-shadow: 0 0 8px #111;
+  box-shadow: 0 0 8px #111;
+
+  background: #ced2d9;
+}
+
+#viewport {
+  position: absolute;
+  top: 0;
+  left: 120px;
+  right: 400px;
+  bottom: 0;
+
+  -webkit-box-shadow: 0 0 6px #666;
+  box-shadow: 0 0 6px #666;
+
+  overflow-y: auto;
+  background: white;
+}
+
+#stream {
+  position: absolute;
+  /*bottom: 0;*/
+  width: 100%;
+}
+
+#viewport .message {
+}
+
+#viewport .message .avatar {
+  display: block;
+  float: left;
+  padding: 4px 8px 0 8px;
+}
+#viewport .message .time {
+  float: right;
+  color: #aaa;
+}
+
+#viewport .message .author {
+  float: left;
+  margin-top: 12px;
+  margin-left: -98px;
+  color: #999;
+}
+
+#viewport .message .content {
+  padding: 8px 0;
+  border-top: 1px solid #ccc;
+  margin: 0 20px 0 46px;
+}
+
+#youlabel {
+  position: absolute;
+  top: 26px;
+  left: 88px;
+  color: white;
+  font-weight: bold;
+}
+
+#talkbox {
+  position: absolute;
+  left: 120px;
+  right: 400px;
+  top: 8px;
+  bottom: 22px;
+
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+
+  border: 2px solid #fff;
+  background: #ced2d9;
+}
+
+#post-message {
+  position: absolute;
+  right: 408px;
+  bottom: 30px;
+}
+
+.button {
+  background:#b9bdc3;
+  color: #999;
+  border: none;
+  padding: 3px 4px;
+
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+#right {
+  position: absolute;
+  right: 12px;
+  padding: 8px;
+
+  color: #777;
+}
+
+#right div {
+  text-align: right;
+}
+
+#right .strong-title {
+  padding-top: 12px;
+  font-weight: bold;
+}
