@@ -134,7 +134,7 @@ h1 span {
   font-weight: bold;
 }
 
-#talkbox {
+.talkbox {
   position: absolute;
   left: 120px;
   right: 400px;
@@ -146,6 +146,12 @@ h1 span {
 
   border: 2px solid #fff;
   background: #ced2d9;
+}
+
+.talkbox .signin {
+  position: absolute;
+  top: 40px;
+  left: 40%;
 }
 
 #post-message {
@@ -174,6 +180,10 @@ h1 span {
 
 #right div {
   text-align: right;
+}
+
+#right .weak-title {
+  padding: 4px 0;
 }
 
 #right .strong-title {

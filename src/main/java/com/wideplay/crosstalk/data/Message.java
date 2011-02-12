@@ -1,5 +1,7 @@
 package com.wideplay.crosstalk.data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -7,7 +9,9 @@ import java.util.Date;
  *
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
+@Entity
 public class Message {
+  @Id
   private Long id;
   private User author;
   private Room room; // belongs to.

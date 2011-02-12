@@ -65,13 +65,18 @@ crosstalk.post_ = function() {
   talkbox.val('');
   var token = $('#comet-token').html();
 
+  // escape html:
+  text = $('<div/>').text(text).html();
+
   crosstalk.insertMessage_({
-    author: { username: 'michaelneale', avatar: ''}, // TODO make this a singleton
+    // TODO make this a singleton
+    author: { username: $('#current-user').html(), avatar: $('#current-user-avatar').html()},
     text: text
   });
 
   // Send to the server.
-  crosstalk.send("message", { text: text, token: token }, crosstalk.noop);
+  crosstalk.send("message", { room: $('#room-id').text(), text: text, token: token },
+      crosstalk.noop);
 };
 
 /**
@@ -80,7 +85,7 @@ crosstalk.post_ = function() {
 crosstalk.insertMessage_ = function(post) {
   $('#stream').append('<div class="message">'
     + '<div class="author">' + post.author.username + '</div>'
-    + '<img src="images/swish.png" class="avatar"/>'
+    + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
     + '  <div class="time">' + new Date() + '</div>'
     + post.text
@@ -111,6 +116,5 @@ crosstalk.receiveMessage_ = function(data) {
 };
 
 crosstalk.joinRoom_ = function(data) {
-  // TODO render avatar.
-  $('.current-contributor-avatars').append(data.joiner.username);
+  $('.current-contributor-avatars').append('<img src="' + data.joiner.avatar + '"/>');
 };

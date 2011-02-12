@@ -2,15 +2,56 @@ package com.wideplay.crosstalk.data;
 
 import com.google.appengine.api.users.UserService;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
+@Entity
 public class User {
+  @Id
   private String username; // twitter username (unique id), hmm...
   private String displayName;
   private Date createdOn;
+  private String avatar; // URL
+
+  private String twitterAccessToken;
+  private String twitterTokenSecret;
+
+  // Set up the anonymous user (special case)
+  public static transient final User ANONYMOUS = new User();
+  static {
+    ANONYMOUS.setUsername("anonymous");
+    ANONYMOUS.setAvatar("");
+    ANONYMOUS.setCreatedOn(new Date(0));
+    ANONYMOUS.setDisplayName("Lurker");
+  }
+
+  public String getTwitterAccessToken() {
+    return twitterAccessToken;
+  }
+
+  public void setTwitterAccessToken(String twitterAccessToken) {
+    this.twitterAccessToken = twitterAccessToken;
+  }
+
+  public String getTwitterTokenSecret() {
+    return twitterTokenSecret;
+  }
+
+  public void setTwitterTokenSecret(String twitterTokenSecret) {
+    this.twitterTokenSecret = twitterTokenSecret;
+  }
+
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
 
   public String getUsername() {
     return username;
@@ -58,5 +99,10 @@ public class User {
     user.setUsername(userService.getCurrentUser().getNickname());
     user.setDisplayName(user.getUsername());
     return user;
+  }
+
+  @Override
+  public String toString() {
+    return "<" + username + ">";
   }
 }

@@ -8,6 +8,11 @@ package com.wideplay.crosstalk.web;
 public class ClientRequest {
   private String text;
   private String token;
+  private Long room;
+
+  public Long getRoom() {
+    return room;
+  }
 
   public String getToken() {
     return token;

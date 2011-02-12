@@ -6,7 +6,7 @@
   <artifactId>crosstalk</artifactId>
   <packaging>war</packaging>
   <version>0.1</version>
-  <name>writewire</name>
+  <name>crosstalk</name>
   <url>http://twitter.com/dhanji</url>
 
   <repositories>

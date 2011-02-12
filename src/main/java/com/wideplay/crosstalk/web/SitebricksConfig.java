@@ -6,6 +6,8 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.google.sitebricks.SitebricksModule;
 import com.wideplay.crosstalk.CrosstalkModule;
+import com.wideplay.crosstalk.web.auth.AuthFilter;
+import com.wideplay.crosstalk.web.auth.AuthModule;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -18,6 +20,7 @@ public class SitebricksConfig extends GuiceServletContextListener {
       @Override
       protected void configureServlets() {
         filter("/r/*").through(AuthFilter.class);
+        filter("/oauth/twitter").through(AuthFilter.class); // HACK!
       }
 
     }, new SitebricksModule() {
@@ -27,6 +30,7 @@ public class SitebricksConfig extends GuiceServletContextListener {
         scan(SitebricksConfig.class.getPackage());
 
         install(new CrosstalkModule());
+        install(new AuthModule());
       }
 
     });

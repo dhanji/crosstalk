@@ -9,19 +9,35 @@
   <script type="text/javascript" src="/js/crosstalk.js"></script>
 </head>
 <body>
-<div id="comet-token" class="invisible">${cometToken}</div>
-<div id="room-id" class="invisible">${room.id}</div>
+<div class="invisible">
+  <div id="comet-token" class="invisible">${cometToken}</div>
+  <div id="room-id" class="invisible">${room.id}</div>
+  <div id="current-user" class="invisible">${user.username}</div>
+  <div id="current-user-avatar">${user.avatar}</div>
+</div>
 <div id="header">
   <h1>cross<span>talk</span></h1>
+
   <div class="mid">
     <h2>${room.name}</h2>
   </div>
 </div>
 <div id="footer">
   <div id="youlabel">You</div>
-  <textarea id="talkbox">
-  </textarea>
-  <input id="post-message" class="button" type="button" value="Post message">
+
+  @ShowIf(user.username != 'anonymous')
+  <div>
+    <textarea id="talkbox" class="talkbox">
+    </textarea>
+    <input id="post-message" class="button" type="button" value="Post message">
+  </div>
+
+  @ShowIf(user.username == 'anonymous')
+  <div class="talkbox">
+    <div class="signin">
+      <a href="/login">Sign in</a> with twitter.
+    </div>
+  </div>
 </div>
 <div id="center">
   <div id="right">
@@ -29,7 +45,8 @@
       Current contributors
     </div>
     <div class="current-contributor-avatars">
-      ${occupants}
+      @Repeat(items=occupants, var="occupant")
+      <img src="${occupant.avatar}" alt="${occupant.username}" title="${occupant.username}"/>
     </div>
     <div class="weak-title">
       + 1 lurkers
@@ -45,6 +62,16 @@
   </div>
   <div id="viewport">
     <div id="stream">
+
+      @Repeat(items=messages, var="post")
+      <div class="message">
+        <div class="author">${post.author.displayName}</div>
+        <img src="/images/swish.png" class="avatar"/>
+        <div class="content">'
+          <div class="time">${post.postedOn}</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

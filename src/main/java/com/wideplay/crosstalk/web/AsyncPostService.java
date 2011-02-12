@@ -2,7 +2,6 @@ package com.wideplay.crosstalk.web;
 
 import com.google.appengine.api.channel.ChannelMessage;
 import com.google.appengine.api.channel.ChannelService;
-import com.google.appengine.api.users.UserService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -15,10 +14,13 @@ import com.google.sitebricks.http.Post;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
+import com.wideplay.crosstalk.data.store.RoomStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 /**
 * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -33,7 +35,10 @@ public class AsyncPostService {
   ChannelService channel;
 
   @Inject
-  UserService userService;
+  private CurrentUser currentUser;
+
+  @Inject
+  private RoomStore roomStore;
 
   @Inject
   Gson gson;
@@ -50,10 +55,13 @@ public class AsyncPostService {
   @At("/message") @Post
   Reply<?> receiveMessage(ClientRequest request) {
     Message message = new Message();
+    message.setId(UUID.randomUUID().getMostSignificantBits());
     message.setText(request.getText());
+    message.setRoom(roomStore.byId(request.getRoom()));
+    message.setPostedOn(new Date());
 
     // Temporary hack while we dont have proper user db.
-    User author = User.named(userService);
+    User author = currentUser.getUser();
     message.setAuthor(author);
 
     log.info("Received post {}", message);
@@ -80,7 +88,7 @@ public class AsyncPostService {
 
   @At("/join") @Post
   Reply<?> joinRoom() {
-    User joiner = User.named(userService);
+    User joiner = currentUser.getUser();
     log.info("Received join notification: {}", joiner.getUsername());
     String json = gson.toJson(ImmutableMap.of(
         "rpc", "join",
