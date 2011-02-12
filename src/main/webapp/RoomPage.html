@@ -1,0 +1,81 @@
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/crosstalk.css">
+  <link type="text/css" rel="stylesheet" href="/fileuploader.css">
+  <script src='/_ah/channel/jsapi'></script>
+
+  <script type="text/javascript" src="/js/jquery-1.4.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.embedly.min.js"></script>
+  <script type="text/javascript" src="/js/json2.js"></script>
+  <script type="text/javascript" src="/js/fileuploader.js"></script>
+  <script type="text/javascript" src="/js/crosstalk.js"></script>
+</head>
+<body>
+<div class="invisible">
+  <div id="comet-token" class="invisible">${cometToken}</div>
+  <div id="room-id" class="invisible">${room.id}</div>
+  <div id="current-user" class="invisible">${user.username}</div>
+  <div id="current-user-avatar">${user.avatar}</div>
+</div>
+<div id="header">
+  <h1>cross<span>talk</span></h1>
+
+  <div class="mid">
+    <h2>${room.name}</h2>
+  </div>
+</div>
+<div id="footer">
+  <div id="youlabel">You</div>
+  <div id="dropzone"></div>
+
+  @ShowIf(user.username != 'anonymous')
+  <div>
+    <textarea id="talkbox" class="talkbox"></textarea>
+    <input id="post-message" class="button" type="button" value="Post message">
+  </div>
+
+  @ShowIf(user.username == 'anonymous')
+  <div class="talkbox">
+    <div class="signin">
+      <a href="/login">Sign in</a> with twitter.
+    </div>
+  </div>
+</div>
+<div id="center">
+  <div id="right">
+    <div class="weak-title">
+      Current contributors
+    </div>
+    <div class="current-contributor-avatars">
+      @Repeat(items=occupants, var="occupant")
+      <img class="avatar" src="${occupant.avatar}" alt="${occupant.username}" title="${occupant.username}"/>
+    </div>
+    <div class="weak-title">
+      + 1 lurkers
+    </div>
+    <div class="strong-title">
+      Also pulling tweets from:
+    </div>
+    <div id="hashtags" class="weak-title">
+      <div class="hashtag">#webstock</div>
+      <div class="hashtag">#dataviz</div>
+      <div><input id="add-hashtag" class="button" type="button" value="Add a term"></div>
+    </div>
+  </div>
+  <div id="viewport">
+    <div id="stream">
+
+      @Repeat(items=messages, var="post")
+      <div class="message">
+        <div class="author">${post.author.username}</div>
+        <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
+        <div class="content">'
+          <div class="time">${post.postedOn}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

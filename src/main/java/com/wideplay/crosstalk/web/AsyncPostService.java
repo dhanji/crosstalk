@@ -54,10 +54,12 @@ public class AsyncPostService {
 
   @At("/message") @Post
   Reply<?> receiveMessage(ClientRequest request) {
+    Room room = roomStore.byId(request.getRoom());
+
     Message message = new Message();
     message.setId(UUID.randomUUID().getMostSignificantBits());
     message.setText(request.getText());
-    message.setRoom(roomStore.byId(request.getRoom()));
+    message.setRoom(room);
     message.setPostedOn(new Date());
 
     // Temporary hack while we dont have proper user db.
@@ -71,30 +73,32 @@ public class AsyncPostService {
         "rpc", "receive",
         "post", message
     ));
-    broadcast(author, json);
+    broadcast(room, author, json);
 
     return Reply.saying().ok();
   }
 
-  private void broadcast(User author, String json) {
-    for (User user : Room.DEFAULT.getOccupancy().getUsers()) {
-      if (user.equals(author))
-        continue;
-
-      log.info("Sending packet to {} [{}]\n", user.getUsername(), json);
-      channel.sendMessage(new ChannelMessage(user.getUsername(), json));
-    }
-  }
-
   @At("/join") @Post
-  Reply<?> joinRoom() {
+  Reply<?> joinRoom(ClientRequest request) {
+    Room room = roomStore.byId(request.getRoom());
+
     User joiner = currentUser.getUser();
     log.info("Received join notification: {}", joiner.getUsername());
     String json = gson.toJson(ImmutableMap.of(
         "rpc", "join",
         "joiner", joiner
     ));
-    broadcast(joiner, json);
+    broadcast(room, joiner, json);
     return Reply.saying().ok();
+  }
+
+  private void broadcast(Room room, User author, String json) {
+    for (User user : room.getOccupancy().getUsers()) {
+      if (user.equals(author))
+        continue;
+
+      log.info("Sending packet to {} [{}]\n", user.getUsername(), json);
+      channel.sendMessage(new ChannelMessage(user.getUsername(), json));
+    }
   }
 }

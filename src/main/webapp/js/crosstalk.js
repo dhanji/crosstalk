@@ -81,7 +81,7 @@ crosstalk.init_ = function () {
   };
 
   // Join room!
-  crosstalk.send("join", { text: $('#room-id').text() }, crosstalk.noop);
+  crosstalk.send("join", { room: $('#room-id').text() }, crosstalk.noop);
 };
 
 /**
@@ -96,8 +96,10 @@ crosstalk.post_ = function() {
   // escape html:
   text = $('<div/>').text(text).html();
 
+  var now = new Date();
   crosstalk.insertMessage_({
     author: crosstalk.currentUserInfo,
+    postedOn: now.getHours() + ':' + now.getMinutes(),
     text: text
   });
 
@@ -115,7 +117,7 @@ crosstalk.insertMessage_ = function(post) {
     + '<div class="author">' + post.author.username + '</div>'
     + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
-    + '  <div class="time">' + new Date() + '</div>'
+    + '  <div class="time">' + post.postedOn + '</div>'
     + linkset.text
     + '<div class="images"></div><div class="oembed"></div></div></div>');
 

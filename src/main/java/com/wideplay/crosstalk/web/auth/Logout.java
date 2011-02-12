@@ -37,6 +37,6 @@ public class Logout {
       userStore.get().logout(cookie.getValue());
     }
 
-    return Reply.saying().redirect("/r/chat");
+    return Reply.saying().redirect("/r/chat/1");
   }
 }

@@ -66,6 +66,6 @@ public class TwitterOAuthCallback {
 
     userStore.get().loginAndMaybeCreate(sessionId, user);
 
-    return Reply.saying().redirect("/r/chat") ;
+    return Reply.saying().redirect("/r/chat/1") ;
   }
 }

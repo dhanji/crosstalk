@@ -46,7 +46,7 @@ h1 span {
   left: 0;
   height: 80px;
 
-  background: #4c5258;
+  background-image: url(/images/body.gif);
 }
 
 #header h2 {
@@ -64,7 +64,8 @@ h1 span {
   left: 0;
   height: 130px;
 
-  background: #4c5258;
+  background-image: url(/images/body.gif);
+  /*background: #4c5258;*/
 }
 
 #center {

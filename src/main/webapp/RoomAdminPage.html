@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Administer Rooms</title>
+</head>
+<body>
+
+<div>
+  <div>New room:</div>
+  <form action="/r/room_admin" method="POST">
+    <div>Name: <input type="text" name="name"/>
+      <input type="submit" value="create"/>
+    </div>
+  </form>
+</div>
+
+<div>
+  @Repeat(items=rooms, var="room")
+  <div>${room.name} (${room.occupancy.users.size()} current)
+    <form action="/r/room_admin" method="POST">
+      <input type="__sitebricks__action" value="delete"/>
+      <input type="room-id" value="${room.id}"/>
+      <input type="submit" value="delete"/> (leaves orphaned posts)
+    </form>
+  </div>
+</div>
+</body>
+</html>

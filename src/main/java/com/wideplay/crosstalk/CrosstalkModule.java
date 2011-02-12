@@ -5,8 +5,10 @@ import com.google.appengine.api.channel.ChannelServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.servlet.RequestScoped;
 import com.google.sitebricks.headless.Request;
 import com.googlecode.objectify.Objectify;
@@ -19,7 +21,12 @@ import com.wideplay.crosstalk.web.ClientRequest;
 public class CrosstalkModule extends AbstractModule {
   @Override
   protected void configure() {
-    bind(Gson.class);
+  }
+
+  @Provides
+  @Singleton
+  Gson provideGson() {
+    return new GsonBuilder().setDateFormat("HH:mm a").create();
   }
 
   @Provides

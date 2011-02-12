@@ -1,81 +1,149 @@
-<html>
-<head>
-  <link type="text/css" rel="stylesheet" href="/crosstalk.css">
-  <link type="text/css" rel="stylesheet" href="/fileuploader.css">
-  <script src='/_ah/channel/jsapi'></script>
+<!DOCTYPE html>
 
-  <script type="text/javascript" src="/js/jquery-1.4.1.min.js"></script>
-  <script type="text/javascript" src="/js/jquery.embedly.min.js"></script>
-  <script type="text/javascript" src="/js/json2.js"></script>
-  <script type="text/javascript" src="/js/fileuploader.js"></script>
-  <script type="text/javascript" src="/js/crosstalk.js"></script>
-</head>
-<body>
-<div class="invisible">
-  <div id="comet-token" class="invisible">${cometToken}</div>
-  <div id="room-id" class="invisible">${room.id}</div>
-  <div id="current-user" class="invisible">${user.username}</div>
-  <div id="current-user-avatar">${user.avatar}</div>
-</div>
-<div id="header">
-  <h1>cross<span>talk</span></h1>
+<html lang="en">
+	<head>
+		<title>CrossTalk</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
 
-  <div class="mid">
-    <h2>${room.name}</h2>
-  </div>
-</div>
-<div id="footer">
-  <div id="youlabel">You</div>
-  <div id="dropzone"></div>
-
-  @ShowIf(user.username != 'anonymous')
-  <div>
-    <textarea id="talkbox" class="talkbox"></textarea>
-    <input id="post-message" class="button" type="button" value="Post message">
-  </div>
-
-  @ShowIf(user.username == 'anonymous')
-  <div class="talkbox">
-    <div class="signin">
-      <a href="/login">Sign in</a> with twitter.
-    </div>
-  </div>
-</div>
-<div id="center">
-  <div id="right">
-    <div class="weak-title">
-      Current contributors
-    </div>
-    <div class="current-contributor-avatars">
-      @Repeat(items=occupants, var="occupant")
-      <img src="${occupant.avatar}" alt="${occupant.username}" title="${occupant.username}"/>
-    </div>
-    <div class="weak-title">
-      + 1 lurkers
-    </div>
-    <div class="strong-title">
-      Also pulling tweets from:
-    </div>
-    <div id="hashtags" class="weak-title">
-      <div class="hashtag">#webstock</div>
-      <div class="hashtag">#dataviz</div>
-      <div><input id="add-hashtag" class="button" type="button" value="Add a term"></div>
-    </div>
-  </div>
-  <div id="viewport">
-    <div id="stream">
-
-      @Repeat(items=messages, var="post")
-      <div class="message">
-        <div class="author">${post.author.username}</div>
-        <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
-        <div class="content">'
-          <div class="time">${post.postedOn}</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-</body>
+		<link rel="stylesheet" href="/fonts/fonts.css" />
+		<link rel="stylesheet" href="/main.css" />
+		
+		<script src="/js/jquery-1.5.min.js"></script>
+		<script src="/js/main.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1>CrossTalk</h1>
+			<h2>Real time chat for events</h2>
+			<ol id="roomStatus">
+				<li><a href="#">2 current rooms</a></li>
+				<li><a href="#">10 future rooms</a></li>
+				<li><a href="#">17 archived rooms</a></li>
+			</ol>
+			<p id="corporateLogo"><a href="#">Webstock</a></p>
+		</header>
+		<section id="content">
+			<ul id="roomList">
+				<li class="rank2 active">
+					<a href="#">
+						<h1>That's all well and good but what about the fish?</h1>
+						<h2>Michael Koziarski</h2>
+						<p class="time">9:00&ndash;10:00, Feb 17</p>
+						<section class="contributors">
+							<h2>5 Contributors</h2>
+							<ul>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+							</ul>
+							<p class="lurkers">+8 lurkers</p>
+						</section>
+						<section class="topics">
+							<h2>People are talking about</h2>
+							<ol>
+								<li class="rank1">Photoshop</li>
+								<li class="rank2">HTML5</li>
+								<li class="rank3">Bananas</li>
+								<li class="rank3">Workflow</li>
+							</ol>
+						</section>
+					</a>
+				</li>
+				<li class="rank1 active">
+					<a href="#">
+						<h1>The Digital Campfire</h1>
+						<h2>Frank Chimero</h2>
+						<p class="time">9:00&ndash;10:00, Feb 17</p>
+						<section class="contributors">
+							<h2>14 Contributors</h2>
+							<ul>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+							</ul>
+							<p class="lurkers">+13 lurkers</p>
+						</section>
+						<section class="topics">
+							<h2>People are talking about</h2>
+							<ol>
+								<li class="rank1">Photoshop</li>
+								<li class="rank2">HTML5</li>
+								<li class="rank3">Bananas</li>
+								<li class="rank3">Workflow</li>
+							</ol>
+						</section>
+					</a>
+				</li>
+				<li class="rank2 inactive">
+					<a href="#">
+						<h1>That's all well and good but what about the fish?</h1>
+						<h2>Michael Koziarski</h2>
+						<p class="time">9:00&ndash;10:00, Feb 17</p>
+						<section class="contributors">
+							<h2>5 Contributors</h2>
+							<ul>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+							</ul>
+							<p class="lurkers">+8 lurkers</p>
+						</section>
+						<section class="topics">
+							<h2>People are talking about</h2>
+							<ol>
+								<li class="rank1">Photoshop</li>
+								<li class="rank2">HTML5</li>
+								<li class="rank3">Bananas</li>
+								<li class="rank3">Workflow</li>
+							</ol>
+						</section>
+					</a>
+				</li>
+				<li class="rank3 inactive">
+					<a href="#">
+						<h1>That's all well and good but what about the fish?</h1>
+						<h2>Michael Koziarski</h2>
+						<p class="time">9:00&ndash;10:00, Feb 17</p>
+						<section class="contributors">
+							<h2>5 Contributors</h2>
+							<ul>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+								<li><img src="images/twitter1.jpg" width="24" height="24" alt="Twitter Person" /></li>
+							</ul>
+							<p class="lurkers">+8 lurkers</p>
+						</section>
+						<section class="topics">
+							<h2>People are talking about</h2>
+							<ol>
+								<li class="rank1">Photoshop</li>
+								<li class="rank2">HTML5</li>
+								<li class="rank3">Bananas</li>
+								<li class="rank3">Workflow</li>
+							</ol>
+						</section>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<a id="allRoomsLink" href="#">Show all rooms for this event (past &amp; future) &rarr;</a>
+	</body>
 </html>
