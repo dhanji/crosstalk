@@ -170,6 +170,13 @@ h1 span {
   border-radius: 4px;
 }
 
+.qq-upload-list {
+  list-style-type: none;
+  position: absolute;
+  color: white;
+  right: -60%;
+}
+
 #right {
   position: absolute;
   right: 12px;

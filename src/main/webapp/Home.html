@@ -1,11 +1,13 @@
 <html>
 <head>
   <link type="text/css" rel="stylesheet" href="/crosstalk.css">
+  <link type="text/css" rel="stylesheet" href="/fileuploader.css">
   <script src='/_ah/channel/jsapi'></script>
 
   <script type="text/javascript" src="/js/jquery-1.4.1.min.js"></script>
-  <script type="text/javascript" src="/js/jquery.color.js"></script>
+  <script type="text/javascript" src="/js/jquery.embedly.min.js"></script>
   <script type="text/javascript" src="/js/json2.js"></script>
+  <script type="text/javascript" src="/js/fileuploader.js"></script>
   <script type="text/javascript" src="/js/crosstalk.js"></script>
 </head>
 <body>
@@ -24,11 +26,11 @@
 </div>
 <div id="footer">
   <div id="youlabel">You</div>
+  <div id="dropzone"></div>
 
   @ShowIf(user.username != 'anonymous')
   <div>
-    <textarea id="talkbox" class="talkbox">
-    </textarea>
+    <textarea id="talkbox" class="talkbox"></textarea>
     <input id="post-message" class="button" type="button" value="Post message">
   </div>
 
@@ -65,8 +67,8 @@
 
       @Repeat(items=messages, var="post")
       <div class="message">
-        <div class="author">${post.author.displayName}</div>
-        <img src="/images/swish.png" class="avatar"/>
+        <div class="author">${post.author.username}</div>
+        <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
         <div class="content">'
           <div class="time">${post.postedOn}</div>
         </div>
