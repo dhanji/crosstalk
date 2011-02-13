@@ -1,5 +1,8 @@
 package com.wideplay.crosstalk.data;
 
+import com.googlecode.objectify.Key;
+
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
@@ -13,8 +16,10 @@ import java.util.Date;
 public class Message {
   @Id
   private Long id;
+  @Embedded
   private User author;
-  private Room room; // belongs to.
+
+  private Key<Room> room; // belongs to.
 
   private Date postedOn;
   private String text;
@@ -37,12 +42,8 @@ public class Message {
     this.author = author;
   }
 
-  public Room getRoom() {
-    return room;
-  }
-
   public void setRoom(Room room) {
-    this.room = room;
+    this.room = new Key<Room>(Room.class, room.getId());
   }
 
   public Date getPostedOn() {

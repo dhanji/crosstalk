@@ -12,7 +12,7 @@ body {
 	width: 100%;
 	overflow: hidden;
 	background-color: #4D5158;
-	background-image: url(../images/body.gif);
+	background-image: url(/images/body.gif);
 	color: #ffffff;
 	line-height: 1.4;
 	font-family: Arial, Helvetica, sans-serif;
@@ -65,7 +65,7 @@ header > h1 {
 	float: left;
 	width: 255px;
 	height: 53px;
-	background-image: url(../images/logo.png);
+	background-image: url(/images/logo.png);
 	background-repeat: no-repeat;
 	text-indent: -9999px;
 }
@@ -88,17 +88,17 @@ header > h2 {
 #roomStatus li {
 	display: inline-block;
 	margin-right: 2em;
-	background-image: url(../images/room_status_orange.png);
+	background-image: url(/images/room_status_orange.png);
 	background-repeat: no-repeat;
 	background-position: 0 50%;
 }
 
 #roomStatus li:first-child {
-	background-image: url(../images/room_status_green.png);
+	background-image: url(/images/room_status_green.png);
 }
 
 #roomStatus li:last-child {
-	background-image: url(../images/room_status_grey.png);
+	background-image: url(/images/room_status_grey.png);
 }
 
 #roomStatus a {
@@ -126,7 +126,7 @@ header > h2 {
 	top: 7px;
 	width: 188px;
 	height: 43px;
-	background-image: url(../images/webstock.gif);
+	background-image: url(/images/webstock.gif);
 	background-repeat: no-repeat;
 	text-indent: -9999px;
 }
@@ -211,7 +211,7 @@ header > h2 {
 	top: 6px;
 	width: 0.45em;
 	height: 0.45em;
-	background-image: url(../images/room_status_grey_lrg.png);
+	background-image: url(/images/room_status_grey_lrg.png);
 	background-repeat: no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -219,11 +219,11 @@ header > h2 {
 }
 
 #roomList .active h1:before {
-	background-image: url(../images/room_status_green_lrg.png);
+	background-image: url(/images/room_status_green_lrg.png);
 }
 
 #roomList .future h1:before {
-	background-image: url(../images/room_status_orange_lrg.png);
+	background-image: url(/images/room_status_orange_lrg.png);
 }
 
 #roomList h2 {

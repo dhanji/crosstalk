@@ -4,7 +4,6 @@ import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.wideplay.crosstalk.data.User;
 
 import java.util.concurrent.ConcurrentMap;
@@ -14,11 +13,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 @Singleton
 public class UserStore {
-  static {
-    // All managed data types.
-    ObjectifyService.register(User.class);
-  }
-
+  // TODO re-activate these hot-caches, and maybe back with memcache too.
   private final ConcurrentMap<String, User> loggedInUsers = new MapMaker().makeMap();
   private final ConcurrentMap<String, String> unclaimedOAuthTokens = new MapMaker().makeMap();
 
@@ -29,27 +24,37 @@ public class UserStore {
    * Returns user if logged in, or null.
    */
   public User isLoggedIn(String sessionId) {
-    System.out.println("Getting: " + loggedInUsers);
-
-    // TODO look in data store if not present in local cache.
-    return loggedInUsers.get(sessionId);
+    return objectify.query(User.class).filter("sessionId", sessionId).get();
   }
 
   public void logout(String sessionId) {
-    // TODO update in data store.
-    loggedInUsers.remove(sessionId);
-  }
-
-  public String claimOAuthToken(String requestToken) {
-    return unclaimedOAuthTokens.remove(requestToken);
-  }
-
-  public String newOAuthToken(String requestToken, String tokenSecret) {
-    return unclaimedOAuthTokens.put(requestToken, tokenSecret);
+    User user = isLoggedIn(sessionId);
+    if (null != user) {
+      user.setSessionId(null);
+      objectify.put(user);
+    }
   }
 
   public void loginAndMaybeCreate(String sessionId, User user) {
-    loggedInUsers.put(sessionId, user);
-    System.out.println("Stashing: " + loggedInUsers);
+    User found = objectify.find(User.class, user.getUsername());
+    if (found == null) {
+      found = user;
+    }
+
+    found.setSessionId(sessionId);
+    objectify.put(found);
+  }
+
+  public String claimOAuthToken(String requestToken) {
+    LoginToken token = objectify.find(LoginToken.class, requestToken);
+    if (null == token) {
+      return null;
+    }
+    objectify.delete(LoginToken.class, requestToken);
+    return token.getTokenSecret();
+  }
+
+  public void newOAuthToken(String requestToken, String tokenSecret) {
+    objectify.put(new LoginToken(requestToken, tokenSecret));
   }
 }

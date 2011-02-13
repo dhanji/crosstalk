@@ -29,14 +29,17 @@ public class RoomAdminPage {
   }
 
   @Post
-  void newRoom(Request request) {
+  String newRoom(Request request) {
     String name = request.param("name");
     roomStore.create(name);
+
+    // redirect back here!
+    return "/r/room_admin";
   }
 
   @Delete
   void deleteRoom(Request request) {
-    Long roomId = Long.valueOf(request.param("room-id"));
+    Long roomId = Long.valueOf(request.param("id"));
     roomStore.remove(roomId);
   }
 

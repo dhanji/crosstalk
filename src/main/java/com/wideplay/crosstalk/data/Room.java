@@ -10,7 +10,7 @@ import javax.persistence.Id;
  */
 @Entity
 public class Room {
-  public static final Room DEFAULT;
+  private static final Room DEFAULT;
 
   static {
     DEFAULT = new Room();
@@ -22,6 +22,7 @@ public class Room {
   @Id
   private Long id;
   private String name;
+  private String displayName;
 
   private transient Occupancy occupancy;
 
@@ -39,6 +40,14 @@ public class Room {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 
   public Occupancy getOccupancy() {

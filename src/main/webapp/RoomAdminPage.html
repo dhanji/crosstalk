@@ -17,10 +17,12 @@
 
 <div>
   @Repeat(items=rooms, var="room")
-  <div>${room.name} (${room.occupancy.users.size()} current)
+  <div>
+    <a href="/r/chat/${room.name}">${room.name}</a>
+    ({room.occupancy.users.size()} current)
     <form action="/r/room_admin" method="POST">
-      <input type="__sitebricks__action" value="delete"/>
-      <input type="room-id" value="${room.id}"/>
+      <input name="__sitebricks__action" type="hidden" value="delete"/>
+      <input name="id" value="${room.id}" type="hidden" />
       <input type="submit" value="delete"/> (leaves orphaned posts)
     </form>
   </div>

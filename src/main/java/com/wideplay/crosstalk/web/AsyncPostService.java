@@ -58,6 +58,7 @@ public class AsyncPostService {
 
     Message message = new Message();
     message.setId(UUID.randomUUID().getMostSignificantBits());
+    // TODO escape html!
     message.setText(request.getText());
     message.setRoom(room);
     message.setPostedOn(new Date());

@@ -2,8 +2,6 @@ package com.wideplay.crosstalk;
 
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
@@ -11,8 +9,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.RequestScoped;
 import com.google.sitebricks.headless.Request;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
+import com.wideplay.crosstalk.data.store.StoreModule;
 import com.wideplay.crosstalk.web.ClientRequest;
 
 /**
@@ -21,6 +18,7 @@ import com.wideplay.crosstalk.web.ClientRequest;
 public class CrosstalkModule extends AbstractModule {
   @Override
   protected void configure() {
+    install(new StoreModule());
   }
 
   @Provides
@@ -32,16 +30,6 @@ public class CrosstalkModule extends AbstractModule {
   @Provides
   ChannelService provideChannelService() {
     return ChannelServiceFactory.getChannelService();
-  }
-
-  @Provides
-  UserService provideUserService() {
-    return UserServiceFactory.getUserService();
-  }
-
-  @Provides @RequestScoped
-  Objectify provideObjectify() {
-    return ObjectifyService.begin();
   }
 
   @Provides @RequestScoped

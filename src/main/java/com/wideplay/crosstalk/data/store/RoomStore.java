@@ -1,41 +1,75 @@
 package com.wideplay.crosstalk.data.store;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.MapMaker;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.googlecode.objectify.Objectify;
+import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;
 
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @Singleton
 public class RoomStore {
-  private final Map<Long, Room> rooms = new MapMaker().makeMap();
+
+  @Inject
+  private Objectify objectify;
 
   public RoomStore() {
-    rooms.put(1L, Room.DEFAULT);
   }
 
   public Room byId(Long id) {
-    return rooms.get(id);
+    Room room = objectify.find(Room.class, id);
+    if (room == null) {
+      return null;
+    }
+
+    loadOccupancy(room);
+    return room;
+  }
+
+  private void loadOccupancy(Room room) {
+    // Grab the occupancy too (they share the same id).
+    Occupancy occupancy = objectify.get(Occupancy.class, room.getId());
+    room.setOccupancy(occupancy);
+  }
+
+  public Room named(String name) {
+    Room room = objectify.query(Room.class).filter("name", name).get();
+    if (null == room) {
+      return null;
+    }
+
+    // Load occupancy.
+    loadOccupancy(room);
+    return room;
   }
 
   public void remove(Long roomId) {
-    // delete!
-    rooms.remove(roomId);
+    // delete! (orphans both occupancy & posts).
+    objectify.delete(Room.class, roomId);
   }
 
   public List<Room> list() {
-    return ImmutableList.copyOf(rooms.values());
+    return objectify.query(Room.class).list();
   }
 
-  public void create(String name) {
+  public void create(String displayName) {
+    // Derive a name for this room.
+    String name = displayName.toLowerCase();
+
     Room room = new Room();
-    room.setId((long)Math.random());
+    room.setId(UUID.randomUUID().getMostSignificantBits());
     room.setName(name);
-    rooms.put(room.getId(), room);
+    room.setDisplayName(displayName);
+
+    objectify.put(room);
+    // Also create an occupancy with the same id.
+    Occupancy occupancy = new Occupancy();
+    occupancy.setId(room.getId());
+    objectify.put(occupancy);
   }
 }

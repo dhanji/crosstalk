@@ -1,7 +1,7 @@
 Next features
 -------------
 
-- Persistence
+x Persistence
 x Dynamic rooms (i.e. more than 1)
 - Wire up anonymous to lurkers counter
 - Multiple rooms per user connected
@@ -19,3 +19,5 @@ LATER
 - Create new room UI(?)
 - Editing hashtags
 - Pull hashtag content from twitter
+- Hot-cache for users/rooms (especially occupancy)
+- Memcache for users/rooms (especially occupancy)

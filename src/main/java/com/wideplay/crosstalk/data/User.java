@@ -1,6 +1,7 @@
 package com.wideplay.crosstalk.data;
 
 import com.google.appengine.api.users.UserService;
+import com.googlecode.objectify.annotation.Unindexed;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,10 +16,17 @@ public class User {
   private String username; // twitter username (unique id), hmm...
   private String displayName;
   private Date createdOn;
+
+  @Unindexed
   private String avatar; // URL
 
+  @Unindexed
   private String twitterAccessToken;
+
+  @Unindexed
   private String twitterTokenSecret;
+
+  private String sessionId;
 
   // Set up the anonymous user (special case)
   public static transient final User ANONYMOUS = new User();
@@ -75,6 +83,10 @@ public class User {
 
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
+  }
+
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
   }
 
   @Override

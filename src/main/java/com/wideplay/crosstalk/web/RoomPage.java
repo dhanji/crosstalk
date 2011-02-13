@@ -38,11 +38,18 @@ public class RoomPage {
   private Room room;
 
   @Get
-  void displayRoom(@Named("room") String roomId) {
+  String displayRoom(@Named("room") String roomId) {
+    if (roomId == null || roomId.isEmpty()) {
+      return "/";
+    }
 
     // Find the room with this id.
-    Long id = Long.valueOf(roomId);
-    room = roomStore.byId(id);
+    room = roomStore.named(roomId);
+
+    // No such room!
+    if (null == room) {
+      return "/";
+    }
 
     // Create channel token specific to this user.
     User user = getUser();
@@ -56,6 +63,7 @@ public class RoomPage {
     occupancy.getUsers().add(user);
 
 //    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withUrl("/queue/hashtag"));
+    return null;
   }
 
   public String getCometToken() {
