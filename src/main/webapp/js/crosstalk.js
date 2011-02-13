@@ -195,7 +195,9 @@ crosstalk.receiveMessage_ = function(data) {
 crosstalk.joinRoom_ = function(data) {
   if (data.joiner.username == 'anonymous') {
     // Treat anonymous joiners as lurkers (they have no avatar).
-    //...
+    var countRef = $('#lurker-count');
+    var count = parseInt(countRef.html());
+    countRef.html(count + 1);
   } else {
     $('.current-contributor-avatars').append('<img src="' + data.joiner.avatar + '"/>');
   }

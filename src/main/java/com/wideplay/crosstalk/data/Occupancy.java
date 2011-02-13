@@ -16,6 +16,7 @@ import java.util.Set;
 public class Occupancy {
   @Id
   private Long id;
+  
 
   @Embedded
   private Set<User> users = Sets.newLinkedHashSet();
