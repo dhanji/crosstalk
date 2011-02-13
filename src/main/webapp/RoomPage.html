@@ -46,7 +46,7 @@
   <div id="right">
     <div id="activity-map">
       @Repeat(items=room.occupancy.segments, var="segment")
-      <div class="segment">
+      <div class="segment" title="${segment.count} posts around ${__page.format(segment.startsOn)}">
         ${ __page.activity(segment) }
       </div>
     </div>

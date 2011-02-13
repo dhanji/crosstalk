@@ -2,6 +2,7 @@ package com.wideplay.crosstalk.web;
 
 import com.google.inject.Inject;
 import com.google.sitebricks.At;
+import com.google.sitebricks.Show;
 import com.google.sitebricks.http.Get;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-@At("/")
+@At("/") @Show("HomePage.xml")
 public class HomePage {
   @Inject
   private RoomStore roomStore;

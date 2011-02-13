@@ -14,7 +14,8 @@ $(document).ready(function() {
   // Callbacks from server.
   crosstalk.callbacks = {
     'receive': crosstalk.receiveMessage_,
-    'join': crosstalk.joinRoom_
+    'join': crosstalk.joinRoom_,
+    'leave': crosstalk.leaveRoom_
   };
 
   // Setup Comet channel.
@@ -79,6 +80,11 @@ crosstalk.init_ = function () {
     username: $('#current-user').html(),
     avatar: $('#current-user-avatar').html()
   };
+
+  // Send leave room signal when the page is unloaded.
+  $(window).unload(function() {
+    crosstalk.send("leave", { room: $('#room-id').text() }, crosstalk.noop);
+  });
 
   // Join room!
   crosstalk.send("join", { room: $('#room-id').text() }, crosstalk.noop);
@@ -206,5 +212,18 @@ crosstalk.joinRoom_ = function(data) {
       return;
     $('.current-contributor-avatars')
         .append('<img id="' + id + '" src="' + data.joiner.avatar + '"/>');
+  }
+};
+
+crosstalk.leaveRoom_ = function(data) {
+  if (data.leaver.username == 'anonymous') {
+    // Treat anonymous leavers as lurkers (they have no avatar).
+    var countRef = $('#lurker-count');
+    var count = parseInt(countRef.html());
+    if (count) // guard against weirdness.
+      countRef.html(count - 1);
+  } else {
+    // Do nothing if we already know about this contributor.
+    $('#av-' + data.leaver.username).remove();
   }
 };

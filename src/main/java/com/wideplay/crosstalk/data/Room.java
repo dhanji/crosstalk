@@ -89,4 +89,21 @@ public class Room {
   public Date getEndTime() {
     return endTime;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Room)) return false;
+
+    Room room = (Room) o;
+
+    if (id != null ? !id.equals(room.id) : room.id != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
+  }
 }

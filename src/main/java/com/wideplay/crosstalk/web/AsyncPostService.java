@@ -2,8 +2,9 @@ package com.wideplay.crosstalk.web;
 
 import com.google.appengine.api.channel.ChannelMessage;
 import com.google.appengine.api.channel.ChannelService;
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.MapMaker;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -50,10 +51,17 @@ public class AsyncPostService {
 
   @Singleton
   public static class ConnectedClients {
-    private final Map<User, String> clients = Maps.newHashMap();
+    // TODO(dhanji): This needs to be persistent. And needs periodic eviction.
+    private final Map<String, Map<Room, String>> clients = new MapMaker()
+        .makeComputingMap(new Function<String, Map<Room, String>>() {
+          @Override
+          public Map<Room, String> apply(String user) {
+            return new MapMaker().makeMap();
+          }
+        });
 
-    public void add(String token, User client) {
-      clients.put(client, token);
+    public void add(String token, User client, Room room) {
+      clients.get(client.getUsername()).put(room, token);
     }
   }
 
@@ -93,12 +101,34 @@ public class AsyncPostService {
     Room room = roomStore.byId(request.getRoom());
 
     User joiner = currentUser.getUser();
-    log.info("Received join notification: {}", joiner.getUsername());
+    log.debug("Received join notification: {}", joiner.getUsername());
     String json = gson.toJson(ImmutableMap.of(
         "rpc", "join",
         "joiner", joiner
     ));
     broadcast(room, joiner, json);
+
+    // This is a bit hacky, but we update occupancy BEFORE this RPC is called
+    // in the home screen. We should move it here.
+
+    return Reply.saying().ok();
+  }
+
+  @At("/leave") @Post
+  Reply<?> leaveRoom(ClientRequest request) {
+    Room room = roomStore.byId(request.getRoom());
+
+    User leaver = currentUser.getUser();
+    log.info("Received leave notification: {}", leaver.getUsername());
+    String json = gson.toJson(ImmutableMap.of(
+        "rpc", "leave",
+        "leaver", leaver
+    ));
+    broadcast(room, leaver, json);
+
+    // Update occupancy.
+    room.getOccupancy().getUsers().remove(new Key<User>(User.class, leaver.getUsername()));
+    roomStore.save(room.getOccupancy());
 
     return Reply.saying().ok();
   }
@@ -108,8 +138,14 @@ public class AsyncPostService {
       if (user.getName().equals(author.getUsername()))
         continue;
 
-      log.info("Sending packet to {} [{}]\n", user.getName(), json);
-      channel.sendMessage(new ChannelMessage(user.getName(), json));
+      log.debug("Sending packet to {} [{}]\n", user.getName(), json);
+      String channelId = connected.clients.get(user.getName()).get(room);
+      if (null != channelId) {
+        channel.sendMessage(new ChannelMessage(channelId, json));
+      } else {
+        // stale occupancy, update...
+
+      }
     }
   }
 }

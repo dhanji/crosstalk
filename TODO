@@ -9,8 +9,8 @@ x JS date formatter
 - Tabs (links, images, etc--should be cake with jquery and proper class tagging)
 x Bubble activity index
 - "Infinite" conversation load (i.e. message-list cursors)
-- Incremental updates to bubble index
-- Leave room (idleness checker and/or onunload handler)
+- Incremental updates to bubble index (should be requested by client)
+x Leave room (onunload handler)
 
 x File uploads
 x Embed for arbitrary images
@@ -24,3 +24,4 @@ x Create new room UI(?)
 - Hot-cache for users/rooms (especially occupancy)
 - Memcache for users/rooms (especially occupancy)
 - fast scroll
+- Leave room (idleness checker)

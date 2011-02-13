@@ -26,7 +26,7 @@ import java.util.List;
  */
 @At("/r/chat/:room")
 public class RoomPage {
-  public static final int MAX_ACTIVITY_BUBBLES = 6;
+  public static final double MAX_ACTIVITY_BUBBLES = 6.0;
   @Inject
   private ChannelService channelService;
 
@@ -70,9 +70,10 @@ public class RoomPage {
     // Create channel token specific to this user.
     User user = getUser();
 
-    // TODO(dhanji): Support multiple rooms at once per user.
-    token = channelService.createChannel(user.getUsername());
-    clients.add(token, user);
+    // Create a room & user-specific unique id for this channel.
+    String userChannelId = user.getUsername() + roomId + Math.random();
+    token = channelService.createChannel(userChannelId);
+    clients.add(userChannelId, user, room);
 
     // Set up presence for this room.
     Occupancy occupancy = room.getOccupancy();
@@ -117,7 +118,7 @@ public class RoomPage {
 
   public String activity(TimeSegment segment) {
     // Show a max of MAX_ACTIVITY_BUBBLES bubbles.
-    double ratio = segment.getCount() / getRoom().getOccupancy().getMaxActivity();
+    double ratio = segment.getCount() / ((double)getRoom().getOccupancy().getMaxActivity());
 
     int count = (int)(ratio * MAX_ACTIVITY_BUBBLES);
     StringBuilder builder = new StringBuilder();

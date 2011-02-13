@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <title>CrossTalk</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
 
@@ -149,6 +149,6 @@
 				-->
   </ul>
 </section>
-<a id="allRoomsLink" href="#">Show all rooms for this event (past &amp; future) &rarr;</a>
+<a id="allRoomsLink" href="#">Show all rooms for this event (past &amp; future) -></a>
 </body>
 </html>
