@@ -2,6 +2,8 @@ package com.wideplay.crosstalk.data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import java.util.Date;
 
 /**
  * Encapuslates a structured set of documents. Contains an ACL.
@@ -23,8 +25,14 @@ public class Room {
   private Long id;
   private String name;
   private String displayName;
+  private String host;
 
-  private transient Occupancy occupancy;
+  private Date startTime;
+  private Date endTime;
+
+  // Loaded independently.
+  @Transient
+  private Occupancy occupancy;
 
   public Long getId() {
     return id;
@@ -39,6 +47,9 @@ public class Room {
   }
 
   public void setName(String name) {
+    setDisplayName(name);
+
+    name = name.toLowerCase().replaceAll("[ ]+", "-");
     this.name = name;
   }
 
@@ -56,5 +67,26 @@ public class Room {
 
   public void setOccupancy(Occupancy occupancy) {
     this.occupancy = occupancy;
+  }
+
+  public String getHost() {
+    return host;
+  }
+
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public void setPeriod(Date startTime, Date endTime) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
+
+  public Date getStartTime() {
+    return startTime;
+  }
+
+  public Date getEndTime() {
+    return endTime;
   }
 }

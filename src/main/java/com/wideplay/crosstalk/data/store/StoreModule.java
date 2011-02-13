@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.wideplay.crosstalk.data.LoginToken;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;

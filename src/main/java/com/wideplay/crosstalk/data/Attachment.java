@@ -1,8 +1,7 @@
-package com.wideplay.crosstalk.data.store;
+package com.wideplay.crosstalk.data;
 
 import com.google.appengine.api.datastore.Blob;
 import com.googlecode.objectify.Key;
-import com.wideplay.crosstalk.data.User;
 
 import javax.persistence.Id;
 
@@ -15,7 +14,9 @@ public class Attachment {
   private String name;
   private String mimeType;
 
+  @JsonHide
   private Key<User> author;
+  @JsonHide
   private Blob content;
 
   public Long getId() {

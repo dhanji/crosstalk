@@ -44,17 +44,14 @@ public class AuthFilter implements Filter {
     Cookie sessionCookie = currentUser.getSessionCookie();
     if (null == sessionCookie) {
       // Auth as anonymous.
-      System.out.println("No session cookie *******************************");
       currentUser.setUser(User.ANONYMOUS);
     } else {
       // Find the user associated with this session cookie and log her in.
       User loggedIn = userStore.isLoggedIn(sessionCookie.getValue());
-      System.out.println("Was cookied in!*******************************");
 
       // No such user was found. (Invalid session cookie, continue as anonymous)
       if (null == loggedIn) {
         loggedIn = User.ANONYMOUS;
-        System.out.println("Was anonymousd =( *******************************");
       }
 
       currentUser.setUser(loggedIn);

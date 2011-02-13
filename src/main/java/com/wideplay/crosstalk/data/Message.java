@@ -2,9 +2,9 @@ package com.wideplay.crosstalk.data;
 
 import com.googlecode.objectify.Key;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -16,13 +16,17 @@ import java.util.Date;
 public class Message {
   @Id
   private Long id;
-  @Embedded
-  private User author;
 
-  private Key<Room> room; // belongs to.
+  @JsonHide
+  private Key<User> authorKey;
+  @JsonHide
+  private Key<Room> roomKey; // belongs to.
 
   private Date postedOn;
   private String text;
+
+  @Transient
+  private User author;
   // TODO(dhanji): Add attachments.
 
 
@@ -34,16 +38,21 @@ public class Message {
     this.id = id;
   }
 
+  public Key<User> getAuthorKey() {
+    return authorKey;
+  }
+
   public User getAuthor() {
     return author;
   }
 
   public void setAuthor(User author) {
     this.author = author;
+    this.authorKey = new Key<User>(User.class, author.getUsername());
   }
 
   public void setRoom(Room room) {
-    this.room = new Key<Room>(Room.class, room.getId());
+    this.roomKey = new Key<Room>(Room.class, room.getId());
   }
 
   public Date getPostedOn() {
@@ -66,8 +75,8 @@ public class Message {
   public String toString() {
     return "Message{" +
         "id=" + id +
-        ", author=" + author +
-        ", room=" + room +
+        ", author=" + authorKey +
+        ", room=" + roomKey +
         ", postedOn=" + postedOn +
         ", text='" + text + '\'' +
         '}';

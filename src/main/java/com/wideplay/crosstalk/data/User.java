@@ -20,12 +20,13 @@ public class User {
   @Unindexed
   private String avatar; // URL
 
-  @Unindexed
+  @Unindexed @JsonHide
   private String twitterAccessToken;
 
-  @Unindexed
+  @Unindexed @JsonHide
   private String twitterTokenSecret;
 
+  @JsonHide
   private String sessionId;
 
   // Set up the anonymous user (special case)

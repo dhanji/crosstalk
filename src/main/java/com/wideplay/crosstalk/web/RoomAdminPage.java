@@ -9,6 +9,9 @@ import com.google.sitebricks.http.Post;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.store.RoomStore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,9 +32,17 @@ public class RoomAdminPage {
   }
 
   @Post
-  String newRoom(Request request) {
-    String name = request.param("name");
-    roomStore.create(name);
+  String newRoom(Request request) throws ParseException {
+    Room room = new Room();
+    room.setName(request.param("name"));
+    room.setHost(request.param("host"));
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Date startTime = dateFormat.parse(request.param("startTime"));
+    Date endTime = dateFormat.parse(request.param("endTime"));
+    room.setPeriod(startTime, endTime);
+
+    roomStore.create(room);
 
     // redirect back here!
     return "/r/room_admin";

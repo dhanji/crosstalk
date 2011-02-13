@@ -9,9 +9,11 @@
 <div>
   <div>New room:</div>
   <form action="/r/room_admin" method="POST">
-    <div>Name: <input type="text" name="name"/>
-      <input type="submit" value="create"/>
-    </div>
+    <div>Name: <input type="text" name="name"/></div>
+    <div>Host: <input type="text" name="host"/></div>
+    <div>Start: <input type="text" name="startTime"/> (yyyy-MM-dd HH:mm)</div>
+    <div>End: <input type="text" name="endTime"/> (e.g.: 2011-02-18 13:30)</div>
+    <input type="submit" value="create"/>
   </form>
 </div>
 
@@ -19,7 +21,7 @@
   @Repeat(items=rooms, var="room")
   <div>
     <a href="/r/chat/${room.name}">${room.name}</a>
-    ({room.occupancy.users.size()} current)
+    (current: ${room.occupancy.users}) activity >> ${room.occupancy.segments}
     <form action="/r/room_admin" method="POST">
       <input name="__sitebricks__action" type="hidden" value="delete"/>
       <input name="id" value="${room.id}" type="hidden" />

@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.data.store;
+package com.wideplay.crosstalk.data;
 
 import com.googlecode.objectify.annotation.Unindexed;
 

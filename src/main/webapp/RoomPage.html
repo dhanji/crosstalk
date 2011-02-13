@@ -44,12 +44,19 @@
 </div>
 <div id="center">
   <div id="right">
+    <div id="activity-map">
+      @Repeat(items=room.occupancy.segments, var="segment")
+      <div class="segment">
+        ${ __page.activity(segment) }
+      </div>
+    </div>
     <div class="weak-title">
       Current contributors
     </div>
     <div class="current-contributor-avatars">
       @Repeat(items=occupants, var="occupant")
-      <img class="avatar" src="${occupant.avatar}" alt="${occupant.username}" title="${occupant.username}"/>
+      <img id="av-${occupant.username}" class="avatar" src="${occupant.avatar}"
+           alt="${occupant.username}" title="${occupant.username}"/>
     </div>
     <div class="weak-title">
       + <span id="lurker-count">0</span> lurkers
@@ -70,8 +77,9 @@
       <div class="message">
         <div class="author">${post.author.username}</div>
         <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
-        <div class="content">'
-          <div class="time">${post.postedOn}</div>
+        <div class="content">
+          <div class="time">${__page.format(post.postedOn)}</div>
+          ${post.text}
         </div>
       </div>
 

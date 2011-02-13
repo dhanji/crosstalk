@@ -7,7 +7,7 @@ import com.google.sitebricks.client.transport.Raw;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
-import com.wideplay.crosstalk.data.store.Attachment;
+import com.wideplay.crosstalk.data.Attachment;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import org.apache.commons.fileupload.FileUploadException;
 import org.slf4j.Logger;
@@ -21,8 +21,8 @@ import java.io.IOException;
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @At("/r/download/:id") @Service
-public class Download {
-  private static final Logger log = LoggerFactory.getLogger(Download.class);
+public class DownloadService {
+  private static final Logger log = LoggerFactory.getLogger(DownloadService.class);
 
   @Inject
   private CurrentUser currentUser;

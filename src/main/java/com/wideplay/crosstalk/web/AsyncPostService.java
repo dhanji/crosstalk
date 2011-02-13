@@ -11,9 +11,11 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
+import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
+import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,9 @@ public class AsyncPostService {
   private RoomStore roomStore;
 
   @Inject
+  private MessageStore messageStore;
+
+  @Inject
   Gson gson;
 
   @Singleton
@@ -58,7 +63,6 @@ public class AsyncPostService {
 
     Message message = new Message();
     message.setId(UUID.randomUUID().getMostSignificantBits());
-    // TODO escape html!
     message.setText(request.getText());
     message.setRoom(room);
     message.setPostedOn(new Date());
@@ -76,6 +80,11 @@ public class AsyncPostService {
     ));
     broadcast(room, author, json);
 
+    // Save AFTER broadcast (reduces latency).
+    room.getOccupancy().incrementNow(); // Increment activity in the room by 1.
+    roomStore.save(room.getOccupancy());
+    messageStore.save(message);
+
     return Reply.saying().ok();
   }
 
@@ -90,16 +99,17 @@ public class AsyncPostService {
         "joiner", joiner
     ));
     broadcast(room, joiner, json);
+
     return Reply.saying().ok();
   }
 
   private void broadcast(Room room, User author, String json) {
-    for (User user : room.getOccupancy().getUsers()) {
-      if (user.equals(author))
+    for (Key<User> user : room.getOccupancy().getUsers()) {
+      if (user.getName().equals(author.getUsername()))
         continue;
 
-      log.info("Sending packet to {} [{}]\n", user.getUsername(), json);
-      channel.sendMessage(new ChannelMessage(user.getUsername(), json));
+      log.info("Sending packet to {} [{}]\n", user.getName(), json);
+      channel.sendMessage(new ChannelMessage(user.getName(), json));
     }
   }
 }

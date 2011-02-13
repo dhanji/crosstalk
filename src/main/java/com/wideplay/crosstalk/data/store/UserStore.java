@@ -3,9 +3,13 @@ package com.wideplay.crosstalk.data.store;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
+import com.wideplay.crosstalk.data.LoginToken;
 import com.wideplay.crosstalk.data.User;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -43,6 +47,10 @@ public class UserStore {
 
     found.setSessionId(sessionId);
     objectify.put(found);
+  }
+
+  public Map<Key<User>, User> resolve(Set<Key<User>> users) {
+    return objectify.get(users);
   }
 
   public String claimOAuthToken(String requestToken) {

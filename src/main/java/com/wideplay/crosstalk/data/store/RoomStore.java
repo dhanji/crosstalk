@@ -37,6 +37,11 @@ public class RoomStore {
     room.setOccupancy(occupancy);
   }
 
+  public void save(Occupancy occupancy) {
+    // Overwrites the old occupancy!
+    objectify.put(occupancy);
+  }
+
   public Room named(String name) {
     Room room = objectify.query(Room.class).filter("name", name).get();
     if (null == room) {
@@ -54,17 +59,17 @@ public class RoomStore {
   }
 
   public List<Room> list() {
-    return objectify.query(Room.class).list();
+    List<Room> list = objectify.query(Room.class).list();
+    for (Room room : list) {
+      // Load the occupancies too.
+      loadOccupancy(room);
+    }
+    return list;
   }
 
-  public void create(String displayName) {
-    // Derive a name for this room.
-    String name = displayName.toLowerCase();
 
-    Room room = new Room();
+  public void create(Room room) {
     room.setId(UUID.randomUUID().getMostSignificantBits());
-    room.setName(name);
-    room.setDisplayName(displayName);
 
     objectify.put(room);
     // Also create an occupancy with the same id.

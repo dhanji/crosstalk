@@ -80,6 +80,30 @@ h1 span {
   background: #ced2d9;
 }
 
+#activity-map {
+  position: absolute;
+  top: 4px;
+  bottom: 0;
+  left: -212px;
+  width: 120px;
+}
+
+#activity-map .segment {
+  overflow: hidden;
+  padding: 1px 0;
+}
+
+#activity-map .bubble {
+  float: left;
+  background: #aaa;
+  -webkit-border-radius: 500px;
+  -moz-border-radius: 500px;
+  border-radius: 500px;
+  height: 10px;
+  width: 10px;
+  margin-right: 1px;
+}
+
 #viewport {
   position: absolute;
   top: 0;
@@ -101,6 +125,8 @@ h1 span {
 }
 
 #viewport .message {
+  overflow: hidden;
+  padding: 4px 0;
 }
 
 #viewport .message .avatar {
@@ -174,7 +200,6 @@ h1 span {
   list-style-type: none;
   position: absolute;
   color: white;
-  right: -60%;
 }
 
 #right {

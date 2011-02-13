@@ -45,7 +45,6 @@ public class CurrentUser {
 
     for (Cookie cookie : cookies) {
       if (SESSION_COOKIE_NAME.equals(cookie.getName())) {
-        log.info("Session cookie found {} = {}", cookie.getName(), cookie.getValue());
         return cookie;
       }
     }

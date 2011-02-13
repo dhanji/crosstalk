@@ -6,7 +6,7 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
-import com.wideplay.crosstalk.data.store.Attachment;
+import com.wideplay.crosstalk.data.Attachment;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -24,8 +24,8 @@ import java.util.UUID;
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @At("/r/upload") @Service
-public class Upload {
-  private static final Logger log = LoggerFactory.getLogger(Upload.class);
+public class UploadService {
+  private static final Logger log = LoggerFactory.getLogger(UploadService.class);
 
   @Inject
   private CurrentUser currentUser;

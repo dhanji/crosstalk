@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'GS';
-    src: url('gill_sans_mt-webfont.eot?') format('eot'),
-         url('gill_sans_mt-webfont.woff') format('woff'),
-         url('gill_sans_mt-webfont.ttf') format('truetype'),
-         url('gill_sans_mt-webfont.svg#webfontwV7eqL9a') format('svg');
+    src: url('/fonts/gill_sans_mt-webfont.eot?') format('eot'),
+         url('/fonts/gill_sans_mt-webfont.woff') format('woff'),
+         url('/fonts/gill_sans_mt-webfont.ttf') format('truetype'),
+         url('/fonts/gill_sans_mt-webfont.svg#webfontwV7eqL9a') format('svg');
     font-weight: normal;
     font-style: normal;
 }

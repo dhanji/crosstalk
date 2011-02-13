@@ -199,6 +199,12 @@ crosstalk.joinRoom_ = function(data) {
     var count = parseInt(countRef.html());
     countRef.html(count + 1);
   } else {
-    $('.current-contributor-avatars').append('<img src="' + data.joiner.avatar + '"/>');
+    var id = 'av-' + data.joiner.username;
+
+    // Do nothing if we already know about this contributor.
+    if ($('#' + id).length > 0)
+      return;
+    $('.current-contributor-avatars')
+        .append('<img id="' + id + '" src="' + data.joiner.avatar + '"/>');
   }
 };
