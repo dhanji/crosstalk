@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.web;
+package com.wideplay.crosstalk.web.tasks;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,9 +24,9 @@ import java.util.Map;
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @At("/queue/hashtag") @Service
-public class HashtagService {
+public class BackgroundHashtagFetcher {
   private static final Type LIST_TYPE = new TypeToken<List<Map<String, Object>>>() {}.getType();
-  private static final Logger log = LoggerFactory.getLogger(HashtagService.class);
+  private static final Logger log = LoggerFactory.getLogger(BackgroundHashtagFetcher.class);
 
   @Inject
   Web web;

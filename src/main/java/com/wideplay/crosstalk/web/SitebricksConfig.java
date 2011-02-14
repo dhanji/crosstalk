@@ -8,6 +8,7 @@ import com.google.sitebricks.SitebricksModule;
 import com.wideplay.crosstalk.CrosstalkModule;
 import com.wideplay.crosstalk.web.auth.AuthFilter;
 import com.wideplay.crosstalk.web.auth.AuthModule;
+import com.wideplay.crosstalk.web.tasks.BackgroundTasksModule;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -31,6 +32,7 @@ public class SitebricksConfig extends GuiceServletContextListener {
 
         install(new CrosstalkModule());
         install(new AuthModule());
+        install(new BackgroundTasksModule());
       }
 
     });

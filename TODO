@@ -4,12 +4,12 @@ Next features
 x Persistence
 x Dynamic rooms (i.e. more than 1)
 x Wire up anonymous to lurkers counter
-- Multiple rooms per user connected
+x Multiple rooms per user connected
 x JS date formatter
 - Tabs (links, images, etc--should be cake with jquery and proper class tagging)
 x Bubble activity index
 - "Infinite" conversation load (i.e. message-list cursors)
-- Incremental updates to bubble index (should be requested by client)
+x Incremental updates to bubble index (should be requested by client)
 x Leave room (onunload handler)
 
 x File uploads

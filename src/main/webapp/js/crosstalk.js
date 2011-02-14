@@ -86,6 +86,9 @@ crosstalk.init_ = function () {
     crosstalk.send("leave", { room: $('#room-id').text() }, crosstalk.noop);
   });
 
+  // Kick off timer.
+  setTimeout(crosstalk.refreshIndex, 5 * 60 * 1000 /* 5 minutes */);
+
   // Join room!
   crosstalk.send("join", { room: $('#room-id').text() }, crosstalk.noop);
 };
@@ -191,6 +194,23 @@ crosstalk.send = function(rpc, args, callback) {
 function log(log) {
   $('#debug').text(log);
 }
+
+/*** TIMER CALLBACKS ***/
+crosstalk.refreshIndex = function() {
+  crosstalk.send("index", {
+    room: $('#room-id').text()
+  }, function(data) {
+    // index data back from the server.
+    if (data.html) {
+      var last = $('#activity-map > segment:last').attr('starts');
+
+      // Insert only if the returned segment doesn't already exist.
+      if (last != data.startsOn) {
+        $('#activity-map').append(data.html);
+      }
+    }
+  });
+};
 
 
 /*** SERVER RPC CALLBACKS ***/

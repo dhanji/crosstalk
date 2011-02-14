@@ -117,8 +117,12 @@ public class RoomPage {
   }
 
   public String activity(TimeSegment segment) {
+    return renderActivity(getRoom(), segment);
+  }
+
+  public static String renderActivity(Room room, TimeSegment segment) {
     // Show a max of MAX_ACTIVITY_BUBBLES bubbles.
-    double ratio = segment.getCount() / ((double)getRoom().getOccupancy().getMaxActivity());
+    double ratio = segment.getCount() / ((double) room.getOccupancy().getMaxActivity());
 
     int count = (int)(ratio * MAX_ACTIVITY_BUBBLES);
     StringBuilder builder = new StringBuilder();
@@ -127,4 +131,5 @@ public class RoomPage {
     }
     return builder.toString();
   }
+
 }
