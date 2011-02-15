@@ -37,6 +37,10 @@ public class CurrentUser {
     return UUID.randomUUID().toString();
   }
 
+  public boolean isAnonymous() {
+    return user != null && User.ANONYMOUS.equals(user);
+  }
+
   public Cookie getSessionCookie() {
     Cookie[] cookies = request.getCookies();
     if (null == cookies) {

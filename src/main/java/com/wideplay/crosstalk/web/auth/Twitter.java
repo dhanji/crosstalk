@@ -29,7 +29,7 @@ import java.net.URL;
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @RequestScoped
-class Twitter {
+public class Twitter {
   private static final Logger log = LoggerFactory.getLogger(Twitter.class);
   public static final String CONSUMER_KEY = "BaBzQIsMvsuEF4e3xpmxQ";
   public static final String CONSUMER_SECRET = "NvNM3KUmfSkWhWxqZzEJmREorVKmd54G7C9jDv1zFw";

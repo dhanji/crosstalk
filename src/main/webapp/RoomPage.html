@@ -66,8 +66,9 @@
       Also pulling tweets from:
     </div>
     <div id="hashtags" class="weak-title">
-      <div class="hashtag">#webstock</div>
-      <div class="hashtag">#dataviz</div>
+      @Repeat(items=room.occupancy.terms, var="term")
+      <div class="hashtag">${term}</div>
+      <div id="input-hashtag" class="invisible"><input type="text" value=""></div>
       <div><input id="add-hashtag" class="button" type="button" value="Add a term"></div>
     </div>
   </div>

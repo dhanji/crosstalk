@@ -48,7 +48,7 @@ public class HomePage {
     }
 
     // Only pick the top 4 words.
-    return index.getWords().subList(0, 4);
+    return index.getWords().subList(0, Math.min(4, index.getWords().size()));
   }
 
   public String period(Room room) {

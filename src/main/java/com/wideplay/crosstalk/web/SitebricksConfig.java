@@ -33,6 +33,7 @@ public class SitebricksConfig extends GuiceServletContextListener {
         install(new CrosstalkModule());
         install(new AuthModule());
         install(new BackgroundTasksModule());
+        install(new WebModule());
       }
 
     });

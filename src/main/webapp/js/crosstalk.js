@@ -1,5 +1,5 @@
 /**
- * WriteWire by Dhanji.
+ * crosstalk.me by Dhanji and Cameron.
  */
 
 var crosstalk = crosstalk || {};
@@ -15,7 +15,8 @@ $(document).ready(function() {
   crosstalk.callbacks = {
     'receive': crosstalk.receiveMessage_,
     'join': crosstalk.joinRoom_,
-    'leave': crosstalk.leaveRoom_
+    'leave': crosstalk.leaveRoom_,
+    'tweet': crosstalk.tweetArrives_
   };
 
   // Setup Comet channel.
@@ -73,6 +74,26 @@ crosstalk.init_ = function () {
     }
   });
 
+  // Set up interactive adding of terms (hashtags) to pull tweets.
+  var inputContainer = $('#input-hashtag');
+  $('#add-hashtag').click(function() {
+    inputContainer.show();
+    $('input', inputContainer).focus();
+  });
+
+  $('#input-hashtag > input').keypress(function(event) {
+    // enter key pressed.
+    if (event.which == 13) {
+      // Save the tag.
+      var input = $(this);
+      var term = input.val();
+      inputContainer.before('<div class="hashtag">' + term + '</div>');
+      input.val('');
+
+      inputContainer.hide();
+      crosstalk.send("add-term", { room: $('#room-id').text(), text: term }, crosstalk.noop);
+    }
+  });
 
   // Read current user information.
   crosstalk.currentUserInfo = {
@@ -86,8 +107,11 @@ crosstalk.init_ = function () {
     crosstalk.send("leave", { room: $('#room-id').text() }, crosstalk.noop);
   });
 
-  // Kick off timer.
+  // Kick off timer to refresh the index.
   setTimeout(crosstalk.refreshIndex, 5 * 60 * 1000 /* 5 minutes */);
+
+  // Kick off timer to ping the server with activity.
+  setInterval(crosstalk.ping, 30 * 1000 /* seconds */);
 
   // Join room!
   crosstalk.send("join", { room: $('#room-id').text() }, crosstalk.noop);
@@ -212,9 +236,18 @@ crosstalk.refreshIndex = function() {
   });
 };
 
+// Pings server telling it we're active.
+crosstalk.ping = function() {
+  crosstalk.send("ping", { room: $('#room-id').text() }, crosstalk.noop);
+};
+
 
 /*** SERVER RPC CALLBACKS ***/
 crosstalk.receiveMessage_ = function(data) {
+  crosstalk.insertMessage_(data.post);
+};
+
+crosstalk.tweetArrives_ = function(data) {
   crosstalk.insertMessage_(data.post);
 };
 

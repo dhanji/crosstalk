@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.sitebricks.At;
+import com.google.sitebricks.client.Web;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
@@ -18,9 +19,12 @@ import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
+import com.wideplay.crosstalk.data.twitter.TwitterSearch;
+import com.wideplay.crosstalk.web.auth.Twitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -31,11 +35,12 @@ import java.util.UUID;
 @At("/r/async") @Service
 public class AsyncPostService {
   private static final Logger log = LoggerFactory.getLogger(AsyncPostService.class);
-  @Inject
-  ConnectedClients connected;
 
   @Inject
-  ChannelService channel;
+  private ConnectedClients connected;
+
+  @Inject
+  private ChannelService channel;
 
   @Inject
   private CurrentUser currentUser;
@@ -47,7 +52,11 @@ public class AsyncPostService {
   private MessageStore messageStore;
 
   @Inject
-  Gson gson;
+  private Gson gson;
+
+  @Inject
+  private Web web;
+
 
   @Singleton
   public static class ConnectedClients {
@@ -133,12 +142,52 @@ public class AsyncPostService {
     return Reply.saying().ok();
   }
 
+  @At("/ping") @Post
+  Reply<?> ping(ClientRequest request, Twitter twitter, CurrentUser currentUser) {
+    String hashtag = URLEncoder.encode("#webstock");
+
+    // Update active status timestamp of this user/connection
+    //...
+
+    // Only piggyback the twitter call if this user is logged in.
+    if (!currentUser.isAnonymous()) {
+      String result = twitter.call("http://search.twitter.com/search.json?q=" + hashtag);
+      TwitterSearch tweets = gson.fromJson(result, TwitterSearch.class);
+
+      // Select a tweet and broadcast.
+      Message pick = tweets.pick();
+      if (null != pick) {
+        broadcast(roomStore.byId(Long.valueOf(request.getRoom())), null, gson.toJson(
+            ImmutableMap.of(
+                "rpc", "tweet",
+                "post", pick)
+        ));
+      }
+    }
+
+    return Reply.saying().ok();
+  }
+
+  @At("/add-term") @Post
+  Reply<?> addTerm(ClientRequest request) {
+    log.info("New term added {}", request.getText());
+
+    return Reply.saying().ok();
+  }
+
+  @At("/remove-term") @Post
+  Reply<?> removeTerm(ClientRequest request) {
+    log.info("Term deleted {}", request.getText());
+
+    return Reply.saying().ok();
+  }
+
   private void broadcast(Room room, User author, String json) {
     for (Key<User> user : room.getOccupancy().getUsers()) {
-      if (user.getName().equals(author.getUsername()))
+      if (null != author && user.getName().equals(author.getUsername()))
         continue;
 
-      log.debug("Sending packet to {} [{}]\n", user.getName(), json);
+      log.info("Sending packet to {} [{}]\n", user.getName(), json);
       String channelId = connected.clients.get(user.getName()).get(room);
       if (null != channelId) {
         channel.sendMessage(new ChannelMessage(channelId, json));

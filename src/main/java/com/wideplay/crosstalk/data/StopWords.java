@@ -1,9 +1,8 @@
 package com.wideplay.crosstalk.data;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.io.Resources;
 import com.google.inject.Singleton;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +18,8 @@ public class StopWords {
   private final Set<String> words;
 
   public StopWords() throws IOException {
-    List<String> lines = Resources.readLines(StopWords.class.getResource("stopwords.txt"),
-        Charsets.UTF_8);
+    @SuppressWarnings("unchecked")
+    List<String> lines = IOUtils.readLines(StopWords.class.getResourceAsStream("stopwords.txt"));
 
     ImmutableSet.Builder<String> builder = ImmutableSet.builder();
     for (String line : lines) {
