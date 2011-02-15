@@ -1,10 +1,12 @@
 package com.wideplay.crosstalk.web;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.sitebricks.At;
 import com.google.sitebricks.Show;
 import com.google.sitebricks.http.Get;
 import com.wideplay.crosstalk.data.Room;
+import com.wideplay.crosstalk.data.RoomTextIndex;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
@@ -37,6 +39,16 @@ public class HomePage {
 
   public Collection<User> occupants(Room room) {
     return userStore.resolve(room.getOccupancy().getUsers()).values();
+  }
+
+  public List<RoomTextIndex.WordTuple> trends(Room room) {
+    RoomTextIndex index = roomStore.indexOf(room);
+    if (null == index) {
+      return ImmutableList.of();
+    }
+
+    // Only pick the top 4 words.
+    return index.getWords().subList(0, 4);
   }
 
   public String period(Room room) {

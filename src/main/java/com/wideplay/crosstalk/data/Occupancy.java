@@ -3,6 +3,7 @@ package com.wideplay.crosstalk.data;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import java.util.Set;
  *
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-@Entity
+@Cached @Entity
 public class Occupancy {
   public static final int TIME_SEGMENT_INTERVAL_MINS = 10;
   @Id
@@ -27,6 +28,9 @@ public class Occupancy {
 
   @Embedded
   private List<TimeSegment> segments = Lists.newArrayList();
+
+  @Embedded
+  private Set<String> terms = Sets.newLinkedHashSet();
 
   @Transient @JsonHide
   private int maxActivity = -1; // memo field.
@@ -49,6 +53,10 @@ public class Occupancy {
 
   public List<TimeSegment> getSegments() {
     return segments;
+  }
+
+  public Set<String> getTerms() {
+    return terms;
   }
 
   public int getMaxActivity() {

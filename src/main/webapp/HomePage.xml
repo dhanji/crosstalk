@@ -47,10 +47,9 @@
         <section class="topics">
           <h2>People are talking about</h2>
           <ol>
-            <li class="rank1">Photoshop</li>
-            <li class="rank2">HTML5</li>
-            <li class="rank3">Bananas</li>
-            <li class="rank3">Workflow</li>
+            @Repeat(items=__page.trends(room), var="trend")
+            <li class="rank${index + 1}">${trend.word}</li>
+
           </ol>
         </section>
       </a>

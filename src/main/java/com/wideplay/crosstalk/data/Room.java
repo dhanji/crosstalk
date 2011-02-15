@@ -1,5 +1,7 @@
 package com.wideplay.crosstalk.data;
 
+import com.googlecode.objectify.annotation.Cached;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -10,7 +12,7 @@ import java.util.Date;
  *
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-@Entity
+@Cached @Entity
 public class Room {
   private static final Room DEFAULT;
 

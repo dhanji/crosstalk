@@ -5,11 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.wideplay.crosstalk.data.LoginToken;
-import com.wideplay.crosstalk.data.Message;
-import com.wideplay.crosstalk.data.Occupancy;
-import com.wideplay.crosstalk.data.Room;
-import com.wideplay.crosstalk.data.User;
+import com.wideplay.crosstalk.data.*;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -21,6 +17,7 @@ public class StoreModule extends AbstractModule {
     ObjectifyService.register(User.class);
     ObjectifyService.register(Message.class);
     ObjectifyService.register(LoginToken.class);
+    ObjectifyService.register(RoomTextIndex.class);
   }
 
   @Override

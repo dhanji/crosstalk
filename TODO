@@ -23,5 +23,5 @@ x Create new room UI(?)
 - Pull hashtag content from twitter
 - Hot-cache for users/rooms (especially occupancy)
 - Memcache for users/rooms (especially occupancy)
-- fast scroll
+- Fast scroll (via minimap)
 - Leave room (idleness checker)

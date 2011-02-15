@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.googlecode.objectify.Objectify;
 import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;
+import com.wideplay.crosstalk.data.RoomTextIndex;
 
 import java.util.List;
 import java.util.UUID;
@@ -76,5 +77,13 @@ public class RoomStore {
     Occupancy occupancy = new Occupancy();
     occupancy.setId(room.getId());
     objectify.put(occupancy);
+  }
+
+  public RoomTextIndex indexOf(Room room) {
+    return objectify.find(RoomTextIndex.class, room.getId());
+  }
+
+  public void save(RoomTextIndex index) {
+    objectify.put(index);
   }
 }
