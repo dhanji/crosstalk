@@ -8,11 +8,16 @@ article, blockquote, body, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, h
 	padding: 0;
 }
 
+html {
+	height: 100%;
+}
+
 body {
 	width: 100%;
+	height: 100%;
 	overflow: hidden;
 	background-color: #4D5158;
-	background-image: url(/images/body.gif);
+	background-image: url(../images/body.gif);
 	color: #ffffff;
 	line-height: 1.4;
 	font-family: Arial, Helvetica, sans-serif;
@@ -42,13 +47,27 @@ input, select, table, textarea {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+#mobileCheck {
+	position: asbolute;
+	width: 0;
+	height: 0;
+}
+
+#page {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
 
 
 
 /* HEADER ========================================= */
 
 header {
-	position: relative;
+	position: absolute;
+	width: 100%;
 	height: 53px;
 	background-color: #ffffff;
 	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.2, #ededee),
@@ -65,59 +84,21 @@ header > h1 {
 	float: left;
 	width: 255px;
 	height: 53px;
-	background-image: url(/images/logo.png);
+	background-image: url(../images/logo.png);
 	background-repeat: no-repeat;
 	text-indent: -9999px;
 }
 
 header > h2 {
 	position: absolute;
-	top: 57px;
-	left: 20px;
+	top: 15px;
+	left: 270px;
+	color: #4D5158;
 	font-size: 143%;
 	font-family: GS, Arial, Helvetica, sans-serif;
 	font-weight: normal;
-}
-
-#roomStatus {
-	margin-left: 280px;
-	list-style: none;
-	line-height: 54px;
-}
-
-#roomStatus li {
-	display: inline-block;
-	margin-right: 2em;
-	background-image: url(/images/room_status_orange.png);
-	background-repeat: no-repeat;
-	background-position: 0 50%;
-}
-
-#roomStatus li:first-child {
-	background-image: url(/images/room_status_green.png);
-}
-
-#roomStatus li:last-child {
-	background-image: url(/images/room_status_grey.png);
-}
-
-#roomStatus a {
-	padding-left: 13px;
-	color: #ff9933;
-	text-decoration: none;
-	text-shadow: 1px 1px 0 #ffffff;font-weight: bold;
-}
-
-#roomStatus a:hover {
-	text-decoration: underline;
-}
-
-#roomStatus li:first-child a {
-	color: #339900;
-}
-
-#roomStatus li:last-child a {
-	color: rgba(0,0,0,0.4);
+	white-space: nowrap;
+	opacity: 0.4;
 }
 
 #corporateLogo {
@@ -126,7 +107,7 @@ header > h2 {
 	top: 7px;
 	width: 188px;
 	height: 43px;
-	background-image: url(/images/webstock.gif);
+	background-image: url(../images/webstock.gif);
 	background-repeat: no-repeat;
 	text-indent: -9999px;
 }
@@ -134,34 +115,79 @@ header > h2 {
 
 
 
-/* HEADER ========================================= */
+/* CONTENT ========================================= */
+
+#callToAction {
+	position: absolute;
+	top: 70px;
+	left: 50%;
+	width: 20em;
+	margin-left: -9.75em;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	background-color: rgba(255,255,255,0.2);
+	font-size: 130%;
+	text-align: center;
+	opacity: 0.5;
+	line-height: 2em;
+}
 
 #content {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 80px;
-	bottom: 90px;
+	display: table;
+	position: relative;
+	-webkit-transition: left 1s ease, -webkit-transform 1s ease-out;
+	-moz-transition: left 1s ease;
+	transition: left 1s ease;
+}
+
+#content.touching {
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;	
+}
+
+#content.touchGlide {
+	-webkit-transition: left 0.5s ease, -webkit-transform 0.5s ease-out;
+	-moz-transition: left 0.5s ease;
+	transition: left 0.5s ease;
 }
 
 #roomList {
-	position: relative;
+	display: table-row;
 	list-style: none;
 }
 
 #roomList > li {
-	display: inline;
+	display: table-cell;
 	opacity: 0;
+	padding: 0 1.5em 0 1.5em;
+	vertical-align: middle;
+}
+
+.ios #roomList > li {
+	opacity: 1;
+}
+
+#roomList > li:first-child {
+	padding-left: 3em;
+}
+
+#roomList > li:last-child {
+	padding-right: 3em;
 }
 
 #roomList > li > a {
-	position: absolute;
+	display: block;
+	position: relative;
 	top: 30px;
 	z-index: 3;
 	width: 16em;
 	border: 2px solid #ffffff;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
 	border-radius: 6px;
-	padding: 15px;
+	padding: 1em;
 	background-color: #ffffff;
 	color: #7f96b9;
 	text-align: left;
@@ -174,7 +200,22 @@ header > h2 {
 	transition: border-color 0.3s ease-out, opacity 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
-#roomList > li > a:hover {
+.ios #roomList > li > a {
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
+}
+
+#roomList > .hilite > a {
+	z-index: 4 !important;
+	border-color: #ffcc00;
+	-webkit-box-shadow: 0 0 25px rgba(255,204,0,1);
+	-moz-box-shadow: 0 0 25px rgba(255,204,0,1);
+	box-shadow: 0 0 25px rgba(255,204,0,1);
+	opacity: 1 !important;
+}
+
+.notIos #roomList > li > a:hover, .ios #roomList > li > a:focus {
 	z-index: 4 !important;
 	border-color: #00A5FF;
 	-webkit-box-shadow: 0 0 25px rgba(0,165,255,1);
@@ -183,19 +224,14 @@ header > h2 {
 	opacity: 1 !important;
 }
 
-#roomList > li.rank2 > a {
+#roomList > .inactive > a, #roomList > .future > a {
 	z-index: 2;
-	font-size: 80%;
-	opacity: 0.85;
-}
-
-#roomList > li.rank3 > a {
-	z-index: 1;
-	font-size: 64%;
-	opacity: 0.7;
+/*	font-size: 75%;*/
+	opacity: 0.6;
 }
 
 #roomList h1 {
+	margin-right: 0.5em;
 	color: #316493;
 	font-size: 200%;
 	font-family: GS, Arial, Helvetica, sans-serif;
@@ -211,7 +247,7 @@ header > h2 {
 	top: 6px;
 	width: 0.45em;
 	height: 0.45em;
-	background-image: url(/images/room_status_grey_lrg.png);
+	background-image: url(../images/room_status_grey_lrg.png);
 	background-repeat: no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -219,11 +255,11 @@ header > h2 {
 }
 
 #roomList .active h1:before {
-	background-image: url(/images/room_status_green_lrg.png);
+	background-image: url(../images/room_status_green_lrg.png);
 }
 
 #roomList .future h1:before {
-	background-image: url(/images/room_status_orange_lrg.png);
+	background-image: url(../images/room_status_orange_lrg.png);
 }
 
 #roomList h2 {
@@ -234,15 +270,17 @@ header > h2 {
 	line-height: 1.2;
 }
 
-#roomList .time {
+#roomList time {
+	display: block;
 	margin-top: 0.2em;
 	color: #316493;
-	font-size: 100%;
+	font-size: 110%;
 	font-family: GS, Arial, Helvetica, sans-serif;
 }
 
 #roomList .contributors {
-	margin: 1.5em 0 1.3em 0;
+	display: block;
+	margin: 1.2em 0 1.3em 0;
 	border-top: 1px solid #cfd8e5;
 	border-bottom: 1px solid #cfd8e5;
 	padding: 0.6em 0 0.5em 0;
@@ -299,23 +337,154 @@ header > h2 {
 	font-size: 100%;
 }
 
-#allRoomsLink {
-	position: absolute;
-	bottom: 2em;
-	left: 50%;
-	width: 23em;
-	margin-left: -11.5em;
-	border-radius: 6px;
-	background-color: rgba(255,255,255,0.15);
-	color: #ffffff;
-	font-size: 130%;
-	text-decoration: none;
-	line-height: 2.3;
-	-webkit-transition: background-color 0.3s linear;
-	-moz-transition: background-color 0.3s linear;
-	transition: background-color 0.3s linear;
+#roomList .topics .link {
+	margin-top: 0.3em;
+	color: #00A5FF;
+	font-weight: bold;
 }
 
-#allRoomsLink:hover {
-	background-color: rgba(255,255,255,0.25);
+#roomList .topics .link:hover {
+	text-decoration: underline;
+}
+
+nav {
+	position: absolute;
+	bottom: 0;
+	left: 80px;
+	right: 80px;
+	height: 100px;
+}
+
+nav > div {
+	position: relative;
+	margin: 0 auto;
+}
+
+#navIndicator {
+	position: absolute;
+	left: 0;
+	width: 0;
+	height: 49px;
+	top: -7px;
+	margin-left: -12px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	padding: 0 7px;
+	background-color: rgba(255,255,255,0.08);
+	-webkit-transition: left 1s ease, -webkit-transform 1s ease-out;
+	-moz-transition: left 1s ease;
+	transition: left 1s ease;
+}
+
+nav.noIndicator #navIndicator {
+	visibility: hidden;
+}
+
+nav .prev {
+	position: absolute;
+	left: -50px;
+	top: 0;
+	width: 22px;
+	height: 32px;
+	background-image: url(../images/arrow_left.png);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	text-indent: -9999px;
+	opacity: 0.67;
+}
+
+nav .prev:hover {
+	opacity: 1;
+}
+
+nav.noIndicator .prev {
+	visibility: hidden;
+}
+
+nav ol {
+	position: relative;
+	height: 35px;
+	list-style: none;
+}
+
+nav li {
+	display: inline;
+}
+
+nav li time {
+	position: absolute;
+	top: -50px;
+	width: 5em;
+	margin-left: -2.5em;
+	opacity: 0.5;
+}
+
+nav li time:after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 2em;
+	width: 1px;
+	height: 10px;
+	background-color: #ffffff;
+	opacity: 0.4;
+}
+
+nav li time.day {
+	top: auto;
+	bottom: -50px;
+	width: 10em;
+	margin-left: -5em;
+	opacity: 0.5;
+}
+
+nav li time.day:after {
+	top: auto;
+	bottom: 2em;
+}
+
+nav li a {
+	position: absolute;
+	top: 0;
+	width: 25px;
+	height: 35px;
+	margin-left: -12px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	background-color: #676C71;
+	text-indent: -9999px;
+	-webkit-box-shadow: 0 0 3px #4C5258;
+	-moz-box-shadow: 0 0 3px #4C5258;
+	box-shadow: 0 0 3px #4C5258;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	transition: all 0.3s linear;
+}
+
+nav li a:hover {
+	z-index: 2;
+	background-color: #999999;
+}
+
+nav .next {
+	position: absolute;
+	right: -50px;
+	top: 0;
+	width: 22px;
+	height: 32px;
+	background-image: url(../images/arrow_right.png);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	text-indent: -9999px;
+	opacity: 0.67;
+}
+
+nav .next:hover {
+	opacity: 1;
+}
+
+nav.noIndicator .next {
+	visibility: hidden;
 }

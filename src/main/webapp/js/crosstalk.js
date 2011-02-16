@@ -37,8 +37,13 @@ $(document).ready(function() {
 
   // Initialize editor.
   crosstalk.init_();
+  
+  setTimeout(scrollToBottom, 1000);
 });
 
+function scrollToBottom() {
+  $('#viewport').get(0).scrollTop = 100000;
+}
 
 /**
  * Initialize UI event handlers and such.
@@ -122,6 +127,8 @@ crosstalk.init_ = function () {
  * Posts a new local message and sends to server.
  */
 crosstalk.post_ = function() {
+  scrollToBottom();
+  
   var talkbox = $('#talkbox');
   var text = talkbox.val();
   talkbox.val('');
@@ -158,9 +165,15 @@ crosstalk.post_ = function() {
  * Inserts message into dom and nothing else.
  */
 crosstalk.insertMessage_ = function(post) {
+  var refreshScroll = false;
+  
+  if ($('#stream').outerHeight() - $('#viewport').outerHeight() < $('#viewport').get(0).scrollTop + 50) {
+    refreshScroll = true;
+  }
+  
   var linkset = crosstalk.linkify(post.text);
   var stream = $('#stream > .inner');
-  stream.append((post.isTweet ? '<div class="message">' : '<div class="message tweet">')
+  stream.append((post.isTweet ? '<div class="message tweet">' : '<div class="message">')
     + '<div class="author">' + post.author.username + '</div>'
     + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
@@ -173,12 +186,23 @@ crosstalk.insertMessage_ = function(post) {
 
   for (var i = 0; i < linkset.images.length; i ++) {
     var image = linkset.images[i];
-    target.append('<img style="width: 200px" src="' + image + '"/>');
+    
+    if (refreshScroll) {
+      target.append('<img style="width: 200px" src="' + image + '" onload="scrollToBottom()" />');
+    }
+    else {
+      target.append('<img style="width: 200px" src="' + image + '"/>');
+    }
   }
 
   // Add any attachment that this method may have too.
   if (post.attachmentId) {
-    target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '"/>');
+    if (refreshScroll) {
+      target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '" onload="scrollToBottom()" />');
+    }
+    else {
+      target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '" />');
+    }
   }
 
   target = $('.oembed', msg);
@@ -188,6 +212,10 @@ crosstalk.insertMessage_ = function(post) {
     wmode: 'transparent',
     elems: target
   });
+  
+  if (refreshScroll) {
+    scrollToBottom();
+  }
 };
 
 /**

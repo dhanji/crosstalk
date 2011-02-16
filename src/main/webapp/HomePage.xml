@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" class="notIos">
 <head>
   <title>CrossTalk</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
 
   <link rel="stylesheet" href="/fonts/fonts.css"/>
   <link rel="stylesheet" href="/main.css"/>
+  <link rel="stylesheet" href="/main_mobile.css" media="screen and (max-width: 700px)" />
 
   <script src="/js/jquery-1.5.min.js"></script>
   <script src="/js/main.js"></script>
 </head>
 <body>
+<div id="mobileCheck"></div>
+<div id="page">
 <header>
   <h1>CrossTalk</h1>
-
   <h2>Real time chat for events</h2>
-  <ol id="roomStatus">
-    <li><a href="#">2 current rooms</a></li>
-    <li><a href="#">10 future rooms</a></li>
-    <li><a href="#">17 archived rooms</a></li>
-  </ol>
-  <p id="corporateLogo"><a href="#">Webstock</a></p>
+  <p id="corporateLogo"><a href="http://webstock.org.nz/">Webstock</a></p>
 </header>
+<p id="callToAction"><span class="click">Click / </span><span class="tap">tap</span> on the room you'd like to visit:</p>
 <section id="content">
   <ul id="roomList">
 
     @Repeat(items=rooms, var="room")
-    <li class="rank2 ${__page.status(room)}">
+    <li class="${__page.status(room)}">
       <a href="/r/chat/${room.name}">
         <h1>${room.displayName}</h1>
 
         <h2>${room.host}</h2>
 
-        <p class="time">${__page.period(room)}</p>
+        <time>${__page.period(room)}</time>
         <section class="contributors">
           <h2>${__page.contributors(room)} Contributors</h2>
           <ul>
@@ -56,6 +53,6 @@
     </li>
   </ul>
 </section>
-<a id="allRoomsLink" href="#">Show all rooms for this event (past &amp; future)</a>
+</div> <!-- /#page -->
 </body>
 </html>
