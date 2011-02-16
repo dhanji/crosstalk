@@ -16,6 +16,7 @@ public class StoreModule extends AbstractModule {
     ObjectifyService.register(Occupancy.class);
     ObjectifyService.register(User.class);
     ObjectifyService.register(Message.class);
+    ObjectifyService.register(Attachment.class);
     ObjectifyService.register(LoginToken.class);
     ObjectifyService.register(RoomTextIndex.class);
   }

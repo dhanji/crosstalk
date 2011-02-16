@@ -38,7 +38,7 @@
   @ShowIf(user.username == 'anonymous')
   <div class="talkbox">
     <div class="signin">
-      <a href="/login">Sign in</a> with twitter.
+      <a href="/login?r=${room.id}">Sign in</a> with twitter.
     </div>
   </div>
 </div>
@@ -82,6 +82,10 @@
         <div class="content">
           <div class="time">${__page.format(post.postedOn)}</div>
           ${post.text}
+          <div class="images">
+            @ShowIf(post.attachmentId != null)
+            <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>
+          </div>
         </div>
       </div>
 

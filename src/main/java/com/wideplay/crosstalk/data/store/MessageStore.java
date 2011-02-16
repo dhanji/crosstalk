@@ -53,7 +53,7 @@ public class MessageStore {
     objectify.put(attachment);
   }
 
-  public Attachment fetch(Long id) {
+  public Attachment fetchAttachment(Long id) {
     return objectify.find(Attachment.class, id);
   }
 }

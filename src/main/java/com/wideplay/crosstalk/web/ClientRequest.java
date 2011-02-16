@@ -9,6 +9,7 @@ public class ClientRequest {
   private String text;
   private String token;
   private Long room;
+  private Long attachmentId;
 
   public Long getRoom() {
     return room;
@@ -27,5 +28,9 @@ public class ClientRequest {
     return "ClientRequest{" +
         ", text='" + text + '\'' +
         '}';
+  }
+
+  public Long getAttachmentId() {
+    return attachmentId;
   }
 }

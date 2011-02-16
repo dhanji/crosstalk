@@ -7,17 +7,15 @@ import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
 import com.wideplay.crosstalk.data.Attachment;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
+import com.wideplay.crosstalk.data.store.MessageStore;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 /**
@@ -30,19 +28,25 @@ public class UploadService {
   @Inject
   private CurrentUser currentUser;
 
+  @Inject
+  private MessageStore messageStore;
+
   @Post
   Reply<?> receiveFile(HttpServletRequest request) throws IOException, FileUploadException {
     String fileName = request.getParameter("qqfile");
     log.info("Received upload of file named '{}'", fileName);
 
       // Get the image representation
-    ServletFileUpload upload = new ServletFileUpload();
-    FileItemIterator iter = upload.getItemIterator(request);
-    FileItemStream file = iter.next();
-    InputStream fileStream = file.openStream();
+//    ServletFileUpload upload = new ServletFileUpload();
+//    FileItemIterator iter = upload.getItemIterator(request);
+//    FileItemStream file = iter.next();
+//    InputStream fileStream = file.openStream();
 
     // Do something with this stream.
-    byte[] data = IOUtils.toByteArray(fileStream);
+    ServletInputStream inputStream = request.getInputStream();
+    byte[] data = IOUtils.toByteArray(inputStream);
+    IOUtils.closeQuietly(inputStream);
+
     Attachment attachment = new Attachment();
     attachment.setId(UUID.randomUUID().getMostSignificantBits());
     attachment.setAuthor(currentUser.getUser());
@@ -50,10 +54,12 @@ public class UploadService {
     attachment.setContent(new Blob(data));
     attachment.setMimeType(determineMimeType(fileName)); // determine from file name =(
 
-    // Send id back to current user as confirmation somehow.
-    //...
-    IOUtils.closeQuietly(fileStream);
-    return Reply.with("{ success: 'true' }");
+    messageStore.save(attachment);
+
+    log.info("Saving attachment as id [{}]", attachment.getId());
+
+    // Send id back to current user as confirmation.
+    return Reply.with("{ success: 'true', id: '" + attachment.getId() + "' }");
   }
 
   private String determineMimeType(String fileName) {

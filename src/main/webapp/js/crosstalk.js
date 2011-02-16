@@ -69,7 +69,8 @@ crosstalk.init_ = function () {
     onComplete: function(id, file, response) {
       if (response && response.success) {
         // Remember file attachment name.
-        $('#talkbox').data('attachment', file);
+        talkbox.data('attachment', file);
+        talkbox.data('attachmentId', response.id);
       }
     }
   });
@@ -126,18 +127,30 @@ crosstalk.post_ = function() {
   talkbox.val('');
   var token = $('#comet-token').html();
 
+  var attachment = talkbox.data('attachmentId');
+
   // escape html:
   text = $('<div/>').text(text).html();
 
   var now = new Date();
-  crosstalk.insertMessage_({
+  var post = {
     author: crosstalk.currentUserInfo,
     postedOn: now.getHours() + ':' + now.getMinutes(),
     text: text
-  });
+  };
+  var data = { room: $('#room-id').text(), text: text, token: token };
+  if (attachment) {
+    data.attachmentId = attachment;
+    post.attachmentId = attachment;
+
+    // Clear attachments.
+    talkbox.removeData('attachment');
+    talkbox.removeData('attachmentId');
+  }
+  crosstalk.insertMessage_(post);
 
   // Send to the server.
-  crosstalk.send("message", { room: $('#room-id').text(), text: text, token: token },
+  crosstalk.send("message", data,
       crosstalk.noop);
 };
 
@@ -160,6 +173,11 @@ crosstalk.insertMessage_ = function(post) {
   for (var i = 0; i < linkset.images.length; i ++) {
     var image = linkset.images[i];
     target.append('<img style="width: 200px" src="' + image + '"/>');
+  }
+
+  // Add any attachment that this method may have too.
+  if (post.attachmentId) {
+    target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '"/>');
   }
 
   target = $('.oembed', msg);

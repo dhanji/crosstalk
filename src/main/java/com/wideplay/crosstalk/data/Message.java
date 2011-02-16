@@ -25,10 +25,10 @@ public class Message {
   private Date postedOn;
   private String text;
 
+  private Long attachmentId;
+
   @Transient
   private User author;
-  // TODO(dhanji): Add attachments.
-
 
   public Long getId() {
     return id;
@@ -44,6 +44,14 @@ public class Message {
 
   public User getAuthor() {
     return author;
+  }
+
+  public Long getAttachmentId() {
+    return attachmentId;
+  }
+
+  public void setAttachment(Long attachmentId) {
+    this.attachmentId = attachmentId;
   }
 
   public void setAuthor(User author) {
