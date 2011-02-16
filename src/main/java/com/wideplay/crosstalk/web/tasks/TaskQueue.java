@@ -23,6 +23,6 @@ class TaskQueue {
     QueueFactory.getDefaultQueue().add(TaskOptions.Builder
         .withUrl("/queue/tweets")
         .method(TaskOptions.Method.GET)
-        .countdownMillis(30 * 1000 /* seconds */));
+        .countdownMillis(2 * 60 * 1000 /* minutes */));
   }
 }

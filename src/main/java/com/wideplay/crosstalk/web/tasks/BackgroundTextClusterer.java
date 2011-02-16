@@ -7,8 +7,8 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
-import com.wideplay.crosstalk.data.*;
-import com.wideplay.crosstalk.data.indexing.PorterStemmer;
+import com.wideplay.crosstalk.data.Message;
+import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.RoomTextIndex;
 import com.wideplay.crosstalk.data.indexing.StopWords;
 import com.wideplay.crosstalk.data.store.MessageStore;
@@ -78,8 +78,10 @@ public class BackgroundTextClusterer {
       // O(N log N)
       Collections.sort(words);
 
-      // TODO(dhanji): Should probably drop all but the top 50 words?
-      log.info("Trending topics for the current room {}", words);
+      // Only keep 50 words around in our index.
+      if (!words.isEmpty()) {
+        words = words.subList(0, Math.min(words.size(), 50));
+      }
 
       // Update in datastore. We do the if null dance here, coz we
       // need to save this entity anyway, so no point in creating if absent.
