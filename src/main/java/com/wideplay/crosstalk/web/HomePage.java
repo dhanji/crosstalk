@@ -34,6 +34,7 @@ public class HomePage {
 
   private DateFormat timeFormat = new SimpleDateFormat("hh:mm");
   private DateFormat dayFormat = new SimpleDateFormat(", MMM dd");
+  private DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm");
 
   @Get
   void displayHome() {
