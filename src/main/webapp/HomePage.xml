@@ -39,7 +39,7 @@
             @Repeat(items=__page.occupants(room), var="user")
             <li><img src="${user.avatar}" width="24" height="24" alt="${user.displayName}"/></li>
           </ul>
-          <p class="lurkers">+N lurkers</p>
+          <p class="lurkers"></p>
         </section>
         <section class="topics">
           <h2>People are talking about</h2>
