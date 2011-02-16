@@ -41,7 +41,14 @@ function init() {
 		
 		// Focus on active cards
 		var activeRooms = $('#roomList .active');
-		moveRoomListTo(activeRooms.eq(0), activeRooms.eq(activeRooms.length - 1));
+		
+		if (activeRooms.length > 0) {
+			moveRoomListTo(activeRooms.eq(0), activeRooms.eq(activeRooms.length - 1));
+		}
+		else
+		{
+			moveRoomListTo(0);
+		}
 	
 		// Fade-in cards	
 		roomListItems.each(function(index) {
@@ -139,6 +146,8 @@ function createNav() {
 	var roomListItems = $('#roomList > li');
 	var navOl = $('nav ol');
 	var currDay = null;
+	
+	$('nav').addClass('noIndicator');
 	
 	roomListItems.each(function(index) {
 		var self = this;
@@ -258,7 +267,7 @@ function moveRoomListTo(first, second) {
 		if (typeof second == 'undefined') {
 			second = first;
 		}
-		
+
 		var firstX = first.offset().left + -$('#content').offset().left;
 		var secondX = second.offset().left + second.outerWidth() + -$('#content').offset().left;
 		
@@ -306,7 +315,7 @@ function moveRoomListTo(first, second) {
 	// Position nav indicator correctly
 	var navIndicator = $('#navIndicator');
 	var indicatorWidth = $(window).width() / $('#content').outerWidth();
-	
+
 	if (indicatorWidth >= 1) {
 		$('nav').addClass('noIndicator');
 	}

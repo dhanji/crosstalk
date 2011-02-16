@@ -53,6 +53,15 @@
     </li>
   </ul>
 </section>
+<nav>
+  <div>
+    <div id="navIndicator"></div>
+    <a class="prev" href="#">Previous</a>
+    <ol>
+    </ol>
+    <a class="next" href="#">Next</a>
+  </div>
+</nav>
 </div> <!-- /#page -->
 </body>
 </html>
