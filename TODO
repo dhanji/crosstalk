@@ -19,9 +19,8 @@ LATER
 
 x Home screen
 x Create new room UI(?)
-- Editing hashtags
-- Pull hashtag content from twitter
-- Hot-cache for users/rooms (especially occupancy)
+x Editing hashtags
+x Pull hashtag content from twitter
 - Memcache for users/rooms (especially occupancy)
 - Fast scroll (via minimap)
 - Leave room (idleness checker)

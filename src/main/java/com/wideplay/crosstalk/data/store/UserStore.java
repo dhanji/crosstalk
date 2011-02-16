@@ -65,4 +65,8 @@ public class UserStore {
   public void newOAuthToken(String requestToken, String tokenSecret) {
     objectify.put(new LoginToken(requestToken, tokenSecret));
   }
+
+  public User fetch(Key<User> userKey) {
+    return objectify.get(userKey);
+  }
 }

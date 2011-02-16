@@ -24,6 +24,7 @@ public class Message {
 
   private Date postedOn;
   private String text;
+  private boolean isTweet;
 
   private Long attachmentId;
 
@@ -77,6 +78,14 @@ public class Message {
 
   public void setText(String text) {
     this.text = text;
+  }
+
+  public boolean isTweet() {
+    return isTweet;
+  }
+
+  public void setTweet(boolean tweet) {
+    isTweet = tweet;
   }
 
   @Override

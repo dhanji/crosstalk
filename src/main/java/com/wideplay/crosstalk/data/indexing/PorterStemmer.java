@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.data;
+package com.wideplay.crosstalk.data.indexing;
 
 /*
 

@@ -1,5 +1,6 @@
 package com.wideplay.crosstalk.data;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.googlecode.objectify.Key;
@@ -35,6 +36,8 @@ public class Occupancy {
   @Transient @JsonHide
   private int maxActivity = -1; // memo field.
 
+  private Date lastTweetPulledOn;
+
   public Long getId() {
     return id;
   }
@@ -68,6 +71,17 @@ public class Occupancy {
     }
 
     return maxActivity;
+  }
+
+  /**
+   * Picks a user at random (tries to be fair).
+   */
+  public Key<User> pickUser() {
+    if (users.isEmpty()) {
+      return null;
+    }
+    ImmutableList<Key<User>> userKeys = ImmutableList.copyOf(users);
+    return userKeys.get((int) ((Math.random() * userKeys.size()) % userKeys.size()));
   }
 
   @SuppressWarnings("deprecation") // Calendar is just too awful to use.

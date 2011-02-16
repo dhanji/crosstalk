@@ -37,7 +37,6 @@ $(document).ready(function() {
 
   // Initialize editor.
   crosstalk.init_();
-
 });
 
 
@@ -109,7 +108,8 @@ crosstalk.init_ = function () {
   });
 
   // Kick off timer to refresh the index.
-  setTimeout(crosstalk.refreshIndex, 5 * 60 * 1000 /* 5 minutes */);
+  setInterval(crosstalk.refreshIndex, 5 * 60 * 1000 /* 5 minutes */);
+//  setInterval(crosstalk.refreshIndex, 3 * 1000 /* 5 minutes */);
 
   // Kick off timer to ping the server with activity.
   setInterval(crosstalk.ping, 30 * 1000 /* seconds */);
@@ -159,7 +159,8 @@ crosstalk.post_ = function() {
  */
 crosstalk.insertMessage_ = function(post) {
   var linkset = crosstalk.linkify(post.text);
-  $('#stream').append('<div class="message">'
+  var stream = $('#stream');
+  stream.append((post.isTweet ? '<div class="message">' : '<div class="message tweet">')
     + '<div class="author">' + post.author.username + '</div>'
     + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
@@ -244,12 +245,8 @@ crosstalk.refreshIndex = function() {
   }, function(data) {
     // index data back from the server.
     if (data.html) {
-      var last = $('#activity-map > segment:last').attr('starts');
-
-      // Insert only if the returned segment doesn't already exist.
-      if (last != data.startsOn) {
-        $('#activity-map').append(data.html);
-      }
+      // Refresh entire activity map.
+      $('#activity-map').html(data.html);
     }
   });
 };
