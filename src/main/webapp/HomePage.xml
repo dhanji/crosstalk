@@ -37,7 +37,7 @@
 
         <p class="time">${__page.period(room)}</p>
         <section class="contributors">
-          <h2>${room.occupancy.users.size()} Contributors</h2>
+          <h2>${__page.contributors(room)} Contributors</h2>
           <ul>
             @Repeat(items=__page.occupants(room), var="user")
             <li><img src="${user.avatar}" width="24" height="24" alt="${user.displayName}"/></li>

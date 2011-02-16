@@ -66,7 +66,7 @@ public class RoomStore {
   }
 
   public List<Room> list() {
-    List<Room> list = objectify.query(Room.class).list();
+    List<Room> list = objectify.query(Room.class).order("startTime").list();
     for (Room room : list) {
       // Load the occupancies too.
       loadOccupancy(room);

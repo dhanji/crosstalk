@@ -68,6 +68,10 @@ public class AsyncPostService {
     public void add(String token, User client, Room room) {
       clients.get(client.getUsername()).put(room, token);
     }
+
+    public Map<String, Map<Room, String>> getClients() {
+      return clients;
+    }
   }
 
   @At("/message") @Post @Secure

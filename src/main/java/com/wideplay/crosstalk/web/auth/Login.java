@@ -37,6 +37,7 @@ public class Login {
   Reply<?> get(Twitter twitter, Request request, Gson gson) {
     // Decrement lurker count.
     String roomId = request.param("r");
+    String lastUrl = request.param("u");
     CurrentUser user = currentUser.get();
     if (null != roomId && user.isAnonymous()) {
       Room room = roomStore.byId(Long.valueOf(roomId));
@@ -52,7 +53,7 @@ public class Login {
     OAuthRedirect redirect = twitter.redirectForAuth();
 
     // We need to save these temporary credentials to complete the OAuth dance.
-    userStore.newOAuthToken(redirect.getRequestToken(), redirect.getTokenSecret());
+    userStore.newOAuthToken(redirect.getRequestToken(), redirect.getTokenSecret(), lastUrl);
 
     return Reply.saying().redirect(redirect.getUrl());
   }

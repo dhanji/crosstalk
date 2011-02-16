@@ -21,7 +21,8 @@ import java.util.List;
  */
 @At("/r/async/index") @Service
 public class AsyncIndexService {
-  private final DateFormat messageDateFormat = new SimpleDateFormat(CrosstalkModule.POST_DATE_FORMAT);
+  private final DateFormat messageDateFormat =
+      new SimpleDateFormat(CrosstalkModule.SEGMENT_DATE_FORMAT);
 
   @Inject
   private RoomStore roomStore;

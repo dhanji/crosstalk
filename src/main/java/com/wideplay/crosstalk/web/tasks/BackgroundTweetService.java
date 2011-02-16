@@ -98,6 +98,9 @@ public class BackgroundTweetService {
 
         termsFetched++;
       }
+
+      // Use this opportunity to perform room stateness evictions.
+      room.getOccupancy().getUsers();
     }
 
     // Chain next instance of this task.

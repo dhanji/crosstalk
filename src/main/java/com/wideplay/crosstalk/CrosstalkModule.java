@@ -20,6 +20,7 @@ import com.wideplay.crosstalk.web.ClientRequest;
  */
 public class CrosstalkModule extends AbstractModule {
   public static final String POST_DATE_FORMAT = "HH:mm";
+  public static final String SEGMENT_DATE_FORMAT = "HH:m0";
 
   @Override
   protected void configure() {

@@ -3,6 +3,7 @@ package com.wideplay.crosstalk.web.auth;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
+import com.wideplay.crosstalk.data.LoginToken;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.web.CurrentUser;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,10 +77,8 @@ public class Twitter {
 
   public OAuthRedirect redirectForAuth() {
     try {
-      OAuthRedirect redirect = new OAuthRedirect(provider.retrieveRequestToken(consumer, null),
+      return new OAuthRedirect(provider.retrieveRequestToken(consumer, null),
           consumer.getToken(), consumer.getTokenSecret());
-
-      return redirect;
     } catch (OAuthMessageSignerException e) {
       log.error("Oauth failed", e);
     } catch (OAuthNotAuthorizedException e) {
@@ -91,9 +91,10 @@ public class Twitter {
     return null;
   }
 
-  public void authorize(String token, String verification) {
+  public LoginToken authorize(String token, String verification) {
     try {
-      String secret = userStore.claimOAuthToken(token);
+      LoginToken loginToken = userStore.claimOAuthToken(token);
+      String secret = loginToken.getTokenSecret();
       if (null == secret) {
         throw new IllegalStateException("Unknown oauth request token " + token);
       }
@@ -108,6 +109,7 @@ public class Twitter {
       user.setTwitterAccessToken(consumer.getToken());
       user.setTwitterTokenSecret(consumer.getTokenSecret());
 
+      return loginToken;
     } catch (OAuthMessageSignerException e) {
       log.error("Oauth failed", e);
     } catch (OAuthNotAuthorizedException e) {
@@ -117,6 +119,7 @@ public class Twitter {
     } catch (OAuthCommunicationException e) {
       log.error("Oauth failed", e);
     }
+    return null;
   }
 
   /**
@@ -143,12 +146,14 @@ public class Twitter {
       // send the request
       connection.connect();
 
+      InputStream inputStream = connection.getInputStream();
       if (connection.getResponseCode() == 200) {
-        return IOUtils.toString(connection.getInputStream());
+        return IOUtils.toString(inputStream);
       } else {
         log.error("Twitter returned error code {} with message {}", connection.getResponseCode(),
-            IOUtils.toString(connection.getInputStream()));
+            IOUtils.toString(inputStream));
       }
+      IOUtils.closeQuietly(inputStream);
 
     } catch (MalformedURLException e) {
       log.error("Could not perform Twitter OAuth request", e);

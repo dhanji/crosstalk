@@ -21,6 +21,7 @@ public class SitebricksConfig extends GuiceServletContextListener {
       @Override
       protected void configureServlets() {
         filter("/r/*").through(AuthFilter.class);
+        filter("/logout").through(AuthFilter.class);
         filter("/oauth/twitter").through(AuthFilter.class); // HACK!
       }
 

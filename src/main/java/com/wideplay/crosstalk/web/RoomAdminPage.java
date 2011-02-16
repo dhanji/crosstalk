@@ -8,6 +8,7 @@ import com.google.sitebricks.http.Get;
 import com.google.sitebricks.http.Post;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.store.RoomStore;
+import com.wideplay.crosstalk.web.auth.AdminOnly;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,12 +27,12 @@ public class RoomAdminPage {
 
   private List<Room> rooms;
 
-  @Get
+  @Get @AdminOnly
   void displayRooms() {
     rooms = roomStore.list();
   }
 
-  @Post
+  @Post @AdminOnly
   String newRoom(Request request) throws ParseException {
     Room room = new Room();
     room.setName(request.param("name"));
@@ -48,7 +49,7 @@ public class RoomAdminPage {
     return "/r/room_admin";
   }
 
-  @Delete
+  @Delete @AdminOnly
   void deleteRoom(Request request) {
     Long roomId = Long.valueOf(request.param("id"));
     roomStore.remove(roomId);

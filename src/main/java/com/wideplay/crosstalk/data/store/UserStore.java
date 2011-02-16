@@ -53,17 +53,17 @@ public class UserStore {
     return objectify.get(users);
   }
 
-  public String claimOAuthToken(String requestToken) {
+  public LoginToken claimOAuthToken(String requestToken) {
     LoginToken token = objectify.find(LoginToken.class, requestToken);
     if (null == token) {
       return null;
     }
     objectify.delete(LoginToken.class, requestToken);
-    return token.getTokenSecret();
+    return token;
   }
 
-  public void newOAuthToken(String requestToken, String tokenSecret) {
-    objectify.put(new LoginToken(requestToken, tokenSecret));
+  public void newOAuthToken(String requestToken, String tokenSecret, String lastUrl) {
+    objectify.put(new LoginToken(requestToken, tokenSecret, lastUrl));
   }
 
   public User fetch(Key<User> userKey) {

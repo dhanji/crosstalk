@@ -13,13 +13,15 @@ public class LoginToken {
   @Id
   private String requestToken;
   private String tokenSecret;
+  private String lastUrl;
 
   public LoginToken() {
   }
 
-  public LoginToken(String requestToken, String tokenSecret) {
+  public LoginToken(String requestToken, String tokenSecret, String lastUrl) {
     this.requestToken = requestToken;
     this.tokenSecret = tokenSecret;
+    this.lastUrl = lastUrl;
   }
 
   public String getRequestToken() {
@@ -28,5 +30,9 @@ public class LoginToken {
 
   public String getTokenSecret() {
     return tokenSecret;
+  }
+
+  public String getLastUrl() {
+    return lastUrl;
   }
 }

@@ -8,6 +8,7 @@ import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
+import com.wideplay.crosstalk.data.LoginToken;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.data.twitter.TwitterUser;
@@ -39,9 +40,14 @@ public class TwitterOAuthCallback {
     String token = request.param("oauth_token");
     String verifier = request.param("oauth_verifier");
 
+    String redirect = "/r/chat/1";
     log.debug("Twitter callback successful with verifier {} ", verifier);
-    if (verifier != null)
-      twitter.authorize(token, verifier);
+    if (verifier != null) {
+      LoginToken loginToken = twitter.authorize(token, verifier);
+      if (loginToken.getLastUrl() != null) {
+        redirect = loginToken.getLastUrl();
+      }
+    }
 
     // And now we should log this user in properly.
     CurrentUser thisUser = currentUser.get();
@@ -66,6 +72,6 @@ public class TwitterOAuthCallback {
 
     userStore.get().loginAndMaybeCreate(sessionId, user);
 
-    return Reply.saying().redirect("/r/chat/1") ;
+    return Reply.saying().redirect(redirect) ;
   }
 }

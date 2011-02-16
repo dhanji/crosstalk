@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @Cached @Entity
 public class Occupancy {
-  public static final int TIME_SEGMENT_INTERVAL_MINS = 10;
+  public static final int TIME_SEGMENT_INTERVAL_MINS = 5;
   @Id
   private Long id;
 
@@ -33,8 +33,6 @@ public class Occupancy {
 
   @Transient @JsonHide
   private int maxActivity = -1; // memo field.
-
-  private Date lastTweetPulledOn;
 
   public Long getId() {
     return id;

@@ -1,6 +1,7 @@
 package com.wideplay.crosstalk.data;
 
 import com.google.appengine.api.users.UserService;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Unindexed;
 
 import javax.persistence.Entity;
@@ -31,6 +32,9 @@ public class User {
 
   // Set up the anonymous user (special case)
   public static transient final User ANONYMOUS = new User();
+  public static transient final Key<User> ANONYMOUS_KEY = new Key<User>(User.class,
+      User.ANONYMOUS.getUsername());
+
   static {
     ANONYMOUS.setUsername("anonymous");
     ANONYMOUS.setAvatar("");
