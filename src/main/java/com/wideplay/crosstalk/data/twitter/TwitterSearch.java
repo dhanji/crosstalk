@@ -28,10 +28,12 @@ public class TwitterSearch {
     Message message = new Message();
     message.setText(tweet.text);
     message.setPostedOn(new Date()); // set properly
+    message.setTweet(true);
 
     User author = new User();
     author.setAvatar(tweet.avatar);
     author.setUsername(tweet.username);
+    author.setDisplayName(tweet.username);
     message.setAuthor(author);
 
     return message;

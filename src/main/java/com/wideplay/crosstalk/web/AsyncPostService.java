@@ -17,7 +17,6 @@ import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
-import com.wideplay.crosstalk.data.twitter.TwitterSearch;
 import com.wideplay.crosstalk.web.auth.Secure;
 import com.wideplay.crosstalk.web.auth.Twitter;
 import org.slf4j.Logger;
@@ -147,25 +146,6 @@ public class AsyncPostService {
 
     // Update active status timestamp of this user/connection
     //...
-
-    // Only piggyback the twitter call if this user is logged in.
-    if (!currentUser.isAnonymous()) {
-      String result = twitter.call("http://search.twitter.com/search.json?q=" + hashtag);
-      // Call to twitter can fail for various reasons.
-      if (result != null && !result.isEmpty()) {
-        TwitterSearch tweets = gson.fromJson(result, TwitterSearch.class);
-
-        // Select a tweet and broadcast.
-        Message pick = tweets.pick();
-        if (null != pick) {
-          broadcaster.broadcast(roomStore.byId(Long.valueOf(request.getRoom())), null, gson.toJson(
-              ImmutableMap.of(
-                  "rpc", "tweet",
-                  "post", pick)
-          ));
-        }
-      }
-    }
 
     return Reply.saying().ok();
   }

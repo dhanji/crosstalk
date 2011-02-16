@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.data;
+package com.wideplay.crosstalk.data.indexing;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Singleton;

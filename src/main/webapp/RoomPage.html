@@ -76,7 +76,7 @@
     <div id="stream">
 
       @Repeat(items=messages, var="post")
-      <div class="message">
+      <div class="message${post.tweet ? ' tweet' : ''}">
         <div class="author">${post.author.username}</div>
         <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
         <div class="content">

@@ -1,7 +1,5 @@
 package com.wideplay.crosstalk.web.tasks;
 
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.inject.AbstractModule;
 
 /**
@@ -10,17 +8,6 @@ import com.google.inject.AbstractModule;
 public class BackgroundTasksModule extends AbstractModule {
   @Override
   protected void configure() {
-    bind(Initializer.class).asEagerSingleton();
-  }
-
-  public static class Initializer {
-    public Initializer() {
-      QueueFactory.getDefaultQueue().add(TaskOptions.Builder
-          .withUrl("/queue/cluster")
-          .method(TaskOptions.Method.GET)
-          .countdownMillis(5 * 1000)
-      );
-//    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withUrl("/queue/hashtag"));
-    }
+    bind(TaskQueue.class).asEagerSingleton();
   }
 }

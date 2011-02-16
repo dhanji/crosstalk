@@ -6,6 +6,7 @@ import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.wideplay.crosstalk.data.*;
+import com.wideplay.crosstalk.data.RoomTextIndex;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)

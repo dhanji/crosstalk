@@ -8,6 +8,9 @@ import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
 import com.wideplay.crosstalk.data.*;
+import com.wideplay.crosstalk.data.indexing.PorterStemmer;
+import com.wideplay.crosstalk.data.RoomTextIndex;
+import com.wideplay.crosstalk.data.indexing.StopWords;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import org.slf4j.Logger;
@@ -88,6 +91,9 @@ public class BackgroundTextClusterer {
       index.setWords(words);
       roomStore.save(index);
     }
+
+    // Chain next instance of this task.
+    TaskQueue.enqueueClusterTask();
 
     return Reply.saying().ok();
   }

@@ -38,6 +38,10 @@ public class User {
     ANONYMOUS.setDisplayName("Lurker");
   }
 
+  public boolean isGhost() {
+    return twitterAccessToken == null;
+  }
+
   public String getTwitterAccessToken() {
     return twitterAccessToken;
   }

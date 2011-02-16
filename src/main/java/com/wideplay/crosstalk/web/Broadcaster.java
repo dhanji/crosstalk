@@ -33,7 +33,7 @@ public class Broadcaster {
         channel.sendMessage(new ChannelMessage(channelId, json));
       } else {
         // stale occupancy, update...
-
+        connected.clients.get(user.getName()).remove(room);
       }
     }
   }

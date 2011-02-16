@@ -124,6 +124,11 @@ public class Twitter {
    */
   public String call(String urlAsString) {
     User user = currentUser.getUser();
+
+    return call(user, urlAsString);
+  }
+
+  public String call(User user, String urlAsString) {
     consumer.setTokenWithSecret(user.getTwitterAccessToken(), user.getTwitterTokenSecret());
 
     // create an HTTP request to a protected resource

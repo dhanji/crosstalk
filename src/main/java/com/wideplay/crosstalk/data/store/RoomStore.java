@@ -38,7 +38,13 @@ public class RoomStore {
     room.setOccupancy(occupancy);
   }
 
+  /**
+   * This method is very special, since occupancy is such a high-write
+   * data structure, we use a writeback cache instead of the normal
+   * objectify-provided writethru cached backed on appengine's memcache.
+   */
   public void save(Occupancy occupancy) {
+    
     // Overwrites the old occupancy!
     objectify.put(occupancy);
   }
