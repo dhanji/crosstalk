@@ -1,0 +1,157 @@
+
+/* GENERAL ========================================= */
+
+html {
+	height: auto;
+}
+
+body {
+	height: auto;
+	overflow: auto;
+	margin: 0 auto;
+}
+
+#mobileCheck {
+	display: none;
+}
+
+#page {
+	width: auto;
+	height: auto;
+	overflow: auto;
+}
+
+
+
+
+/* HEADER ========================================= */
+
+header {
+	position: relative;
+	height: 41px;
+	background-image: none;
+}
+
+header > h1 {
+	float: left;
+	width: 155px;
+	height: 21px;
+	margin: 10px 0 0 15px;
+	background-image: url(/images/logo_mobile.gif);
+	background-repeat: no-repeat;
+	text-indent: -9999px;
+}
+
+header > h2 {
+	display: none;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#corporateLogo {
+	position: absolute;
+	right: 0;
+	top: 8px;
+	width: 117px;
+	height: 27px;
+	background-image: url(/images/webstock_mobile.gif);
+	background-repeat: no-repeat;
+	text-indent: -9999px;
+}
+
+
+
+
+/* CONTENT ========================================= */
+
+#callToAction {
+	position: static;
+	width: auto;
+	margin: 10px 10px 10px 10px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	background-color: rgba(255,255,255,0.2);
+	font-size: 130%;
+	text-align: center;
+	opacity: 0.5;
+	line-height: 2em;
+}
+
+#callToAction .click {
+	display: none;
+}
+
+#callToAction .tap {
+	display: inline;
+	text-transform: capitalize;
+}
+
+#content {
+	display: block;
+}
+
+#roomList {
+	display: block;
+}
+
+#roomList > li {
+	display: block;
+	overflow: hidden;
+	padding: 0 10px 10px 10px;
+	opacity: 1;
+}
+
+#roomList > li:first-child {
+	padding-left: 10px;
+}
+
+#roomList > li:last-child {
+	padding-right: 10px;
+}
+
+#roomList > li > a {
+	position: relative;
+	top: 0;
+	width: auto;
+}
+
+#roomList h1 {
+	width: 95%;
+	overflow: hidden;
+	font-size: 160%;
+	font-family: Arial, Helvetica, sans-serif;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#roomList h1:before {
+	width: 0.56em;
+	height: 0.56em;
+}
+
+#roomList h2 {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#roomList time {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#roomList .contributors {
+	margin-top: 0.7em;
+	margin-bottom: 0;
+	border-bottom: 0 none #ffffff;
+	padding-bottom: 0;
+}
+
+#roomList .contributors ul {
+	display: none;
+}
+
+#roomList .topics {
+	display: none;
+}
+
+nav {
+	display: none;
+}
