@@ -58,7 +58,8 @@ function init() {
 				$(self).parents('li').animate({opacity: 1}, APPEAR_TIME);
 			}, index * 100);
 		});
-	
+
+/*
 		$('#content').get(0).addEventListener('touchmove', touchMove, false);
 		$('#content').get(0).addEventListener('touchstart', touchStart, false);
 		$('#content').get(0).addEventListener('touchend', touchEnd, false);
@@ -66,6 +67,7 @@ function init() {
 			this.addEventListener('touchstart', cancelEvent, false);
 			this.addEventListener('touchend', cancelEvent, false);
 		});
+*/
 		
 		window.onorientationchange = orientationChange;
 	}
