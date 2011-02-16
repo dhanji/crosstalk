@@ -63,7 +63,7 @@ crosstalk.init_ = function () {
 
   // Set up file uploader.
   crosstalk.uploader_ = new qq.FileUploader({
-    element: $('#dropzone')[0],
+    element: $('#uploadButton')[0],
     action: "/r/upload",
     onComplete: function(id, file, response) {
       if (response && response.success) {
@@ -159,12 +159,12 @@ crosstalk.post_ = function() {
  */
 crosstalk.insertMessage_ = function(post) {
   var linkset = crosstalk.linkify(post.text);
-  var stream = $('#stream');
+  var stream = $('#stream > .inner');
   stream.append((post.isTweet ? '<div class="message">' : '<div class="message tweet">')
     + '<div class="author">' + post.author.username + '</div>'
     + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
-    + '  <div class="time">' + post.postedOn + '</div>'
+    + '  <time>' + post.postedOn + '</time>'
     + linkset.text
     + '<div class="images"></div><div class="oembed"></div></div></div>');
 
@@ -279,7 +279,7 @@ crosstalk.joinRoom_ = function(data) {
     if ($('#' + id).length > 0)
       return;
     $('.current-contributor-avatars')
-        .append('<img id="' + id + '" src="' + data.joiner.avatar + '"/>');
+        .append('<img id="' + id + '" class="avatar" src="' + data.joiner.avatar + '"/>');
   }
 };
 

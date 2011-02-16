@@ -1,15 +1,17 @@
-<html>
+<!DOCTYPE html>
+
+<html lang="en">
 <head>
-  <link type="text/css" rel="stylesheet" href="fonts/fonts.css">
-  <link type="text/css" rel="stylesheet" href="crosstalk.css">
-  <link type="text/css" rel="stylesheet" href="fileuploader.css">
+  <link type="text/css" rel="stylesheet" href="/fonts/fonts.css">
+  <link type="text/css" rel="stylesheet" href="/crosstalk.css">
+  <link type="text/css" rel="stylesheet" href="/fileuploader.css">
   <script src='/_ah/channel/jsapi'></script>
 
-  <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
-  <script type="text/javascript" src="js/jquery.embedly.min.js"></script>
-  <script type="text/javascript" src="js/json2.js"></script>
-  <script type="text/javascript" src="js/fileuploader.js"></script>
-  <script type="text/javascript" src="js/crosstalk.js"></script>
+  <script type="text/javascript" src="/js/jquery-1.4.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.embedly.min.js"></script>
+  <script type="text/javascript" src="/js/json2.js"></script>
+  <script type="text/javascript" src="/js/fileuploader.js"></script>
+  <script type="text/javascript" src="/js/crosstalk.js"></script>
 </head>
 <body>
 <div class="invisible">
@@ -18,53 +20,56 @@
   <div id="current-user" class="invisible">${user.username}</div>
   <div id="current-user-avatar">${user.avatar}</div>
 </div>
+<h1>CrossTalk</h1>
 <div id="header">
-  <h1>cross<span>talk</span></h1>
-
   <div class="mid">
     <h2>${room.displayName}</h2>
   </div>
 </div>
 <div id="footer">
-  <div id="youlabel">You</div>
   <div id="dropzone"></div>
 
   @ShowIf(user.username != 'anonymous')
-  <div>
-    <textarea id="talkbox" class="talkbox"></textarea>
-    <input id="post-message" class="button" type="button" value="Post message">
+  <div id="textareaContainer" class="talkbox">
+    <div class="inner">
+      <div id="youLabel">You</div>
+      <img class="avatar" src="${user.avatar}" alt="${user.username} avatar" />
+      <textarea id="talkbox"></textarea>
+      <input id="post-message" class="button" type="button" value="Post message">
+      <div id="uploadButton"></div>
+    </div> <!-- /.inner -->
   </div>
 
   @ShowIf(user.username == 'anonymous')
   <div class="talkbox">
     <div class="signin">
-      <img src="images/twitter_login.gif" width="44" height="44" alt="Twitter T" /> <a href="/login?r=${room.id}">Sign in with twitter</a> to start chatting
+      <img src="/images/twitter_login.gif" width="44" height="44" alt="Twitter T" /> <a href="/login?r=${room.id}">Sign in with twitter</a> to start chatting
     </div>
   </div>
 </div>
 <div id="center">
+  <div id="activity-map">
+    @Repeat(items=room.occupancy.segments, var="segment")
+    <div class="segment" title="${segment.count} posts around ${__page.format(segment.startsOn)}"
+        starts="${segment.startsOn}">
+      ${ __page.activity(segment) }
+    </div>
+  </div>
   <div id="right">
-    <div id="activity-map">
-      @Repeat(items=room.occupancy.segments, var="segment")
-      <div class="segment" title="${segment.count} posts around ${__page.format(segment.startsOn)}"
-          starts="${segment.startsOn}">
-        ${ __page.activity(segment) }
-      </div>
-    </div>
-    <div class="weak-title">
+    <h2>
       Current contributors
-    </div>
+    </h2>
     <div class="current-contributor-avatars">
       @Repeat(items=occupants, var="occupant")
       <img id="av-${occupant.username}" class="avatar" src="${occupant.avatar}"
            alt="${occupant.username}" title="${occupant.username}"/>
     </div>
-    <div class="weak-title">
+    <p>
       + <span id="lurker-count">0</span> lurkers
-    </div>
-    <div class="strong-title">
+    <p>
+    <h2>
       Also pulling tweets from:
-    </div>
+    </h2>
     <div id="hashtags" class="weak-title">
       @Repeat(items=room.occupancy.terms, var="term")
       <div class="hashtag">${term}</div>
@@ -74,23 +79,23 @@
   </div>
   <div id="viewport">
     <div id="stream">
-
+      <div class="inner">
       @Repeat(items=messages, var="post")
-      <div class="message${post.tweet ? ' tweet' : ''}">
-        <div class="author">${post.author.username}</div>
-        <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
-        <div class="content">
-          <div class="time">${__page.format(post.postedOn)}</div>
+        <div class="message${post.tweet ? ' tweet' : ''}">
+          <div class="author">${post.author.username}</div>
+          <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
+          <div class="content">
+            <time>${__page.format(post.postedOn)}</time>
           ${post.text}
-          <div class="images">
-            @ShowIf(post.attachmentId != null)
-            <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+            <div class="images">
+              @ShowIf(post.attachmentId != null)
+              <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>
+            </div> <!-- /.images -->
+          </div> <!-- /.content -->
+        </div> <!-- /.message -->
+      </div> <!-- /.inner -->
+    </div> <!-- /#stream -->
+  </div> <!-- /#viewport -->
 </div>
 </body>
 </html>

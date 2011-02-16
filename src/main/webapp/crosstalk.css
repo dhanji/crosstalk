@@ -8,7 +8,7 @@
 
 body {
 	background-color: #4D5158;
-	background-image: url(images/body.gif);
+	background-image: url(/images/body.gif);
 	color: #ffffff;
 	line-height: 1.4;
 	font-family: Arial, Helvetica, sans-serif;
@@ -26,25 +26,18 @@ body {
   /*);*/
 }
 
-textarea {
+textarea, input {
   font-size: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 h1 {
-  float: left;
-  font-family: GS, monospace;
-  font-size: 18px;
-
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  cursor: default;
-  padding: 10px 20px;
-  color: #fff;
-}
-
-h1 span {
-  color: #fff;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 125%;
+  font-family: GS, Arial, Helvetica, sans-serif;
+  font-weight: normal;
 }
 
 #header {
@@ -53,16 +46,21 @@ h1 span {
   right: 0;
   left: 0;
   height: 80px;
-
-  background-image: url(/images/body.gif);
 }
 
 #header h2 {
   position: absolute;
   top: 30px;
-  left: 120px;
+  left: 6.25em;
+  right: 30%;
+  overflow: hidden;
   color: white;
-  font-weight: bold;
+  font-size: 160%;
+  font-family: GS, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipse;
 }
 
 #footer {
@@ -71,8 +69,6 @@ h1 span {
   right: 0;
   left: 0;
   height: 130px;
-
-  background-image: url(/images/body.gif);
 }
 
 #center {
@@ -81,19 +77,18 @@ h1 span {
   left: 0;
   right: 0;
   bottom: 130px;
-
-  -webkit-box-shadow: 0 0 8px #111;
-  box-shadow: 0 0 8px #111;
-
+  -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  -moz-box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
   background: #ced2d9;
 }
 
 #activity-map {
   position: absolute;
-  top: 4px;
-  bottom: 0;
-  left: -212px;
+  left: 70%;
+  bottom: 2px;
   width: 120px;
+  margin-left: 5px;
 }
 
 #activity-map .segment {
@@ -103,19 +98,19 @@ h1 span {
 
 #activity-map .bubble {
   float: left;
-  background: #aaa;
+  background: #B3B8C5;
   -webkit-border-radius: 500px;
   -moz-border-radius: 500px;
   border-radius: 500px;
-  height: 10px;
-  width: 10px;
-  margin-right: 1px;
+  height: 7px;
+  width: 7px;
+  margin-right: 3px;
 }
 
 #viewport {
   position: absolute;
   top: 0;
-  left: 10em;
+  left: 0;
   right: 30%;
   bottom: 0;
 
@@ -123,50 +118,76 @@ h1 span {
   -moz-box-shadow: 0 0 12px rgba(0,0,0,0.2);
   box-shadow: 0 0 12px rgba(0,0,0,0.2);
 
-  overflow-y: auto;
-  background: white;
+  overflow: auto;
 }
 
 #stream {
-  position: absolute;
-  /*bottom: 0;*/
   width: 100%;
+  overflow: hidden;
+}
+
+#stream > .inner {
+  min-height: 600px;
+  margin: 0 0 0 10em;
+  background-color: #ffffff;
+  color: #4c4c4c;
+  -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
 }
 
 #viewport .message {
-  overflow: hidden;
-  padding: 4px 0;
-}
-
-#viewport .message .avatar {
-  display: block;
-  float: left;
-  padding: 4px 8px 0 8px;
-}
-#viewport .message .time {
-  float: right;
-  color: #aaa;
+  position: relative;
+  margin: 0 20px 0 47px;
 }
 
 #viewport .message .author {
+  position: absolute;
+  right: 100%;
+  width: 10em;
+  margin: 1em 57px 0 0;
+  color: rgba(0,0,0,0.33);
+  text-align: right;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #ffffff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+  -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+}
+
+#viewport .message .avatar {
+  position: relative;
+  left: -37px;
+  display: block;
   float: left;
-  margin-top: 12px;
-  margin-left: -98px;
-  color: #999;
+  margin: 0.6em -27px -20px 0;
+}
+
+#viewport .message time {
+  float: right;
+  margin-left: 1em;
+  color: #aaa;
 }
 
 #viewport .message .content {
-  padding: 8px 0;
-  border-top: 1px solid #ccc;
-  margin: 0 20px 0 46px;
+  border-top: 1px solid #e5e5e5;
+  padding: 1em 0 1em 0;
 }
 
-#youlabel {
+#youLabel {
   position: absolute;
-  top: 26px;
-  left: 88px;
-  color: white;
+  top: -1px;
+  right: 100%;
+  margin-right: 57px;
   font-weight: bold;
+  text-align: right;
 }
 
 .talkbox {
@@ -175,11 +196,11 @@ h1 span {
   right: 30%;
   top: 10px;
   bottom: 10px;
-
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-
+  margin-right: 15px;
   border: 2px solid #fff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   background: #ced2d9;
   -moz-box-shadow: inset 3px 3px 3px rgba(0,0,0,0.25);
   -webkit-box-shadow: inset 1px 1px 3px rgba(0,0,0,0.33);
@@ -203,20 +224,54 @@ h1 span {
   font-weight: bold;
 }
 
-#post-message {
+.talkbox > .inner {
   position: absolute;
-  right: 408px;
-  bottom: 30px;
+  top: 1em;
+  left: 45px;
+  right: 18px;
+  bottom: 10px;
+}
+
+.talkbox > .inner > .avatar {
+  position: absolute;
+  left: -37px;
+  top: -0.4em;
+}
+
+.talkbox textarea {
+  width: 100%;
+  height: 4em;
+  border: 0 none #ffffff;
+  outline: 0 none #ffffff;
+  padding: 0;
+  background-color: transparent;
+  color: #4c4c4c;
+  resize: none;
 }
 
 .button {
-  background:#b9bdc3;
-  color: #999;
-  border: none;
-  padding: 3px 4px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border: 0 none #ffffff;
+  border-radius: 3px;
+  padding: 0.5em 1em 0.3em 1em;
+  background-color: #b2b2b2;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cccccc),	color-stop(1, #999999));
+  background-image: -moz-linear-gradient(center center, #cccccc 0%, #999999 100%);
+  color: #4c4c4c;
+  font-size: 85%;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.33);
+  -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  -moz-box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  cursor: pointer;
+}
 
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+#post-message {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 9em;
 }
 
 .qq-upload-list {
@@ -228,21 +283,30 @@ h1 span {
 #right {
   position: absolute;
   right: 0;
-  width: 20%;
-  padding: 8px 20px 8px 8px;
-
-  color: #777;
-}
-
-#right div {
+  width: 17%;
+  padding: 20px 20px 20px 20px;
+  color: #696B6F;
   text-align: right;
 }
 
-#right .weak-title {
-  padding: 4px 0;
+#right h2 {
+  margin-top: 1.4em;
+  font-size: 100%;
 }
 
-#right .strong-title {
-  padding-top: 12px;
-  font-weight: bold;
+#right h2:first-of-type {
+  margin-top: 0;
+}
+
+#right p {
+  margin-top: -8px;
+}
+
+.current-contributor-avatars {
+  margin-top: 0.2em;
+}
+
+.current-contributor-avatars img {
+  display: inline-block;
+  margin: 0 0 6px 6px;
 }
