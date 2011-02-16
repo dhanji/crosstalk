@@ -34,12 +34,11 @@
 
         <time datetime="${__page.longdate(room)}">${__page.period(room)}</time>
         <section class="contributors">
-          <h2>${__page.contributors(room)} Contributors</h2>
+          <h2>${__page.contributors(room)} Contributors +N lurkers</h2>
           <ul>
             @Repeat(items=__page.occupants(room), var="user")
             <li><img src="${user.avatar}" width="24" height="24" alt="${user.displayName}"/></li>
           </ul>
-          <p class="lurkers">+N lurkers</p>
         </section>
         <section class="topics">
           <h2>People are talking about</h2>
