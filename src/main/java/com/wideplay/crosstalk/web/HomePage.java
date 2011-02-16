@@ -91,10 +91,10 @@ public class HomePage {
   public String status(Room room) {
     Date now = new Date();
 
-    Date startTime = room.getStartTime();
+    Date startTime = new Date(room.getStartTime().getTime());
     startTime.setMinutes(startTime.getMinutes() - 15);
 
-    Date endTime = room.getEndTime();
+    Date endTime = new Date(room.getEndTime().getTime());
     endTime.setMinutes(endTime.getMinutes() + 15);
     if (now.after(startTime) && now.before(endTime)) {
       return "active";

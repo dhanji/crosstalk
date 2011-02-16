@@ -3,7 +3,7 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>writewire</display-name>
+  <display-name>crosstalk</display-name>
   <filter>
     <filter-name>webFilter</filter-name>
     <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>

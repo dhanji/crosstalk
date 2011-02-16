@@ -4,7 +4,4 @@
     <property name="roomKey" direction="asc"/>
     <property name="postedOn" direction="asc"/>
   </datastore-index>
-  <datastore-index kind="Room" ancestor="false" source="manual">
-    <property name="startTime" direction="asc"/>
-  </datastore-index>
 </datastore-indexes>

@@ -51,7 +51,7 @@ public class Room {
   public void setName(String name) {
     setDisplayName(name);
 
-    name = name.toLowerCase().replaceAll("[ ]+", "-");
+    name = name.toLowerCase().replaceAll("[ :?'\",.()]+", "-");
     this.name = name;
   }
 
