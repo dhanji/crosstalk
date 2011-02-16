@@ -50,6 +50,9 @@ function scrollToBottom() {
  */
 crosstalk.init_ = function () {
 
+  // Size the initial height of the stream
+  $('#stream > .inner').css('minHeight', $('#viewport').outerHeight());
+
   // Linkify all pre-rendered content.
   $('.message').each(function() {
     var msg = $(this);
