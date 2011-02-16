@@ -50,7 +50,7 @@ h1 {
 
 #header h2 {
   position: absolute;
-  top: 30px;
+  top: 15px;
   left: 6.25em;
   right: 30%;
   overflow: hidden;
@@ -61,6 +61,56 @@ h1 {
   text-transform: uppercase;
   white-space: nowrap;
   text-overflow: ellipse;
+}
+
+#tabs {
+  position: absolute;
+  left: 10em;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#tabs li {
+  float: left;
+  margin: 0 5px 0 0;
+  padding: 0;
+}
+
+#tabs li.on {
+  position: relative;
+  z-index: 10;
+  font-weight: bold;
+}
+
+#tabs a {
+  display: block;
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 0 20px 0 20px;
+  background-color: #CED2D9;
+  color: #4c4c4c;
+  line-height: 30px;
+  text-decoration: none;
+}
+
+#tabs li.on a {
+  background-color: #ffffff;
+}
+
+#linkBack {
+  position: absolute;
+  right: 20px;
+  top: 22px;
+}
+
+#linkBack a {
+  color: #ffffff;
 }
 
 #footer {
@@ -141,6 +191,10 @@ h1 {
   margin: 0 20px 0 47px;
 }
 
+#viewport .message.tweet {
+  background-color: #DEF7FF;
+}
+
 #viewport .message .author {
   position: absolute;
   right: 100%;
@@ -150,6 +204,21 @@ h1 {
   text-align: right;
 }
 
+#viewport .message.tweet .author {
+  position: static;
+  width: auto;
+  margin: 0;
+  padding: 1em 10px 0 10px;
+  border-top: 1px solid #CAE2EA;
+  color: #747F83;
+  text-align: left;
+  font-weight: bold;
+}
+
+#viewport .message.tweet .author:before {
+  content: 'Tweet from @';
+}
+
 .avatar {
   width: 24px;
   height: 24px;
@@ -157,9 +226,9 @@ h1 {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
-  -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
-  box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.15);
+  -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.15);
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.15);
 }
 
 #viewport .message .avatar {
@@ -170,15 +239,48 @@ h1 {
   margin: 0.6em -27px -20px 0;
 }
 
+#viewport .message.tweet .avatar {
+  top: -2.4em;
+}
+
 #viewport .message time {
   float: right;
   margin-left: 1em;
   color: #aaa;
 }
 
+#viewport .message.tweet time {
+  display: none;
+}
+
 #viewport .message .content {
   border-top: 1px solid #e5e5e5;
   padding: 1em 0 1em 0;
+}
+
+#viewport .message:first-child .content {
+  border-top: 0 none #ffffff !important;
+}
+
+#viewport .message.tweet .content {
+  border-top: 0 none #ffffff;
+  padding: 0 10px 1em 10px;
+}
+
+#viewport .message .images {
+  margin-top: 1.4em;
+}
+
+time + .images {
+  margin-top: 0 !important;
+}
+
+#viewport .message .images img {
+  max-width: 90%;
+  border: 6px solid #ffffff;
+  -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.3), 3px 3px 6px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0 0 1px rgba(0,0,0,0.3), 3px 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 0 1px rgba(0,0,0,0.3), 3px 3px 6px rgba(0,0,0,0.1);
 }
 
 #youLabel {
@@ -309,4 +411,8 @@ h1 {
 .current-contributor-avatars img {
   display: inline-block;
   margin: 0 0 6px 6px;
+}
+
+#hashtags div:last-child {
+  margin-top: 0.3em;
 }
