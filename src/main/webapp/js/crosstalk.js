@@ -37,7 +37,7 @@ $(document).ready(function() {
 
   // Initialize editor.
   crosstalk.init_();
-  
+
   setTimeout(scrollToBottom, 1000);
 });
 
@@ -49,6 +49,18 @@ function scrollToBottom() {
  * Initialize UI event handlers and such.
  */
 crosstalk.init_ = function () {
+
+  // Linkify all pre-rendered content.
+  $('.message').each(function() {
+    var msg = $(this);
+    var textRef = $('.content > .text', msg);
+    var linkset = crosstalk.linkify(textRef.text());
+    textRef.html(linkset.text);
+
+    crosstalk.expandLinks_(linkset, $('.images', msg), null, msg);
+  });
+
+  // Event handlers for posting.
   $('#post-message').click(crosstalk.post_);
   $('#talkbox').keypress(function(event) {
     // If enter key pressed, post.
@@ -128,7 +140,7 @@ crosstalk.init_ = function () {
  */
 crosstalk.post_ = function() {
   scrollToBottom();
-  
+
   var talkbox = $('#talkbox');
   var text = talkbox.val();
   talkbox.val('');
@@ -164,41 +176,22 @@ crosstalk.post_ = function() {
 /**
  * Inserts message into dom and nothing else.
  */
-crosstalk.insertMessage_ = function(post) {
-  var refreshScroll = false;
-  
-  if ($('#stream').outerHeight() - $('#viewport').outerHeight() < $('#viewport').get(0).scrollTop + 50) {
-    refreshScroll = true;
-  }
-  
-  var linkset = crosstalk.linkify(post.text);
-  var stream = $('#stream > .inner');
-  stream.append((post.isTweet ? '<div class="message tweet">' : '<div class="message">')
-    + '<div class="author">' + post.author.username + '</div>'
-    + '<img class="avatar" src="' + post.author.avatar + '"/>'
-    + '<div class="content">'
-    + '  <time>' + post.postedOn + '</time>'
-    + linkset.text
-    + '<div class="images"></div><div class="oembed"></div></div></div>');
-
-  var msg = $('#stream .message:last'); 
-  var target = $('.images', msg);
+crosstalk.expandLinks_ = function(linkset, target, attachment, msg, refreshScroll) {
 
   for (var i = 0; i < linkset.images.length; i ++) {
     var image = linkset.images[i];
-    
+
     if (refreshScroll) {
       target.append('<img style="width: 200px" src="' + image + '" onload="scrollToBottom()" />');
-    }
-    else {
+    } else {
       target.append('<img style="width: 200px" src="' + image + '"/>');
     }
   }
 
   // Add any attachment that this method may have too.
-  if (post.attachmentId) {
+  if (attachment) {
     if (refreshScroll) {
-      target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '" onload="scrollToBottom()" />');
+      target.append('<img style="width: 200px" src="/r/attachment/' + attachment + '" onload="scrollToBottom()" />');
     }
     else {
       target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '" />');
@@ -212,10 +205,31 @@ crosstalk.insertMessage_ = function(post) {
     wmode: 'transparent',
     elems: target
   });
-  
+
   if (refreshScroll) {
     scrollToBottom();
   }
+};
+
+crosstalk.insertMessage_ = function(post) {
+  var refreshScroll = false;
+  if ($('#stream').outerHeight() - $('#viewport').outerHeight() < $('#viewport').get(0).scrollTop + 50) {
+    refreshScroll = true;
+  }
+  var linkset = crosstalk.linkify(post.text);
+  var stream = $('#stream > .inner');
+  stream.append((post.isTweet ? '<div class="message tweet">' : '<div class="message">')
+    + '<div class="author">' + post.author.username + '</div>'
+    + '<img class="avatar" src="' + post.author.avatar + '"/>'
+    + '<div class="content">'
+    + '  <time>' + post.postedOn + '</time>'
+    + linkset.text
+    + '<div class="images"></div><div class="oembed"></div></div></div>');
+
+  var msg = $('#stream .message:last'); 
+  var target = $('.images', msg);
+  crosstalk.expandLinks_(linkset, target, post.attachmentId, msg, refreshScroll);
+
 };
 
 /**

@@ -7,7 +7,7 @@
   <link type="text/css" rel="stylesheet" href="/fileuploader.css">
   <script src='/_ah/channel/jsapi'></script>
 
-  <script type="text/javascript" src="/js/jquery-1.4.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
   <script type="text/javascript" src="/js/jquery.embedly.min.js"></script>
   <script type="text/javascript" src="/js/json2.js"></script>
   <script type="text/javascript" src="/js/fileuploader.js"></script>
@@ -91,7 +91,7 @@
           <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
           <div class="content">
             <time>${__page.format(post.postedOn)}</time>
-          ${post.text}
+            <div class="text">${post.text}</div>
             <div class="images">
               @ShowIf(post.attachmentId != null)
               <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>

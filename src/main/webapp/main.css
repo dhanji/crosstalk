@@ -320,7 +320,7 @@ header > h2 {
 }
 
 #roomList .topics li {
-	display: inline;
+	display: inline-block;
 	color: #316493;
 	margin-right: 0.3em;
 }
