@@ -7,8 +7,12 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  font-size: small;
+	background-color: #4D5158;
+	background-image: url(images/body.gif);
+	color: #ffffff;
+	line-height: 1.4;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 85%;
 
   /*background-color: #eee;*/
   /*background-color: #c8d6ff;*/
@@ -20,6 +24,10 @@ body {
     /*color-stop(0.5, #fefefe),*/
     /*color-stop(1.0, #c6c6c6)*/
   /*);*/
+}
+
+textarea {
+  font-size: 100%;
 }
 
 h1 {
@@ -107,12 +115,13 @@ h1 span {
 #viewport {
   position: absolute;
   top: 0;
-  left: 120px;
-  right: 400px;
+  left: 10em;
+  right: 30%;
   bottom: 0;
 
-  -webkit-box-shadow: 0 0 6px #666;
-  box-shadow: 0 0 6px #666;
+  -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
 
   overflow-y: auto;
   background: white;
@@ -162,22 +171,36 @@ h1 span {
 
 .talkbox {
   position: absolute;
-  left: 120px;
-  right: 400px;
-  top: 8px;
-  bottom: 22px;
+  left: 10em;
+  right: 30%;
+  top: 10px;
+  bottom: 10px;
 
   -webkit-border-radius: 4px;
   border-radius: 4px;
 
   border: 2px solid #fff;
   background: #ced2d9;
+  -moz-box-shadow: inset 3px 3px 3px rgba(0,0,0,0.25);
+  -webkit-box-shadow: inset 1px 1px 3px rgba(0,0,0,0.33);
+  box-shadow: inset 3px 3px 3px rgba(0,0,0,0.25);
 }
 
 .talkbox .signin {
-  position: absolute;
-  top: 40px;
-  left: 40%;
+  color: #67696C;
+  font-size: 125%;
+  text-align: center;
+  line-height: 106px;
+}
+
+.talkbox .signin img {
+  margin-right: 0.5em;
+  vertical-align: middle;
+}
+
+.talkbox .signin a {
+  color: #67696C;
+  font-weight: bold;
 }
 
 #post-message {
@@ -204,8 +227,9 @@ h1 span {
 
 #right {
   position: absolute;
-  right: 12px;
-  padding: 8px;
+  right: 0;
+  width: 20%;
+  padding: 8px 20px 8px 8px;
 
   color: #777;
 }
