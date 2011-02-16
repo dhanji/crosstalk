@@ -37,18 +37,16 @@ public class AttachmentService {
 
     Attachment attachment = messageStore.fetchAttachment(attachmentId);
     if (null == attachment) {
-      log.info("No attachment found for id {}", attachmentId);
+      log.warn("No attachment found for id {}", attachmentId);
       return Reply.saying().notFound();
     }
 
     byte[] bytes = attachment.getContent().getBytes();
-    log.info("Found attachment {}, rendering to browser... ({} bytes)", attachmentId, bytes.length);
     response.setContentType(attachment.getMimeType());
     response.setContentLength(bytes.length);
     ServletOutputStream out = response.getOutputStream();
     IOUtils.write(bytes, out);
     IOUtils.closeQuietly(out);
-    log.info("Found attachment {}, rendering to browser... ({} bytes)", attachmentId, bytes.length);
 
     return Reply.saying().ok();
   }

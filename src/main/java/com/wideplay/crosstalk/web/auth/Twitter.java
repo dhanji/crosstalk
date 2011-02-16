@@ -147,7 +147,7 @@ public class Twitter {
         return IOUtils.toString(connection.getInputStream());
       } else {
         log.error("Twitter returned error code {} with message {}", connection.getResponseCode(),
-            connection.getResponseMessage());
+            IOUtils.toString(connection.getInputStream()));
       }
 
     } catch (MalformedURLException e) {

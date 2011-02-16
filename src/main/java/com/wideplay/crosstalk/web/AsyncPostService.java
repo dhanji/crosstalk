@@ -13,6 +13,7 @@ import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
 import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Message;
+import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.MessageStore;
@@ -152,14 +153,30 @@ public class AsyncPostService {
 
   @At("/add-term") @Post @Secure
   Reply<?> addTerm(ClientRequest request) {
-    log.info("New term added {}", request.getText());
+
+    Room room = roomStore.byId(request.getRoom());
+    Occupancy occupancy = room.getOccupancy();
+    String term = request.getText();
+    if (!occupancy.getTerms().contains(term)) {
+      occupancy.getTerms().add(term);
+      roomStore.save(occupancy);
+      log.info("New term added {} in room {}", term, room.getName());
+    }
 
     return Reply.saying().ok();
   }
 
   @At("/remove-term") @Post @Secure
   Reply<?> removeTerm(ClientRequest request) {
-    log.info("Term deleted {}", request.getText());
+
+    Room room = roomStore.byId(request.getRoom());
+    Occupancy occupancy = room.getOccupancy();
+    String term = request.getText();
+    if (occupancy.getTerms().contains(term)) {
+      occupancy.getTerms().remove(term);
+      roomStore.save(occupancy);
+      log.info("Term deleted {} in room {}", term, room.getName());
+    }
 
     return Reply.saying().ok();
   }

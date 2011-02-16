@@ -99,9 +99,11 @@ couldnt
 coz
 cuz
 date
+data
 did
 didn't
 different
+differ
 does
 doesn't
 doing

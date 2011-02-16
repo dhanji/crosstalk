@@ -43,6 +43,10 @@ public class Message {
     return authorKey;
   }
 
+  public Key<Room> getRoomKey() {
+    return roomKey;
+  }
+
   public User getAuthor() {
     return author;
   }

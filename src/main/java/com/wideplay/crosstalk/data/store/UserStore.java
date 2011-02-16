@@ -69,4 +69,8 @@ public class UserStore {
   public User fetch(Key<User> userKey) {
     return objectify.get(userKey);
   }
+
+  public void createGhost(User author) {
+    objectify.put(author);
+  }
 }

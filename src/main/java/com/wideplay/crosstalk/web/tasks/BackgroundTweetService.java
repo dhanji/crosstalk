@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
-import com.google.sitebricks.http.Post;
+import com.google.sitebricks.http.Get;
 import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Room;
@@ -17,8 +17,10 @@ import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.data.twitter.TwitterSearch;
 import com.wideplay.crosstalk.web.Broadcaster;
 import com.wideplay.crosstalk.web.auth.Twitter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -27,6 +29,7 @@ import java.util.List;
 @At("/queue/tweets")
 @Service
 public class BackgroundTweetService {
+  private static final Logger log = LoggerFactory.getLogger(BackgroundTweetService.class);
   private static final int MAX_TERMS = 4;
 
   @Inject
@@ -41,8 +44,8 @@ public class BackgroundTweetService {
   @Inject
   private Broadcaster broadcaster;
 
-  @Post
-  Reply<?> pullTweets(HttpServletRequest request, Twitter twitter, Gson gson) {
+  @Get
+  Reply<?> pullTweets(Twitter twitter, Gson gson) {
     // Do this for all rooms.
     List<Room> rooms = roomStore.list();
 
@@ -55,11 +58,7 @@ public class BackgroundTweetService {
       }
 
       User patsy = userStore.fetch(userKey);
-
-      // Ghost users can't be used as patsies =(
-      if (patsy.isGhost()) {
-        continue;
-      }
+      log.info("Patsy found: {}!", patsy.getUsername());
 
       int termsFetched = 0;
       for (String term : room.getOccupancy().getTerms()) {
@@ -67,6 +66,8 @@ public class BackgroundTweetService {
         if (termsFetched > MAX_TERMS) {
           break;
         }
+
+        term = URLEncoder.encode(term);
         String result = twitter.call(patsy, "http://search.twitter.com/search.json?q=" + term);
         // Call to twitter can fail for various reasons.
         if (result != null && !result.isEmpty()) {
@@ -74,7 +75,14 @@ public class BackgroundTweetService {
 
           // Select a tweet and broadcast.
           Message pick = tweets.pick();
+
           if (null != pick) {
+            // Skip sending this tweet if it already exists in the room.
+            Message message = messageStore.fetchMessage(pick.getId());
+            if (message != null && room.getId().equals(message.getRoomKey().getId())) {
+              continue;
+            }
+
             pick.setRoom(room);
             broadcaster.broadcast(room, null, gson.toJson(
                 ImmutableMap.of(
@@ -83,6 +91,7 @@ public class BackgroundTweetService {
             ));
 
             // If we liked this tweet, insert it into the room log.
+            userStore.createGhost(pick.getAuthor());
             messageStore.save(pick);
           }
         }

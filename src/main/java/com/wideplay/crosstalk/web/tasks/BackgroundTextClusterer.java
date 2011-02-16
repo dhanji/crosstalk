@@ -55,7 +55,7 @@ public class BackgroundTextClusterer {
           word = word.toLowerCase();
 
           // Stem word to its room form.
-          word = PorterStemmer.stem(word); // should we bother?
+//          word = PorterStemmer.stem(word); // should we bother?
 
           if (!stopWords.isStopWord(word)) {
             Integer count = wordCount.get(word);

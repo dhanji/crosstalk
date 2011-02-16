@@ -1,6 +1,5 @@
 package com.wideplay.crosstalk.data;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.googlecode.objectify.Key;
@@ -30,7 +29,6 @@ public class Occupancy {
   @Embedded
   private List<TimeSegment> segments = Lists.newArrayList();
 
-  @Embedded
   private Set<String> terms = Sets.newLinkedHashSet();
 
   @Transient @JsonHide
@@ -80,7 +78,19 @@ public class Occupancy {
     if (users.isEmpty()) {
       return null;
     }
-    ImmutableList<Key<User>> userKeys = ImmutableList.copyOf(users);
+    List<Key<User>> userKeys = Lists.newArrayList();
+
+    // Eliminate the anonymous user from the selection set.
+    for (Key<User> userKey : this.users) {
+      if (!User.ANONYMOUS.getUsername().equals(userKey.getName())) {
+        userKeys.add(userKey);
+      }
+    }
+
+    return pickUser(userKeys);
+  }
+
+  private Key<User> pickUser(List<Key<User>> userKeys) {
     return userKeys.get((int) ((Math.random() * userKeys.size()) % userKeys.size()));
   }
 

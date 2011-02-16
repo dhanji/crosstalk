@@ -23,6 +23,10 @@ public class MessageStore {
   @Inject
   private UserStore userStore;
 
+  public Message fetchMessage(Long id) {
+    return objectify.find(Message.class, id);
+  }
+
   public void save(Message message) {
     objectify.put(message);
   }

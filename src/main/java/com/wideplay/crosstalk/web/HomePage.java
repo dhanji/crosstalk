@@ -13,6 +13,7 @@ import com.wideplay.crosstalk.data.store.UserStore;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,5 +61,27 @@ public class HomePage {
         .append(timeFormat.format(room.getEndTime()))
         .append(dayFormat.format(room.getStartTime()))
         .toString();
+  }
+
+  /**
+   * Returns a css class representing the active status of this
+   * room based on its session time.
+   */
+  @SuppressWarnings("deprecation")
+  public String status(Room room) {
+    Date now = new Date();
+
+    Date startTime = room.getStartTime();
+    startTime.setMinutes(startTime.getMinutes() - 15);
+
+    Date endTime = room.getEndTime();
+    endTime.setMinutes(endTime.getMinutes() + 15);
+    if (now.after(startTime) && now.before(endTime)) {
+      return "active";
+    } else if (now.after(endTime)) {
+      return "future";
+    }
+
+    return "inactive";
   }
 }

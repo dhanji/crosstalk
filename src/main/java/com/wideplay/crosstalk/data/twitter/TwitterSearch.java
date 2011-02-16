@@ -26,6 +26,7 @@ public class TwitterSearch {
     Tweet tweet = results.get((int)((Math.random() * results.size()) % results.size()));
 
     Message message = new Message();
+    message.setId(tweet.id);
     message.setText(tweet.text);
     message.setPostedOn(new Date()); // set properly
     message.setTweet(true);
@@ -40,6 +41,9 @@ public class TwitterSearch {
   }
 
   public static class Tweet {
+    @SerializedName("id_str")
+    private Long id;
+
     @SerializedName("from_user")
     private String username;
 
