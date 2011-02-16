@@ -34,7 +34,7 @@ public class HomePage {
 
   private DateFormat timeFormat = new SimpleDateFormat("hh:mm");
   private DateFormat dayFormat = new SimpleDateFormat(", MMM dd");
-  private DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm");
+  private DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
   @Get
   void displayHome() {
@@ -74,6 +74,12 @@ public class HomePage {
         .append("-")
         .append(timeFormat.format(room.getEndTime()))
         .append(dayFormat.format(room.getStartTime()))
+        .toString();
+  }
+
+  public String longdate(Room room) {
+    return new StringBuilder().append(timestampFormat.format(room.getStartTime()))
+        .append("+12:00")
         .toString();
   }
 
