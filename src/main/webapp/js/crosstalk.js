@@ -38,7 +38,9 @@ $(document).ready(function() {
   // Initialize editor.
   crosstalk.init_();
 
-  setTimeout(scrollToBottom, 1000);
+  if ($('#mobileCheck').css('display') != 'none') {
+    setTimeout(scrollToBottom, 1000);
+  }
 });
 
 function scrollToBottom() {
