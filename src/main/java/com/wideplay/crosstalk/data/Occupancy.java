@@ -89,6 +89,9 @@ public class Occupancy {
   }
 
   private Key<User> pickUser(List<Key<User>> userKeys) {
+    if (userKeys.isEmpty()) {
+      return null;
+    }
     return userKeys.get((int) ((Math.random() * userKeys.size()) % userKeys.size()));
   }
 

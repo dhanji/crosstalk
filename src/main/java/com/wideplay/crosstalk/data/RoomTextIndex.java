@@ -2,9 +2,8 @@ package com.wideplay.crosstalk.data;
 
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Serialized;
-import com.wideplay.crosstalk.data.Room;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -18,7 +17,7 @@ public class RoomTextIndex {
   @Id
   private Long id;
 
-  @Serialized
+  @Embedded
   private List<WordTuple> words = Lists.newArrayList();
 
   public static class WordTuple implements Comparable<WordTuple>, Serializable {

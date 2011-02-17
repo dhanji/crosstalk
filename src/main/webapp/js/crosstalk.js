@@ -172,15 +172,14 @@ crosstalk.post_ = function() {
   crosstalk.insertMessage_(post);
 
   // Send to the server.
-  crosstalk.send("message", data,
-      crosstalk.noop);
+  crosstalk.send("message", data, crosstalk.noop);
 };
 
 /**
  * Inserts message into dom and nothing else.
  */
 crosstalk.expandLinks_ = function(linkset, target, attachment, msg, refreshScroll) {
-
+  var isImages = false;
   for (var i = 0; i < linkset.images.length; i ++) {
     var image = linkset.images[i];
 
@@ -189,6 +188,7 @@ crosstalk.expandLinks_ = function(linkset, target, attachment, msg, refreshScrol
     } else {
       target.append('<img style="width: 200px" src="' + image + '"/>');
     }
+    isImages = true;
   }
 
   // Add any attachment that this method may have too.
@@ -199,6 +199,11 @@ crosstalk.expandLinks_ = function(linkset, target, attachment, msg, refreshScrol
     else {
       target.append('<img style="width: 200px" src="/r/attachment/' + post.attachmentId + '" />');
     }
+    isImages = true;
+  }
+
+  if (!isImages) {
+    target.hide();
   }
 
   target = $('.oembed', msg);
