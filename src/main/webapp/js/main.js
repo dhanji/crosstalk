@@ -100,10 +100,10 @@ function init() {
 			}, index * 100);
 		});
 
+/*
 		$('#content').get(0).addEventListener('touchmove', touchMove, false);
 		$('#content').get(0).addEventListener('touchstart', touchStart, false);
 		$('#content').get(0).addEventListener('touchend', touchEnd, false);
-/*
 		$('#roomList .anchor').each(function() {
 			this.addEventListener('touchstart', cancelEvent, false);
 			this.addEventListener('touchend', cancelEvent, false);
@@ -111,6 +111,16 @@ function init() {
 */
 		
 		window.onorientationchange = orientationChange;
+	}
+	else {
+		var roomListItems = $('#roomList > li > .anchor');
+
+		// Add click handlers to act as anchors for each card
+		roomListItems.click(function() {
+			window.location = $('a', this).get(0).href;
+			
+			return false;
+		});
 	}
 }
 

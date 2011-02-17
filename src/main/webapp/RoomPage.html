@@ -2,10 +2,12 @@
 
 <html lang="en">
 <head>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" />
+
   <link type="text/css" rel="stylesheet" href="/fonts/fonts.css">
   <link type="text/css" rel="stylesheet" href="/crosstalk.css">
   <link type="text/css" rel="stylesheet" href="/fileuploader.css">
-  <link rel="stylesheet" href="/crosstalk_mobile.css" media="screen and (max-width: 1024px)" />
+  <link rel="stylesheet" href="/crosstalk_mobile.css" media="screen and (max-device-width: 1024px)" />
   <script src='/_ah/channel/jsapi'></script>
 
   <script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
@@ -50,9 +52,11 @@
       <img id="av-${occupant.username}" class="avatar" src="${occupant.avatar}"
            alt="${occupant.username}" title="${occupant.username}"/>
     </div>
+    <!--
     <p>
       + <span id="lurker-count">0</span> lurkers
     <p>
+    -->
     <h2>
       Also pulling tweets from:
     </h2>
