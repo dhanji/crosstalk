@@ -2,9 +2,12 @@
 
 <html lang="en">
 <head>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" />
+
   <link type="text/css" rel="stylesheet" href="/fonts/fonts.css">
   <link type="text/css" rel="stylesheet" href="/crosstalk.css">
   <link type="text/css" rel="stylesheet" href="/fileuploader.css">
+  <link rel="stylesheet" href="/crosstalk_mobile.css" media="screen and (max-device-width: 1024px)" />
   <script src='/_ah/channel/jsapi'></script>
 
   <script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
@@ -14,6 +17,7 @@
   <script type="text/javascript" src="/js/crosstalk.js"></script>
 </head>
 <body>
+<div id="mobileCheck"></div>
 <div class="invisible">
   <div id="comet-token" class="invisible">${cometToken}</div>
   <div id="room-id" class="invisible">${room.id}</div>
@@ -31,6 +35,59 @@
   </ul>
   <p id="linkBack"><a href="/">Show all chat rooms for <strong>Webstock</strong></a></p>
 </div>
+<div id="center">
+  <div id="activity-map">
+    @Repeat(items=room.occupancy.segments, var="segment")
+    <div class="segment" title="${segment.count} posts around ${__page.format(segment.startsOn)}"
+        starts="${segment.startsOn}">
+      ${ __page.activity(segment) }
+    </div>
+  </div>
+  <div id="right">
+    <h2>
+      Current contributors
+    </h2>
+    <div class="current-contributor-avatars">
+      @Repeat(items=occupants, var="occupant")
+      <img id="av-${occupant.username}" class="avatar" src="${occupant.avatar}"
+           alt="${occupant.username}" title="${occupant.username}"/>
+    </div>
+    <!--
+    <p>
+      + <span id="lurker-count">0</span> lurkers
+    <p>
+    -->
+    <h2>
+      Also pulling tweets from:
+    </h2>
+    <div id="hashtags" class="weak-title">
+      @Repeat(items=room.occupancy.terms, var="term")
+      <div class="hashtag">${term}</div>
+      <div id="input-hashtag" class="invisible"><input type="text" value=""></div>
+      <div><input id="add-hashtag" class="button" type="button" value="Add a term"></div>
+    </div>
+  </div>
+  <div id="viewport">
+    <div id="stream">
+      <div class="inner">
+      @Repeat(items=messages, var="post")
+        <div class="message${post.tweet ? ' tweet' : ''}">
+          <div class="author">${post.author.username}</div>
+          <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
+          <div class="content">
+            <time>${__page.format(post.postedOn)}</time>
+            <div class="text">${post.text}</div>
+            @ShowIf(post.attachmentId != null)
+            <div class="images">
+              <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>
+            </div> <!-- /.images -->
+          </div> <!-- /.content -->
+        </div> <!-- /.message -->
+      </div> <!-- /.inner -->
+    </div> <!-- /#stream -->
+  </div> <!-- /#viewport -->
+</div>
+
 <div id="footer">
   <div id="dropzone"></div>
 
@@ -52,55 +109,6 @@
     </div>
   </div>
 </div>
-<div id="center">
-  <div id="activity-map">
-    @Repeat(items=room.occupancy.segments, var="segment")
-    <div class="segment" title="${segment.count} posts around ${__page.format(segment.startsOn)}"
-        starts="${segment.startsOn}">
-      ${ __page.activity(segment) }
-    </div>
-  </div>
-  <div id="right">
-    <h2>
-      Current contributors
-    </h2>
-    <div class="current-contributor-avatars">
-      @Repeat(items=occupants, var="occupant")
-      <img id="av-${occupant.username}" class="avatar" src="${occupant.avatar}"
-           alt="${occupant.username}" title="${occupant.username}"/>
-    </div>
-    <p>
-      + <span id="lurker-count">0</span> lurkers
-    <p>
-    <h2>
-      Also pulling tweets from:
-    </h2>
-    <div id="hashtags" class="weak-title">
-      @Repeat(items=room.occupancy.terms, var="term")
-      <div class="hashtag">${term}</div>
-      <div id="input-hashtag" class="invisible"><input type="text" value=""></div>
-      <div><input id="add-hashtag" class="button" type="button" value="Add a term"></div>
-    </div>
-  </div>
-  <div id="viewport">
-    <div id="stream">
-      <div class="inner">
-      @Repeat(items=messages, var="post")
-        <div class="message${post.tweet ? ' tweet' : ''}">
-          <div class="author">${post.author.username}</div>
-          <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
-          <div class="content">
-            <time>${__page.format(post.postedOn)}</time>
-            <div class="text">${post.text}</div>
-            <div class="images">
-              @ShowIf(post.attachmentId != null)
-              <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>
-            </div> <!-- /.images -->
-          </div> <!-- /.content -->
-        </div> <!-- /.message -->
-      </div> <!-- /.inner -->
-    </div> <!-- /#stream -->
-  </div> <!-- /#viewport -->
-</div>
+
 </body>
 </html>

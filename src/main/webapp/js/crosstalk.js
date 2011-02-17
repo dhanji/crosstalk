@@ -38,18 +38,24 @@ $(document).ready(function() {
   // Initialize editor.
   crosstalk.init_();
 
-  setTimeout(scrollToBottom, 1000);
+  if ($('#mobileCheck').css('display') != 'none') {
+    setTimeout(scrollToBottom, 1000);
+  }
 });
 
 function scrollToBottom() {
-  $('#viewport').get(0).scrollTop = 100000;
+  if ($('#mobileCheck').css('display') == 'none') {
+    window.scrollTo(0, 100000);
+  }
+  else {
+    $('#viewport').get(0).scrollTop = 100000;
+  }
 }
 
 /**
  * Initialize UI event handlers and such.
  */
 crosstalk.init_ = function () {
-
   // Size the initial height of the stream
   $('#stream > .inner').css('minHeight', $('#viewport').outerHeight());
 
@@ -72,6 +78,11 @@ crosstalk.init_ = function () {
       return false;
     }
   });
+  
+  // Always focus the textarea if you click anywhere in the footer
+  $('#footer').click(function() {
+    $('textarea', this).focus();
+  })
 
   // Size the dropzone on the talkbox
   var talkbox = $('#talkbox');
@@ -221,9 +232,17 @@ crosstalk.expandLinks_ = function(linkset, target, attachment, msg, refreshScrol
 
 crosstalk.insertMessage_ = function(post) {
   var refreshScroll = false;
-  if ($('#stream').outerHeight() - $('#viewport').outerHeight() < $('#viewport').get(0).scrollTop + 50) {
+  
+  // Mobile requires different metrics to figure out whether we have to scroll to the bottom when a new message is inserted
+  if ($('#mobileCheck').css('display') == 'none') {
+    if ($('body').outerHeight() - $(window).height() < document.body.scrollTop + 50) {
+      refreshScroll = true;
+    }
+  }
+  else if ($('#stream').outerHeight() - $('#viewport').outerHeight() < $('#viewport').get(0).scrollTop + 50) {
     refreshScroll = true;
   }
+  
   var linkset = crosstalk.linkify(post.text);
   var stream = $('#stream > .inner');
   stream.append((post.isTweet ? '<div class="message tweet">' : '<div class="message">')

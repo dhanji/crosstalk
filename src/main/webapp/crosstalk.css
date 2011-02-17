@@ -31,6 +31,12 @@ textarea, input {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#mobileCheck {
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
 h1 {
   position: absolute;
   right: 10px;

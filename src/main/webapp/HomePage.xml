@@ -27,8 +27,8 @@
 
     @Repeat(items=rooms, var="room")
     <li class="${__page.status(room)}">
-      <a href="/r/chat/${room.name}">
-        <h1>${room.displayName}</h1>
+      <div class="anchor">
+        <a href="/r/chat/${room.name}">${room.displayName}</a>
 
         <h2>${room.host}</h2>
 
@@ -49,7 +49,7 @@
 
           </ol>
         </section>
-      </a>
+      </div>
     </li>
   </ul>
 </section>
