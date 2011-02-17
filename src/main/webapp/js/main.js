@@ -14,12 +14,53 @@ $(init);
 
 function init() {
 	if ($('#mobileCheck').css('display') != 'none') {
+		$('#roomList > li')
+			.removeClass('active')
+			.removeClass('future')
+			.addClass('inactive')
+		
 		var APPEAR_TIME = 1000;
 	
-		var roomListItems = $('#roomList > li > a');
+		var roomListItems = $('#roomList > li > .anchor');
+		
+		// Find room that's closest to current time (NZ time) and make it active, also make rooms within an hour active
+		var closest = roomListItems.eq(0);
+		var closestDiff = null;
+		var now = new Date();
+		var nowTime = now.getTime();
+		nowTime += (780 + now.getTimezoneOffset()) * 60 * 1000;
+		var oneHourInMilliseconds = 60 * 60 * 1000;
+		
+		roomListItems.each(function() {
+			var time = $('time', this).attr('datetime');
+			var year = time.match(/^([^\-]+)/)[1];
+			var month = time.match(/^[^\-]+-([^-]+)/)[1];
+			var day = time.match(/^[^\-]+-[^-]+-([^T]+)/)[1];
+			var hour = time.match(/T([^:]+)/)[1];
+			var minute = time.match(/:([^+]+)/)[1];
+			var date = new Date(year, parseInt(month) - 1, day, hour, minute);
+			
+			if (closestDiff == null || Math.abs(date.getTime() - nowTime) < closestDiff) {
+				closest = $(this);
+				closestDiff = Math.abs(date.getTime() - nowTime);
+			}
+
+			if (Math.abs(date.getTime() - nowTime) <= oneHourInMilliseconds) {
+				$(this).parents('li').removeClass('inactive').addClass('active');
+			}
+		});
+		
+		closest.parents('li').removeClass('inactive').addClass('active');
+		
+		// Add click handlers to act as anchors for each card
+		roomListItems.click(function() {
+			window.location = $('a', this).get(0).href;
+			
+			return false;
+		});
 	
 		// Truncate text in room titles	
-		$('h1', roomListItems).each(function() {
+		$('> a', roomListItems).each(function() {
 			var CHAR_LIMIT = 22;
 			
 			var originalText = $(this).text();
@@ -59,11 +100,11 @@ function init() {
 			}, index * 100);
 		});
 
-/*
 		$('#content').get(0).addEventListener('touchmove', touchMove, false);
 		$('#content').get(0).addEventListener('touchstart', touchStart, false);
 		$('#content').get(0).addEventListener('touchend', touchEnd, false);
-		$('#roomList a').each(function() {
+/*
+		$('#roomList .anchor').each(function() {
 			this.addEventListener('touchstart', cancelEvent, false);
 			this.addEventListener('touchend', cancelEvent, false);
 		});
@@ -154,7 +195,7 @@ function createNav() {
 	roomListItems.each(function(index) {
 		var self = this;
 		
-		var listItem = $('<li><a href="#" title="' + $('h1', this).text() + '">' + $('h1', this).text() + '</a></li>');
+		var listItem = $('<li><a href="#" title="' + $('.anchor > a', this).text() + '">' + $('.anchor > a', this).text() + '</a></li>');
 		
 		if ($(this).hasClass('active')) {
 			listItem.addClass('active');

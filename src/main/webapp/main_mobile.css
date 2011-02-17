@@ -109,13 +109,13 @@ header > h2 {
 	padding-right: 10px;
 }
 
-#roomList > li > a {
+#roomList > li > .anchor {
 	position: relative;
 	top: 0;
 	width: auto;
 }
 
-#roomList h1 {
+#roomList .anchor > a {
 	width: 95%;
 	overflow: hidden;
 	font-size: 160%;
@@ -124,7 +124,7 @@ header > h2 {
 	text-overflow: ellipsis;
 }
 
-#roomList h1:before {
+#roomList .anchor > a:before {
 	width: 0.56em;
 	height: 0.56em;
 }

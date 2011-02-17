@@ -5,6 +5,7 @@
   <link type="text/css" rel="stylesheet" href="/fonts/fonts.css">
   <link type="text/css" rel="stylesheet" href="/crosstalk.css">
   <link type="text/css" rel="stylesheet" href="/fileuploader.css">
+  <link rel="stylesheet" href="/crosstalk_mobile.css" media="screen and (max-width: 1024px)" />
   <script src='/_ah/channel/jsapi'></script>
 
   <script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
@@ -14,6 +15,7 @@
   <script type="text/javascript" src="/js/crosstalk.js"></script>
 </head>
 <body>
+<div id="mobileCheck"></div>
 <div class="invisible">
   <div id="comet-token" class="invisible">${cometToken}</div>
   <div id="room-id" class="invisible">${room.id}</div>
@@ -30,27 +32,6 @@
 <!--    <li><a href="#">Links</a></li>-->
   </ul>
   <p id="linkBack"><a href="/">Show all chat rooms for <strong>Webstock</strong></a></p>
-</div>
-<div id="footer">
-  <div id="dropzone"></div>
-
-  @ShowIf(user.username != 'anonymous')
-  <div id="textareaContainer" class="talkbox">
-    <div class="inner">
-      <div id="youLabel">You</div>
-      <img class="avatar" src="${user.avatar}" alt="${user.username} avatar" />
-      <textarea id="talkbox"></textarea>
-      <input id="post-message" class="button" type="button" value="Post message">
-      <div id="uploadButton"></div>
-    </div> <!-- /.inner -->
-  </div>
-
-  @ShowIf(user.username == 'anonymous')
-  <div class="talkbox">
-    <div class="signin">
-      <img src="/images/twitter_login.gif" width="44" height="44" alt="Twitter T" /> <a href="/login?r=${room.id}&u=/r/chat/${room.name}"">Sign in with twitter</a> to start chatting
-    </div>
-  </div>
 </div>
 <div id="center">
   <div id="activity-map">
@@ -92,8 +73,8 @@
           <div class="content">
             <time>${__page.format(post.postedOn)}</time>
             <div class="text">${post.text}</div>
+            @ShowIf(post.attachmentId != null)
             <div class="images">
-              @ShowIf(post.attachmentId != null)
               <img style="width: 200px" src="/r/attachment/${post.attachmentId}"/>
             </div> <!-- /.images -->
           </div> <!-- /.content -->
@@ -102,5 +83,28 @@
     </div> <!-- /#stream -->
   </div> <!-- /#viewport -->
 </div>
+
+<div id="footer">
+  <div id="dropzone"></div>
+
+  @ShowIf(user.username != 'anonymous')
+  <div id="textareaContainer" class="talkbox">
+    <div class="inner">
+      <div id="youLabel">You</div>
+      <img class="avatar" src="${user.avatar}" alt="${user.username} avatar" />
+      <textarea id="talkbox"></textarea>
+      <input id="post-message" class="button" type="button" value="Post message">
+      <div id="uploadButton"></div>
+    </div> <!-- /.inner -->
+  </div>
+
+  @ShowIf(user.username == 'anonymous')
+  <div class="talkbox">
+    <div class="signin">
+      <img src="/images/twitter_login.gif" width="44" height="44" alt="Twitter T" /> <a href="/login?r=${room.id}&u=/r/chat/${room.name}"">Sign in with twitter</a> to start chatting
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
