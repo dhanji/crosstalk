@@ -7,6 +7,7 @@ import com.google.inject.Singleton;
 import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
+import com.wideplay.crosstalk.data.store.RoomStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 public class Broadcaster {
   private static final Logger log = LoggerFactory.getLogger(Broadcaster.class);
   @Inject
-  private AsyncPostService.ConnectedClients connected;
+  private RoomStore roomStore;
 
   @Inject
   private ChannelService channel;
@@ -28,12 +29,13 @@ public class Broadcaster {
         continue;
 
       log.debug("Sending packet to {} [{}]\n", user.getName(), json);
-      String channelId = connected.clients.get(user.getName()).get(room);
+      String channelId = roomStore.channelOf(user, room);
+
       if (null != channelId) {
         channel.sendMessage(new ChannelMessage(channelId, json));
       } else {
-        // stale occupancy, update...
-        connected.clients.get(user.getName()).remove(room);
+        // stale occupancy, remove from room...
+        roomStore.leaveRoom(user, room);
       }
     }
   }

@@ -31,9 +31,6 @@ public class RoomPage {
   private ChannelService channelService;
 
   @Inject
-  private AsyncPostService.ConnectedClients clients;
-
-  @Inject
   private CurrentUser currentUser;
 
   @Inject
@@ -73,7 +70,7 @@ public class RoomPage {
     // Create a room & user-specific unique id for this channel.
     String userChannelId = user.getUsername() + roomId + Math.random();
     token = channelService.createChannel(userChannelId);
-    clients.add(userChannelId, user, room);
+    roomStore.connectClient(user, userChannelId, room);
 
     // Set up presence for this room.
     Occupancy occupancy = room.getOccupancy();

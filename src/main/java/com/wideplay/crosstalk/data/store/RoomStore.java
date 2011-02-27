@@ -1,12 +1,17 @@
 package com.wideplay.crosstalk.data.store;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
+import com.wideplay.crosstalk.data.ConnectedClients;
 import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.RoomTextIndex;
+import com.wideplay.crosstalk.data.User;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +41,22 @@ public class RoomStore {
     // Grab the occupancy too (they share the same id).
     Occupancy occupancy = objectify.get(Occupancy.class, room.getId());
     room.setOccupancy(occupancy);
+  }
+
+  private ConnectedClients loadConnectedClients() {
+    ConnectedClients clients = objectify.find(new Key<ConnectedClients>(ConnectedClients.class,
+        ConnectedClients.SINGLETON_ID));
+    // Should only happen once per database reset, really.
+    if (null == clients) {
+      clients = new ConnectedClients();
+      objectify.put(clients);
+    }
+
+    return clients;
+  }
+
+  private void save(ConnectedClients clients) {
+    objectify.put(clients);
   }
 
   /**
@@ -91,5 +112,31 @@ public class RoomStore {
 
   public void save(RoomTextIndex index) {
     objectify.put(index);
+  }
+
+  public Collection<Room> roomsOf(User user) {
+    Collection<Key<Room>> roomKeys = loadConnectedClients().getRooms(user);
+    List<Room> rooms = Lists.newArrayList();
+    for (Key<Room> roomKey : roomKeys) {
+      rooms.add(byId(roomKey.getId()));
+    }
+    return rooms;
+  }
+
+  public void connectClient(User user, String token, Room room) {
+    ConnectedClients clients = loadConnectedClients();
+    clients.add(token, user, room);
+
+    save(clients);
+  }
+
+  public String channelOf(Key<User> user, Room room) {
+    return loadConnectedClients().channelOf(user.getName(), room);
+  }
+
+  public void leaveRoom(Key<User> user, Room room) {
+    ConnectedClients clients = loadConnectedClients();
+    clients.remove(user, room);
+    save(clients);
   }
 }

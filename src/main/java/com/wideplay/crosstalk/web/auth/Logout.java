@@ -9,16 +9,17 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
+import com.wideplay.crosstalk.data.ConnectedClients;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
+import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
-import com.wideplay.crosstalk.web.AsyncPostService;
 import com.wideplay.crosstalk.web.Broadcaster;
 import com.wideplay.crosstalk.web.CurrentUser;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -32,10 +33,13 @@ public class Logout {
   private Provider<UserStore> userStore;
 
   @Inject
+  private Provider<RoomStore> roomStore;
+
+  @Inject
   private Broadcaster broadcaster;
 
   @Inject
-  private AsyncPostService.ConnectedClients connected;
+  private ConnectedClients connected;
 
   @Get
   Reply<?> logout(HttpServletResponse response, Gson gson) {
@@ -49,7 +53,8 @@ public class Logout {
 
       // Kick user out of all rooms.
       User leaver = currentUser.getUser();
-      Set<Room> rooms = connected.getClients().get(leaver.getUsername()).keySet();
+      Collection<Room> rooms = roomStore.get().roomsOf(leaver);
+      
       for (Room room : rooms) {
         broadcaster.broadcast(room, leaver, gson.toJson(ImmutableMap.of(
             "rpc", "leave",

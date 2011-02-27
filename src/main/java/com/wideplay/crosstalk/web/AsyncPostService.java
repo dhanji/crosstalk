@@ -1,11 +1,8 @@
 package com.wideplay.crosstalk.web;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.MapMaker;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.google.sitebricks.At;
 import com.google.sitebricks.client.Web;
 import com.google.sitebricks.headless.Reply;
@@ -25,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -52,27 +48,6 @@ public class AsyncPostService {
 
   @Inject
   private Broadcaster broadcaster;
-
-
-  @Singleton
-  public static class ConnectedClients {
-    // TODO(dhanji): This needs to be persistent. And needs periodic eviction.
-    final Map<String, Map<Room, String>> clients = new MapMaker()
-        .makeComputingMap(new Function<String, Map<Room, String>>() {
-          @Override
-          public Map<Room, String> apply(String user) {
-            return new MapMaker().makeMap();
-          }
-        });
-
-    public void add(String token, User client, Room room) {
-      clients.get(client.getUsername()).put(room, token);
-    }
-
-    public Map<String, Map<Room, String>> getClients() {
-      return clients;
-    }
-  }
 
   @At("/message") @Post @Secure
   Reply<?> receiveMessage(ClientRequest request) {
