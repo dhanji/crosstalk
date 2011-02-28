@@ -14,7 +14,10 @@ import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.web.Broadcaster;
 import com.wideplay.crosstalk.web.CurrentUser;
-import com.wideplay.crosstalk.web.auth.Twitter.OAuthRedirect;
+import com.wideplay.crosstalk.web.auth.buzz.BuzzApi;
+import com.wideplay.crosstalk.web.auth.twitter.Twitter;
+import com.wideplay.crosstalk.web.auth.twitter.Twitter.OAuthRedirect;
+import com.wideplay.crosstalk.web.auth.twitter.TwitterMode;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -33,8 +36,14 @@ public class Login {
   @Inject
   private Broadcaster broadcaster;
 
+  @Inject
+  private Twitter twitter;
+
+  @Inject
+  private BuzzApi buzz;
+
   @Get
-  Reply<?> get(Twitter twitter, Request request, Gson gson) {
+  Reply<?> get(@TwitterMode boolean twitterMode, Request request, Gson gson) {
     // Decrement lurker count.
     String roomId = request.param("r");
     String lastUrl = request.param("u");
@@ -50,11 +59,21 @@ public class Login {
       }
     }
 
-    OAuthRedirect redirect = twitter.redirectForAuth();
+    String redirectUrl;
+    if (twitterMode) {
+      OAuthRedirect redirect = twitter.redirectForAuth();
+      redirectUrl = redirect.getUrl();
 
-    // We need to save these temporary credentials to complete the OAuth dance.
-    userStore.newOAuthToken(redirect.getRequestToken(), redirect.getTokenSecret(), lastUrl);
+      // We need to save these temporary credentials to complete the OAuth dance.
+      userStore.newOAuthToken(redirect.getRequestToken(), redirect.getTokenSecret(), lastUrl);
+    } else {
+      OAuthRedirect redirect = buzz.redirectForAuth();
+      redirectUrl = redirect.getUrl();
 
-    return Reply.saying().redirect(redirect.getUrl());
+      // We need to save these temporary credentials to complete the OAuth dance.
+      userStore.newOAuthToken(redirect.getRequestToken(), redirect.getTokenSecret(), lastUrl);
+    }
+
+    return Reply.saying().redirect(redirectUrl);
   }
 }

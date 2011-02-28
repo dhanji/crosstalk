@@ -16,7 +16,7 @@ import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.data.twitter.TwitterSearch;
 import com.wideplay.crosstalk.web.Broadcaster;
-import com.wideplay.crosstalk.web.auth.Twitter;
+import com.wideplay.crosstalk.web.auth.twitter.Twitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -4,7 +4,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.annotation.Cached;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -15,16 +19,23 @@ import java.util.Map;
 import java.util.Set;
 
 /**
-* @author dhanji@gmail.com (Dhanji R. Prasanna)
-*/
-@Entity
+ * Encapsulates all connected clients. bit of a hack.
+ *
+ * @author dhanji@gmail.com (Dhanji R. Prasanna)
+ */
+@RequestScoped
 public class ConnectedClients {
-  public static final long SINGLETON_ID = 1L;
+  private final Objectify objectify;
 
-  @Id
-  private long id = SINGLETON_ID;
+  @Inject
+  public ConnectedClients(Objectify objectify) {
+    this.objectify = objectify;
 
-  @Embedded
+    // Initialize myself.
+    usersInRooms.addAll(objectify.query(UserRoom.class).list());
+    ensure();
+  }
+
   private Set<UserRoom> usersInRooms = Sets.newHashSet();
 
   // MEMO FIELD
@@ -32,7 +43,6 @@ public class ConnectedClients {
   private Map<String, UserRoom> usersInRoomsMemo;
 
   public String channelOf(String userName, Room room) {
-    ensure();
     UserRoom userRoom = usersInRoomsMemo.get(userName);
     if (null == userRoom) {
       return null;
@@ -49,8 +59,6 @@ public class ConnectedClients {
   }
 
   public void remove(Key<User> user, Room room) {
-    ensure();
-
     UserRoom userRoom = usersInRoomsMemo.get(user.getName());
     if (null == userRoom) {
       return;
@@ -59,9 +67,12 @@ public class ConnectedClients {
     RoomTokens toRemove = new RoomTokens();
     toRemove.roomKey = new Key<Room>(Room.class, room.getId());
     userRoom.roomTokens.remove(toRemove);
+    objectify.put(userRoom);
   }
 
+  @Cached @Entity
   public static class UserRoom {
+    @Id
     private String username;
 
     @Embedded
@@ -91,8 +102,6 @@ public class ConnectedClients {
   }
 
   public void add(String token, User client, Room room) {
-    ensure();
-
     UserRoom userRoom = usersInRoomsMemo.get(client.getUsername());
     if (null == userRoom) {
       userRoom = new UserRoom();
@@ -106,12 +115,12 @@ public class ConnectedClients {
     roomTokens.token = token;
 
     userRoom.roomTokens.add(roomTokens);
+
     // Remember to save me!
+    objectify.put(userRoom);
   }
 
   public Collection<Key<Room>> getRooms(User user) {
-    ensure();
-
     UserRoom userRoom = usersInRoomsMemo.get(user.getUsername());
     if (null == userRoom) {
       return ImmutableList.of();

@@ -20,6 +20,10 @@ public class RoomTextIndex {
   @Embedded
   private List<WordTuple> words = Lists.newArrayList();
 
+  public void setId(long id) {
+    this.id = id;
+  }
+
   public static class WordTuple implements Comparable<WordTuple>, Serializable {
     private static final long serialVersionUID = 0L;
     private String word;
@@ -33,8 +37,6 @@ public class RoomTextIndex {
       return count;
     }
 
-
-    @Override
     public int compareTo(WordTuple that) {
       return that.count - this.count;
     }

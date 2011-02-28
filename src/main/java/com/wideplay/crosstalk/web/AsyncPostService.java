@@ -16,7 +16,6 @@ import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.web.auth.Secure;
-import com.wideplay.crosstalk.web.auth.Twitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +120,7 @@ public class AsyncPostService {
   }
 
   @At("/ping") @Post
-  Reply<?> ping(ClientRequest request, Twitter twitter, CurrentUser currentUser) {
+  Reply<?> ping(ClientRequest request, CurrentUser currentUser) {
     String hashtag = URLEncoder.encode("#webstock");
 
     // Update active status timestamp of this user/connection

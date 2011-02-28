@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.web.auth;
+package com.wideplay.crosstalk.web.auth.buzz;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -22,8 +22,8 @@ import java.io.IOException;
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @Singleton
-public class AuthFilter implements Filter {
-  private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
+public class BuzzAuthFilter implements Filter {
+  private static final Logger log = LoggerFactory.getLogger(BuzzAuthFilter.class);
 
   @Inject
   private Provider<UserStore> userStoreProvider;
@@ -44,14 +44,14 @@ public class AuthFilter implements Filter {
     Cookie sessionCookie = currentUser.getSessionCookie();
     if (null == sessionCookie) {
       // Auth as anonymous.
-      currentUser.setUser(User.ANONYMOUS);
+      currentUser.setUser(User.anonymous());
     } else {
       // Find the user associated with this session cookie and log her in.
       User loggedIn = userStore.isLoggedIn(sessionCookie.getValue());
 
       // No such user was found. (Invalid session cookie, continue as anonymous)
       if (null == loggedIn) {
-        loggedIn = User.ANONYMOUS;
+        loggedIn = User.anonymous();
       }
 
       currentUser.setUser(loggedIn);

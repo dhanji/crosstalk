@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-  <application>crosstalk-me</application>
+  <application>crosstalkchat</application>
   <version>2</version>
   <system-properties>
     <property name="mvel2.disable.jit" value="true"/>
+    <property name="twittermode" value="false"/>
   </system-properties>
 </appengine-web-app>

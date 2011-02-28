@@ -1,6 +1,5 @@
 package com.wideplay.crosstalk.data.store;
 
-import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.googlecode.objectify.Key;
@@ -10,16 +9,12 @@ import com.wideplay.crosstalk.data.User;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 @Singleton
 public class UserStore {
-  // TODO re-activate these hot-caches, and maybe back with memcache too.
-  private final ConcurrentMap<String, User> loggedInUsers = new MapMaker().makeMap();
-  private final ConcurrentMap<String, String> unclaimedOAuthTokens = new MapMaker().makeMap();
 
   @Inject
   private Objectify objectify;

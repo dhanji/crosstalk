@@ -7,7 +7,7 @@
   <packaging>war</packaging>
   <version>0.1</version>
   <name>crosstalk</name>
-  <url>http://twitter.com/dhanji</url>
+  <url>http://buzz.com/dhanji</url>
 
   <repositories>
     <repository>
@@ -76,6 +76,16 @@
       <groupId>net.sf.jsr107cache</groupId>
       <artifactId>jsr107cache</artifactId>
       <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api.client</groupId>
+      <artifactId>google-api-data-buzz-v1</artifactId>
+      <version>1.0.9-alpha</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api.client</groupId>
+      <artifactId>google-api-client</artifactId>
+      <version>1.2.2-alpha</version>
     </dependency>
   </dependencies>
 

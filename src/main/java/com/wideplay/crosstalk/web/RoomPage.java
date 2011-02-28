@@ -14,6 +14,7 @@ import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
+import com.wideplay.crosstalk.web.auth.twitter.TwitterMode;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,9 @@ public class RoomPage {
 
   @Inject
   private UserStore userStore;
+
+  @Inject @TwitterMode
+  private boolean twitterMode;
 
   private String token;
   private Room room;
@@ -82,7 +86,6 @@ public class RoomPage {
     // Load the initial set of messages (currently loads everything).
     messages = messageStore.list(room);
 
-//    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withUrl("/queue/hashtag"));
     return null;
   }
 
@@ -100,7 +103,7 @@ public class RoomPage {
 
   public Collection<User> getOccupants() {
     Collection<User> users = userStore.resolve(room.getOccupancy().getUsers()).values();
-    users.remove(User.ANONYMOUS);
+    users.remove(User.anonymous());
     return users;
   }
 
@@ -129,4 +132,7 @@ public class RoomPage {
     return builder.toString();
   }
 
+  public boolean isTwitterMode() {
+    return twitterMode;
+  }
 }

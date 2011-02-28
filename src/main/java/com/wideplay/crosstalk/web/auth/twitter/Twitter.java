@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.web.auth;
+package com.wideplay.crosstalk.web.auth.twitter;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;

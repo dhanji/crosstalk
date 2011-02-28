@@ -31,15 +31,18 @@ public class User {
   private String sessionId;
 
   // Set up the anonymous user (special case)
-  public static transient final User ANONYMOUS = new User();
+  public static final String ANONYMOUS_USERNAME = "anonymous";
   public static transient final Key<User> ANONYMOUS_KEY = new Key<User>(User.class,
-      User.ANONYMOUS.getUsername());
+      ANONYMOUS_USERNAME);
 
-  static {
-    ANONYMOUS.setUsername("anonymous");
-    ANONYMOUS.setAvatar("");
-    ANONYMOUS.setCreatedOn(new Date(0));
-    ANONYMOUS.setDisplayName("Lurker");
+  // A reusable, mutable anonymous user.
+  public static User anonymous() {
+    User user = new User();
+    user.setUsername(ANONYMOUS_USERNAME);
+    user.setAvatar("");
+    user.setCreatedOn(new Date(0));
+    user.setDisplayName("Lurker");
+    return user;
   }
 
   public boolean isGhost() {

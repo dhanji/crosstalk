@@ -20,6 +20,7 @@ public class StoreModule extends AbstractModule {
     ObjectifyService.register(Attachment.class);
     ObjectifyService.register(LoginToken.class);
     ObjectifyService.register(RoomTextIndex.class);
+    ObjectifyService.register(ConnectedClients.UserRoom.class);
   }
 
   @Override

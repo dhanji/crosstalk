@@ -2,14 +2,19 @@ package com.wideplay.crosstalk.web.tasks;
 
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.inject.Inject;
+import com.wideplay.crosstalk.web.auth.twitter.TwitterMode;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 class TaskQueue {
-  public TaskQueue() {
+  @Inject
+  public TaskQueue(@TwitterMode boolean twitterMode) {
+    if (twitterMode) {
+      enqueueTweetTask();
+    }
     enqueueClusterTask();
-    enqueueTweetTask();
   }
 
   public static void enqueueClusterTask() {

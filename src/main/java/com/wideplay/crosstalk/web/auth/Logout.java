@@ -9,7 +9,6 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
-import com.wideplay.crosstalk.data.ConnectedClients;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.RoomStore;
@@ -38,9 +37,6 @@ public class Logout {
   @Inject
   private Broadcaster broadcaster;
 
-  @Inject
-  private ConnectedClients connected;
-
   @Get
   Reply<?> logout(HttpServletResponse response, Gson gson) {
     CurrentUser currentUser = currentUserProvider.get();
@@ -66,6 +62,6 @@ public class Logout {
       userStore.get().logout(cookie.getValue());
     }
 
-    return Reply.saying().redirect("/r/chat/1");
+    return Reply.saying().redirect("/");
   }
 }

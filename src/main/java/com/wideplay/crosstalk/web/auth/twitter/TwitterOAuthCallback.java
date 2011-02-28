@@ -1,4 +1,4 @@
-package com.wideplay.crosstalk.web.auth;
+package com.wideplay.crosstalk.web.auth.twitter;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -42,12 +42,14 @@ public class TwitterOAuthCallback {
 
     String redirect = "/r/chat/1";
     log.debug("Twitter callback successful with verifier {} ", verifier);
+
     if (verifier != null) {
       LoginToken loginToken = twitter.authorize(token, verifier);
       if (loginToken.getLastUrl() != null) {
         redirect = loginToken.getLastUrl();
       }
-    }
+    } else
+      throw new IllegalStateException("OAuth callback called without verification.");
 
     // And now we should log this user in properly.
     CurrentUser thisUser = currentUser.get();
@@ -69,6 +71,8 @@ public class TwitterOAuthCallback {
     user.setUsername(twitterUser.getScreenName());
     user.setDisplayName(twitterUser.getName());
     user.setAvatar(twitterUser.getProfileImageUrl());
+    user.setTwitterAccessToken(thisUser.getUser().getTwitterAccessToken());
+    user.setTwitterTokenSecret(thisUser.getUser().getTwitterTokenSecret());
 
     userStore.get().loginAndMaybeCreate(sessionId, user);
 

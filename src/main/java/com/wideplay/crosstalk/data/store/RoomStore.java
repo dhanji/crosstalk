@@ -2,6 +2,7 @@ package com.wideplay.crosstalk.data.store;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -43,20 +44,10 @@ public class RoomStore {
     room.setOccupancy(occupancy);
   }
 
+  @Inject
+  private Provider<ConnectedClients> connectedClientsProvider;
   private ConnectedClients loadConnectedClients() {
-    ConnectedClients clients = objectify.find(new Key<ConnectedClients>(ConnectedClients.class,
-        ConnectedClients.SINGLETON_ID));
-    // Should only happen once per database reset, really.
-    if (null == clients) {
-      clients = new ConnectedClients();
-      objectify.put(clients);
-    }
-
-    return clients;
-  }
-
-  private void save(ConnectedClients clients) {
-    objectify.put(clients);
+    return connectedClientsProvider.get();
   }
 
   /**
@@ -126,8 +117,6 @@ public class RoomStore {
   public void connectClient(User user, String token, Room room) {
     ConnectedClients clients = loadConnectedClients();
     clients.add(token, user, room);
-
-    save(clients);
   }
 
   public String channelOf(Key<User> user, Room room) {
@@ -137,6 +126,5 @@ public class RoomStore {
   public void leaveRoom(Key<User> user, Room room) {
     ConnectedClients clients = loadConnectedClients();
     clients.remove(user, room);
-    save(clients);
   }
 }

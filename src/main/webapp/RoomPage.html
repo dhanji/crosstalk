@@ -33,7 +33,7 @@
     <li class="on"><a href="#">All chat</a></li>
 <!--    <li><a href="#">Links</a></li>-->
   </ul>
-  <p id="linkBack"><a href="/">Show all chat rooms for <strong>Webstock</strong></a></p>
+  <p id="linkBack"><a href="/">Show all chat rooms</a></p>
 </div>
 <div id="center">
   <div id="activity-map">
@@ -105,7 +105,7 @@
   @ShowIf(user.username == 'anonymous')
   <div class="talkbox">
     <div class="signin">
-      <img src="/images/twitter_login.gif" width="44" height="44" alt="Twitter T" /> <a href="/login?r=${room.id}&u=/r/chat/${room.name}"">Sign in with twitter</a> to start chatting
+      <img src="/images/twitter_login.gif" width="44" height="44" alt="${twitterMode ? 'Twitter' : 'Buzz'}" /> <a href="/login?r=${room.id}&u=/r/chat/${room.name}">Sign in with ${twitterMode ? 'twitter' : 'Buzz'}</a> to start chatting
     </div>
   </div>
 </div>

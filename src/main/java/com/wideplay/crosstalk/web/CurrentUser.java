@@ -3,8 +3,6 @@ package com.wideplay.crosstalk.web;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import com.wideplay.crosstalk.data.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +15,6 @@ import java.util.UUID;
  */
 @RequestScoped
 public class CurrentUser {
-  private static final Logger log = LoggerFactory.getLogger(CurrentUser.class);
   public static final String SESSION_COOKIE_NAME = "x-crosstalk-session-id";
 
   @Inject
@@ -38,7 +35,7 @@ public class CurrentUser {
   }
 
   public boolean isAnonymous() {
-    return user != null && User.ANONYMOUS.equals(user);
+    return user != null && User.ANONYMOUS_USERNAME.equals(user.getUsername());
   }
 
   public Cookie getSessionCookie() {

@@ -80,7 +80,7 @@ public class Occupancy {
 
     // Eliminate the anonymous user from the selection set.
     for (Key<User> userKey : this.users) {
-      if (!User.ANONYMOUS.getUsername().equals(userKey.getName())) {
+      if (!User.ANONYMOUS_USERNAME.equals(userKey.getName())) {
         userKeys.add(userKey);
       }
     }
