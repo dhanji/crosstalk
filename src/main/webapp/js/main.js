@@ -320,7 +320,7 @@ function showSnippets(data) {
 
 	$('.snippet').css('opacity', 0);
 
-	var newSnippet = $('<div class="snippet"><img class="cloud" src="images/cloud.png" alt="" /><span class="cloudPointer1"></span><span class="cloudPointer2"></span><div class="content"><img class="avatar" src="images/avatar.png" width="48" height="48" alt="Avatar" /> <strong>' + author + '</strong> <span class="text">' + randomString + '</span></div>');
+	var newSnippet = $('<div class="snippet"><img class="cloud" src="/images/cloud.png" alt="" /><span class="cloudPointer1"></span><span class="cloudPointer2"></span><div class="content"><img class="avatar" src="/images/avatar.png" width="48" height="48" alt="Avatar" /> <strong>' + author + '</strong> <span class="text">' + randomString + '</span></div>');
 	newSnippet.appendTo('#topicContent');
 
 	newSnippet
