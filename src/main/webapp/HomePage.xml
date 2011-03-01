@@ -19,14 +19,14 @@
 <header>
   <h1>CrossTalk</h1>
   <h2>Real time chat for events</h2>
-  <p id="newRoom"><a href="#">Start a new discussion</a></p>
+  <p id="newRoom"><a href="#">Create a new chat room</a></p>
 </header>
 <ul id="switcher">
   <li class="on"><a href="#">Rooms</a></li>
   <li><a href="#">Topics</a></li>
 </ul>
   <section id="roomContent" class="content on">
-    <p class="callToAction"><span class="click">Click / </span><span class="tap">tap</span> on the room you'd like to visit:</p>
+    <p class="callToAction"><span class="click">Click</span> <span class="tap">Tap</span> on the room you'd like to visit<span class="click">:</span> <span class="tap">or <a href="#">create a new chat room</a></span></p>
   <ul id="roomList">
 
     @Repeat(items=rooms, var="room")

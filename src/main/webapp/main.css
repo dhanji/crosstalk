@@ -61,6 +61,7 @@ header {
 	position: absolute;
 	left: 0;
 	width: 100%;
+	z-index: 50;
 	height: 53px;
 	background-color: #ffffff;
 	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.2, #ededee),
@@ -96,9 +97,16 @@ header > h2 {
 
 #newRoom {
 	position: absolute;
-	top: 15px;
+	top: 11px;
 	right: 20px;
-	color: #316494;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #316494;
+	background-image: url(/images/new_room_arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 90% 55%;
+	color: #ffffff;
 	font-size: 143%;
 	font-family: GS, Arial, Helvetica, sans-serif;
 	font-weight: normal;
@@ -106,7 +114,9 @@ header > h2 {
 }
 
 #newRoom a {
-	color: #316494;
+	display: block;
+	padding: 0.2em 2.3em 0.2em 1em;
+	color: #ffffff;
 	text-decoration: none;
 }
 
@@ -121,18 +131,25 @@ header > h2 {
 
 .callToAction {
 	position: absolute;
-	top: 74px;
-	left: 50%;
-	width: 20em;
-	margin-left: -9.75em;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	background-color: rgba(255,255,255,0.2);
+	top: 75px;
+	left: 20px;
+  width: auto;
+  margin-left: 0;
+  background-color: transparent;
 	font-size: 130%;
-	text-align: center;
-	opacity: 0.5;
 	line-height: 2em;
+  text-align: left;
+  -webkit-transition: opacity 0.6s linear;
+  -moz-transition: opacity 0.6s linear;
+  transition: opacity 0.6s linear;
+}
+
+.callToAction .tap {
+	display: none;
+}
+
+.callToAction a {
+	color: #ffffff;
 }
 
 #switcher {
@@ -322,28 +339,6 @@ header > h2 {
 	text-decoration: none;
 }
 
-#roomList li .anchor > a:before {
-	content: '';
-	position: absolute;
-	right: 6px;
-	top: 6px;
-	width: 0.45em;
-	height: 0.45em;
-	background-image: url(/images/room_status_grey_lrg.png);
-	background-repeat: no-repeat;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	background-size: cover;
-}
-
-#roomList .active .anchor > a:before {
-	background-image: url(/images/room_status_green_lrg.png);
-}
-
-#roomList .future .anchor > a:before {
-	background-image: url(/images/room_status_orange_lrg.png);
-}
-
 #roomList h2 {
 	color: #00A5FF;
 	font-size: 140%;
@@ -433,6 +428,7 @@ header > h2 {
 }
 
 #topicContent {
+  display: none;
   position: absolute;
   left: 0;
   right: 0;
@@ -445,22 +441,12 @@ header > h2 {
 }
 
 #topicContent.on {
+  display: block;
   opacity: 1;
 }
 
 #topicContent .callToAction {
-	position: absolute;
-	top: 22px;
-	left: 20px;
-  width: auto;
-  margin-left: 0;
-  background-color: transparent;
-	font-size: 130%;
-	line-height: 2em;
-  text-align: left;
-  -webkit-transition: opacity 0.6s linear;
-  -moz-transition: opacity 0.6s linear;
-  transition: opacity 0.6s linear;
+  top: 22px;
 }
 
 #topicContent .callToAction.off {

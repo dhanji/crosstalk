@@ -47,15 +47,8 @@ header > h2 {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-#corporateLogo {
-	position: absolute;
-	right: 0;
-	top: 8px;
-	width: 117px;
-	height: 27px;
-	background-image: url(/images/webstock_mobile.gif);
-	background-repeat: no-repeat;
-	text-indent: -9999px;
+#newRoom {
+	display: none;
 }
 
 
@@ -63,10 +56,15 @@ header > h2 {
 
 /* CONTENT ========================================= */
 
-#callToAction {
+#switcher {
+  display: none;
+}
+
+.callToAction {
 	position: static;
 	width: auto;
 	margin: 10px 10px 10px 10px;
+	padding: 5px 10px;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
@@ -74,20 +72,20 @@ header > h2 {
 	font-size: 130%;
 	text-align: center;
 	opacity: 0.5;
-	line-height: 2em;
+	line-height: 1.4;
 }
 
-#callToAction .click {
+.callToAction .click {
 	display: none;
 }
 
-#callToAction .tap {
+.callToAction .tap {
 	display: inline;
-	text-transform: capitalize;
 }
 
-#content {
+#roomContent {
 	display: block;
+	padding-top: 0;
 }
 
 #roomList {
@@ -120,8 +118,6 @@ header > h2 {
 	overflow: hidden;
 	font-size: 160%;
 	font-family: Arial, Helvetica, sans-serif;
-	white-space: nowrap;
-	text-overflow: ellipsis;
 }
 
 #roomList .anchor > a:before {
