@@ -157,6 +157,9 @@ crosstalk.post_ = function() {
 
   var talkbox = $('#talkbox');
   var text = talkbox.val();
+  if ($.trim(text) == '') {
+    return;
+  }
   talkbox.val('');
   var token = $('#comet-token').html();
 
@@ -348,7 +351,7 @@ crosstalk.joinRoom_ = function(data) {
     if ($('#' + id).length > 0)
       return;
     $('.current-contributor-avatars')
-        .append('<img id="' + id + '" class="avatar" src="' + data.joiner.avatar + '"/>');
+        .append('<img id="' + id + '" class="avatar" src="/images/avatar.png"/>'); /** temporary **/
   }
 };
 

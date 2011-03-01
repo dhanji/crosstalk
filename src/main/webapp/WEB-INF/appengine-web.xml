@@ -7,4 +7,5 @@
     <property name="twittermode" value="false"/>
     <property name="crosstalk.domain" value="http://crosstalkchat.appspot.com"/>
   </system-properties>
+  <sessions-enabled>true</sessions-enabled>
 </appengine-web-app>

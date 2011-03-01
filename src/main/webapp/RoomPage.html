@@ -49,7 +49,7 @@
     </h2>
     <div class="current-contributor-avatars">
       @Repeat(items=occupants, var="occupant")
-      <img id="av-${occupant.username}" class="avatar" src="${occupant.avatar}"
+      <img id="av-${occupant.username}" class="avatar" src="/images/avatar.png"
            alt="${occupant.username}" title="${occupant.username}"/>
     </div>
     <!--
@@ -58,7 +58,7 @@
     <p>
     -->
     <h2>
-      Also pulling tweets from:
+      Also pulling buzzes matching:
     </h2>
     <div id="hashtags" class="weak-title">
       @Repeat(items=room.occupancy.terms, var="term")

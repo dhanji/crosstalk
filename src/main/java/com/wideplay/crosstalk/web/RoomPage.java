@@ -73,7 +73,7 @@ public class RoomPage {
     User user = getUser();
 
     // Create a room & user-specific unique id for this channel.
-    String userChannelId = user.getUsername() + roomId + UUID.randomUUID().toString();
+    String userChannelId = Long.toHexString(UUID.randomUUID().getLeastSignificantBits());
     token = channelService.createChannel(userChannelId);
     roomStore.connectClient(user, userChannelId, room);
 
