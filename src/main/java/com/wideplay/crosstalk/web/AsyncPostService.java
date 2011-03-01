@@ -9,7 +9,6 @@ import com.google.sitebricks.client.Web;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
-import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;
@@ -78,7 +77,7 @@ public class AsyncPostService {
     ));
     broadcaster.broadcast(room, author, json);
 
-    // Save AFTER broadcast (reduces latency).
+    // Save AFTER broadcast (reduces latency). This is used for activity segments.
     room.getOccupancy().incrementNow(); // Increment activity in the room by 1.
     roomStore.save(room.getOccupancy());
     messageStore.save(message);
@@ -115,10 +114,6 @@ public class AsyncPostService {
         "leaver", leaver
     ));
     broadcaster.broadcast(room, leaver, json);
-
-    // Update occupancy.
-    room.getOccupancy().getUsers().remove(new Key<User>(User.class, leaver.getUsername()));
-    roomStore.save(room.getOccupancy());
 
     return Reply.saying().ok();
   }

@@ -521,6 +521,7 @@ qq.FileUploader = function(o){
     qq.extend(this._options, o);       
 
     this._element = this._options.element;
+    if (!this._element) { return; }
     this._element.innerHTML = this._options.template;        
     this._listElement = this._options.listElement || this._find(this._element, 'list');
     

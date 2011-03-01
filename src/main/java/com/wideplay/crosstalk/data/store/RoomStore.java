@@ -124,12 +124,27 @@ public class RoomStore {
     clients.add(token, user, room);
   }
 
-  public String channelOf(Key<User> user, Room room) {
+  public Collection<String> channelOf(Key<User> user, Room room) {
     return loadConnectedClients().channelOf(user.getName(), room);
+  }
+
+  public void leaveRoom(Key<User> user, Room room, String id) {
+    ConnectedClients clients = loadConnectedClients();
+    boolean remove = clients.remove(user, room, id);
+
+    // Did this user lose all occupancy?
+    if (remove) {
+      room.getOccupancy().getUsers().remove(user);
+      save(room.getOccupancy());
+    }
   }
 
   public void leaveRoom(Key<User> user, Room room) {
     ConnectedClients clients = loadConnectedClients();
-    clients.remove(user, room);
+    clients.removeAll(user, room);
+
+    // This user lost all occupancy of the room.
+    room.getOccupancy().getUsers().remove(user);
+    save(room.getOccupancy());
   }
 }

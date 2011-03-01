@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
@@ -72,7 +73,7 @@ public class RoomPage {
     User user = getUser();
 
     // Create a room & user-specific unique id for this channel.
-    String userChannelId = user.getUsername() + roomId + Math.random();
+    String userChannelId = user.getUsername() + roomId + UUID.randomUUID().toString();
     token = channelService.createChannel(userChannelId);
     roomStore.connectClient(user, userChannelId, room);
 

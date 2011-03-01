@@ -5,15 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
-import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Serialized;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +22,6 @@ import java.util.Set;
  *
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-@RequestScoped
 public class ConnectedClients {
   private final Objectify objectify;
 
@@ -39,10 +37,9 @@ public class ConnectedClients {
   private Set<UserRoom> usersInRooms = Sets.newHashSet();
 
   // MEMO FIELD
-  @Transient @JsonHide
   private Map<String, UserRoom> usersInRoomsMemo;
 
-  public String channelOf(String userName, Room room) {
+  public Collection<String> channelOf(String userName, Room room) {
     UserRoom userRoom = usersInRoomsMemo.get(userName);
     if (null == userRoom) {
       return null;
@@ -50,7 +47,7 @@ public class ConnectedClients {
 
     for (RoomTokens roomToken : userRoom.roomTokens) {
       if (roomToken.roomKey.getId() == room.getId()) {
-        return roomToken.token;
+        return roomToken.tokens;
       }
     }
 
@@ -58,15 +55,37 @@ public class ConnectedClients {
     return null;
   }
 
-  public void remove(Key<User> user, Room room) {
+  public boolean remove(Key<User> user, Room room, String id) {
+    UserRoom userRoom = usersInRoomsMemo.get(user.getName());
+    if (null == userRoom) {
+      return true;
+    }
+
+    boolean leftRoom = false;
+    for (RoomTokens roomToken : userRoom.roomTokens) {
+      if (roomToken.roomKey.getId() == room.getId()) {
+        roomToken.tokens.remove(id);
+        leftRoom = roomToken.tokens.isEmpty();
+        break;
+      }
+    }
+    objectify.put(userRoom);
+
+    return leftRoom;
+  }
+
+  public void removeAll(Key<User> user, Room room) {
     UserRoom userRoom = usersInRoomsMemo.get(user.getName());
     if (null == userRoom) {
       return;
     }
 
-    RoomTokens toRemove = new RoomTokens();
-    toRemove.roomKey = new Key<Room>(Room.class, room.getId());
-    userRoom.roomTokens.remove(toRemove);
+    for (RoomTokens roomToken : userRoom.roomTokens) {
+      if (roomToken.roomKey.getId() == room.getId()) {
+        roomToken.tokens.clear();
+        break;
+      }
+    }
     objectify.put(userRoom);
   }
 
@@ -75,13 +94,14 @@ public class ConnectedClients {
     @Id
     private String username;
 
-    @Embedded
+    @Serialized
     private Set<RoomTokens> roomTokens = Sets.newHashSet();
   }
 
-  public static class RoomTokens {
+  public static class RoomTokens implements Serializable {
+    private static final long serialVerionUID = -1L;
     private Key<Room> roomKey;
-    private String token;
+    private Set<String> tokens = Sets.newHashSet();
 
     @Override
     public boolean equals(Object o) {
@@ -110,11 +130,21 @@ public class ConnectedClients {
       usersInRooms.add(userRoom);
     }
 
-    RoomTokens roomTokens = new RoomTokens();
-    roomTokens.roomKey = new Key<Room>(Room.class, room.getId());
-    roomTokens.token = token;
+    RoomTokens found = null;
+    for (RoomTokens roomToken : userRoom.roomTokens) {
+      if (roomToken.roomKey.getId() == room.getId()) {
+        found = roomToken;
+        break;
+      }
+    }
 
-    userRoom.roomTokens.add(roomTokens);
+    // Should we create a new one?
+    if (null == found) {
+      found = new RoomTokens();
+      found.roomKey = new Key<Room>(Room.class, room.getId());
+      userRoom.roomTokens.add(found);
+    }
+    found.tokens.add(token);
 
     // Remember to save me!
     objectify.put(userRoom);

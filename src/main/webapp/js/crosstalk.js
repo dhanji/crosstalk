@@ -25,7 +25,7 @@ $(document).ready(function() {
   // Set up coment channel.
   var channel = new goog.appengine.Channel(token);
   var socket = channel.open();
-  socket.onopen = function() {};
+  socket.onopen = function() { };
   socket.onmessage = function(data) {
     // Receive as JSON.
     data = eval('(' + data.data + ')');
