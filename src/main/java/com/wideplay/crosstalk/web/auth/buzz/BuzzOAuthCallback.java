@@ -11,7 +11,6 @@ import com.google.sitebricks.http.Get;
 import com.wideplay.crosstalk.data.LoginToken;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.buzz.BuzzSearch;
-import com.wideplay.crosstalk.data.buzz.BuzzUser;
 import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.web.CurrentUser;
 import org.slf4j.Logger;
@@ -71,14 +70,19 @@ public class BuzzOAuthCallback {
 
     User user = new User();
     if (data.getItems().isEmpty()) {
+      return Reply.with("Error: You have never posted anything in Buzz so we can't log you in!");
       // Maybe check something else?
-      creds = buzz.call("https://www.googleapis.com/buzz/v1/people/@me/@self?alt=json");
-      BuzzUser userData = gson.fromJson(creds, BuzzUser.Data.class).getUser();
-      user.setUsername(userData.getDisplayName());
-      user.setDisplayName(userData.getDisplayName());
-      user.setAvatar(userData.getAvatar());
+//      creds = buzz.call("https://www.googleapis.com/buzz/v1/people/@me/@self?alt=json");
+//      BuzzUser userData = gson.fromJson(creds, BuzzUser.Data.class).getUser();
+//      user.setUsername(userData.getDisplayName());
+//      user.setDisplayName(userData.getDisplayName());
+//      user.setAvatar(userData.getAvatar());
     } else {
       BuzzSearch.Buzz buzz = data.getItems().get(0);
+      if (!buzz.getArbitraryPermalink().startsWith("http://www.google.com/buzz/a/google.com/")) {
+        // Dont allow non-google domains.
+        return Reply.saying().forbidden();
+      }
       user.setUsername(buzz.getActor().getName());
       user.setDisplayName(buzz.getActor().getName());
       user.setAvatar(buzz.getActor().getAvatar());

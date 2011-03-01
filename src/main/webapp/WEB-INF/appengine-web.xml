@@ -4,7 +4,8 @@
   <version>1</version>
   <system-properties>
     <property name="mvel2.disable.jit" value="true"/>
-    <property name="twittermode" value="false"/>
+    <property name="twittermode" value="false"/> <!-- Uses Google Buzz if false -->
+    <property name="supersecure" value="true"/> <!-- restricts anonymous if true -->
     <property name="crosstalk.domain" value="http://crosstalkchat.appspot.com"/>
   </system-properties>
   <sessions-enabled>true</sessions-enabled>

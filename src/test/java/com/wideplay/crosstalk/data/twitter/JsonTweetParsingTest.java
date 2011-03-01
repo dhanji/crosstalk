@@ -1,6 +1,7 @@
 package com.wideplay.crosstalk.data.twitter;
 
 import com.google.gson.Gson;
+import com.wideplay.crosstalk.data.buzz.BuzzSearch;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
@@ -19,4 +20,16 @@ public class JsonTweetParsingTest {
 
     System.out.println("Parsed: " + tweets.getResults());
   }
+
+
+  @Test
+  public final void parseBuzz() throws IOException {
+    String json = IOUtils.toString(TwitterSearch.class.getResourceAsStream("example_buzz_@me.json"));
+
+    BuzzSearch tweets = new Gson().fromJson(json, BuzzSearch.Data.class).getData();
+
+    System.out.println("Parsed: " + tweets.getItems());
+  }
+
+
 }

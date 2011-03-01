@@ -240,7 +240,7 @@ public class BuzzApi {
 
       InputStream inputStream = connection.getInputStream();
       if (connection.getResponseCode() == 200) {
-        return IOUtils.toString(inputStream);
+        return IOUtils.toString(inputStream, "UTF-8");
       } else {
         log.error("Twitter returned error code {} with message {}", connection.getResponseCode(),
             IOUtils.toString(inputStream));
