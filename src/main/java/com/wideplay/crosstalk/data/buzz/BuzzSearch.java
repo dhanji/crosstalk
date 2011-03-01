@@ -1,17 +1,44 @@
 package com.wideplay.crosstalk.data.buzz;
 
+import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
+import com.wideplay.crosstalk.data.Message;
+import com.wideplay.crosstalk.data.User;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
 public class BuzzSearch {
-  private List<Buzz> items;
+  private List<Buzz> items = Lists.newArrayList();
 
   public List<Buzz> getItems() {
     return items;
+  }
+
+  public Message pick() {
+    if (items.isEmpty()) {
+      return null;
+    }
+
+    // Pick a random buzz.
+    Buzz buzz = items.get((int) ((Math.random() * items.size()) % items.size()));
+
+    Message message = new Message();
+    message.setId((long)buzz.id.hashCode()); // UGH HACK.
+    message.setText(buzz.title);
+    message.setPostedOn(new Date()); // set properly
+    message.setTweet(true);
+
+    User author = new User();
+    author.setAvatar(buzz.actor.getAvatar());
+    author.setUsername(buzz.actor.getName());
+    author.setDisplayName(buzz.actor.getName());
+    message.setAuthor(author);
+
+    return message;
   }
 
   public static class Data {
@@ -24,6 +51,8 @@ public class BuzzSearch {
 
   public static class Buzz {
     private Actor actor;
+    private String id;
+    private String title;
 
     public Actor getActor() {
       return actor;

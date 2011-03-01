@@ -1,6 +1,7 @@
 package com.wideplay.crosstalk.data;
 
 import com.google.common.collect.Lists;
+import com.google.gson.annotations.SerializedName;
 import com.googlecode.objectify.annotation.Cached;
 
 import javax.persistence.Embedded;
@@ -26,8 +27,13 @@ public class RoomTextIndex {
 
   public static class WordTuple implements Comparable<WordTuple>, Serializable {
     private static final long serialVersionUID = 0L;
+
+    @SerializedName("title")
     private String word;
+    @SerializedName("rank")
     private int count;
+    @SerializedName("room")
+    private String roomName;
 
     public String getWord() {
       return word;
@@ -63,6 +69,14 @@ public class RoomTextIndex {
     @Override
     public String toString() {
       return word + '(' + count + ')';
+    }
+
+    public void setCount(int count) {
+      this.count = count;
+    }
+
+    public void setRoomName(String roomName) {
+      this.roomName = roomName;
     }
   }
 

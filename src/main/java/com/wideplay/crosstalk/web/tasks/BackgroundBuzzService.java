@@ -11,12 +11,12 @@ import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Room;
 import com.wideplay.crosstalk.data.User;
+import com.wideplay.crosstalk.data.buzz.BuzzSearch;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
-import com.wideplay.crosstalk.data.twitter.TwitterSearch;
 import com.wideplay.crosstalk.web.Broadcaster;
-import com.wideplay.crosstalk.web.auth.twitter.Twitter;
+import com.wideplay.crosstalk.web.auth.buzz.BuzzApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +26,10 @@ import java.util.List;
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-@At("/queue/tweets")
+@At("/queue/buzz")
 @Service
-public class BackgroundTweetService {
-  private static final Logger log = LoggerFactory.getLogger(BackgroundTweetService.class);
+public class BackgroundBuzzService {
+  private static final Logger log = LoggerFactory.getLogger(BackgroundBuzzService.class);
   private static final int MAX_TERMS = 4;
 
   @Inject
@@ -45,12 +45,12 @@ public class BackgroundTweetService {
   private Broadcaster broadcaster;
 
   @Get
-  Reply<?> pullTweets(Twitter twitter, Gson gson) {
+  Reply<?> pullBuzzes(BuzzApi buzz, Gson gson) {
     // Do this for all rooms.
     List<Room> rooms = roomStore.list();
-    log.info("Starting background twitter fetch...");
+    log.info("Starting background buzz fetch...");
 
-    // Pick an arbitrary user to be our twitter patsy.
+    // Pick an arbitrary user to be our buzz patsy.
     for (Room room : rooms) {
       Key<User> userKey = room.getOccupancy().pickUser();
       if (null == userKey) {
@@ -69,14 +69,15 @@ public class BackgroundTweetService {
         }
 
         term = URLEncoder.encode(term);
-        String result = twitter.call(patsy, "http://search.twitter.com/search.json?q=" + term);
+        String result = buzz.call(patsy, "https://www.googleapis.com/buzz/v1/activities/search?alt=json&q=" + term);
         // Call to twitter can fail for various reasons.
         if (result != null && !result.isEmpty()) {
-          TwitterSearch tweets = gson.fromJson(result, TwitterSearch.class);
+          BuzzSearch buzzes = gson.fromJson(result, BuzzSearch.Data.class).getData();
 
           // Select a tweet and broadcast.
-          Message pick = tweets.pick();
+          Message pick = buzzes.pick();
 
+          log.info("Found {} results for {}, picking buzz...", buzzes.getItems().size(), term);
           if (null != pick) {
             // Skip sending this tweet if it already exists in the room.
             Message message = messageStore.fetchMessage(pick.getId());
@@ -105,7 +106,7 @@ public class BackgroundTweetService {
     }
 
     // Chain next instance of this task.
-    TaskQueue.enqueueTweetTask();
+    TaskQueue.enqueueBuzzTask();
 
     return Reply.saying().ok();
   }

@@ -42,6 +42,7 @@ import java.net.URLEncoder;
 @RequestScoped
 public class BuzzApi {
   private static final Logger log = LoggerFactory.getLogger(BuzzApi.class);
+  public static final String APP_DOMAIN = System.getProperty("crosstalk.domain");
   public static final String CONSUMER_KEY = "crosstalkchat.appspot.com";
   public static final String CONSUMER_SECRET = "Z3U9dZKymbTXqAaO6dwM3sV3";
 //  public static final String CONSUMER_KEY = "anonymous";
@@ -54,7 +55,7 @@ public class BuzzApi {
   private final OAuthConsumer consumer = new DefaultOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
   private final OAuthProvider provider = new DefaultOAuthProvider(
       "https://www.google.com/accounts/OAuthGetRequestToken?scope=" + BUZZ_SCOPE_READONLY
-      + "&next=" + URLEncoder.encode("http://crosstalk.appspot.com/oauth/buzz"),
+      + "&next=" + URLEncoder.encode(APP_DOMAIN + "/oauth/buzz"),
       "https://www.google.com/accounts/OAuthGetAccessToken",
       "https://www.google.com/buzz/api/auth/OAuthAuthorizeToken?scope="
           + BUZZ_SCOPE_READONLY
@@ -69,10 +70,12 @@ public class BuzzApi {
   @Inject
   private UserStore userStore;
 
-  private static OAuthHmacSigner signer = new OAuthHmacSigner();
+
 
   public Twitter.OAuthRedirect redirectForAuth() {
     try {
+
+      OAuthHmacSigner signer = new OAuthHmacSigner();
       GoogleOAuthGetTemporaryToken temporaryToken = new GoogleOAuthGetTemporaryToken();
 //      temporaryToken.transport = Util.AUTH_TRANSPORT;
       signer.clientSharedSecret = CONSUMER_SECRET;
@@ -80,7 +83,7 @@ public class BuzzApi {
       temporaryToken.consumerKey = CONSUMER_KEY;
       temporaryToken.scope = "https://www.googleapis.com/auth/buzz";
       temporaryToken.displayName = "Crosstalk";
-      temporaryToken.callback = "http://crosstalkchat.appspot.com/oauth/buzz";
+      temporaryToken.callback = APP_DOMAIN + "/oauth/buzz";
       OAuthCredentialsResponse tempCredentials = temporaryToken.execute();
       signer.tokenSharedSecret = tempCredentials.tokenSecret;
 
@@ -98,7 +101,7 @@ public class BuzzApi {
           tempCredentials.token, tempCredentials.tokenSecret);
 
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("Error redirecting for OAuth.", e);
     }
     return null;
   }
@@ -130,6 +133,7 @@ public class BuzzApi {
 //  }
 
   public LoginToken authorize(String token, String verification) {
+    OAuthHmacSigner signer = new OAuthHmacSigner();
     try {
       LoginToken loginToken = userStore.claimOAuthToken(token);
       // access token
@@ -137,12 +141,14 @@ public class BuzzApi {
       OAuthCredentialsResponse credentials;
       GoogleOAuthGetAccessToken accessToken = new GoogleOAuthGetAccessToken();
   //    accessToken.transport = Util.AUTH_TRANSPORT;
+      signer.clientSharedSecret = CONSUMER_SECRET;
       accessToken.temporaryToken = token;
       accessToken.signer = signer;
       accessToken.consumerKey = CONSUMER_KEY;
       accessToken.verifier = verification;
+      signer.tokenSharedSecret = loginToken.getTokenSecret();
+//      signer.tokenSharedSecret = credentials.tokenSecret;
       credentials = accessToken.execute();
-      signer.tokenSharedSecret = credentials.tokenSecret;
 
       OAuthParameters authorizer = new OAuthParameters();
       authorizer.consumerKey = CONSUMER_KEY;
@@ -163,7 +169,7 @@ public class BuzzApi {
 
       return loginToken;
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("authorize", e);
     }
     return null;
   }

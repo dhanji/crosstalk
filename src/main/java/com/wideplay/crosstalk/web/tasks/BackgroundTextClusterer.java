@@ -51,6 +51,7 @@ public class BackgroundTextClusterer {
     // Gather info about all rooms.
     RoomTextIndex globalIndex = new RoomTextIndex();
     Map<String, Integer> globalWordCount = Maps.newHashMap();
+    Map<String, Room> globalWordRooms = Maps.newHashMap();
     globalIndex.setId(1L);
 
     List<Room> rooms = roomStore.list();
@@ -77,6 +78,7 @@ public class BackgroundTextClusterer {
 
             wordCount.put(word, count + 1);
             globalWordCount.put(word, globalCount + 1);
+            globalWordRooms.put(word, room);
           }
         }
       }
@@ -105,6 +107,12 @@ public class BackgroundTextClusterer {
     // Save global word count.
     List<RoomTextIndex.WordTuple> globalWords = toWordList(globalWordCount);
     Collections.sort(globalWords);
+
+    // assign rooms to them.
+    for (RoomTextIndex.WordTuple globalWord : globalWords) {
+      globalWord.setRoomName(globalWordRooms.get(globalWord.getWord()).getName());
+    }
+
     globalIndex.setWords(globalWords);
     roomStore.save(globalIndex);
 

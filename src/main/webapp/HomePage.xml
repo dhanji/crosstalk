@@ -19,10 +19,14 @@
 <header>
   <h1>CrossTalk</h1>
   <h2>Real time chat for events</h2>
-  <p id="corporateLogo"><a href="http://webstock.org.nz/">Webstock</a></p>
+  <p id="newRoom"><a href="#">Start a new discussion</a></p>
 </header>
-<p id="callToAction"><span class="click">Click / </span><span class="tap">tap</span> on the room you'd like to visit:</p>
-<section id="content">
+<ul id="switcher">
+  <li class="on"><a href="#">Rooms</a></li>
+  <li><a href="#">Topics</a></li>
+</ul>
+  <section id="roomContent" class="content on">
+    <p class="callToAction"><span class="click">Click / </span><span class="tap">tap</span> on the room you'd like to visit:</p>
   <ul id="roomList">
 
     @Repeat(items=rooms, var="room")
@@ -30,14 +34,18 @@
       <div class="anchor">
         <a href="/r/chat/${room.name}">${room.displayName}</a>
 
-        <h2>${room.host}</h2>
+<!--        <h2>${room.host}</h2> -->
 
-        <time datetime="${__page.longdate(room)}">${__page.period(room)}</time>
+<!--        <time datetime="${__page.longdate(room)}">${__page.period(room)}</time> -->
         <section class="contributors">
-          <h2>${__page.contributors(room)} Contributors</h2>
+          <h2>${__page.contributors(room)} Contributors:</h2>
           <ul>
+<!--
+            @ Repeat(items=__page.occupants(room), var="user")
+            <li><img src="$ {user.avatar}" width="24" height="24" alt="$ {user.displayName}"/></li>
+-->
             @Repeat(items=__page.occupants(room), var="user")
-            <li><img src="${user.avatar}" width="24" height="24" alt="${user.displayName}"/></li>
+            <li>${user.displayName.split(' ')[0]}${!isLast ? ',' : ''}</li>
           </ul>
           <p class="lurkers"></p>
         </section>
@@ -53,15 +61,11 @@
     </li>
   </ul>
 </section>
-<nav>
-  <div>
-    <div id="navIndicator"></div>
-    <a class="prev" href="#">Previous</a>
-    <ol>
-    </ol>
-    <a class="next" href="#">Next</a>
-  </div>
-</nav>
+  <section id="topicContent" class="content">
+    <p class="callToAction"><span class="click">Click / </span><span class="tap">tap</span> on a topic you'd like to explore:</p>
+    <ul id="topicList">
+    </ul>
+  </section>
 </div> <!-- /#page -->
 </body>
 </html>

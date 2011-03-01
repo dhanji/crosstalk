@@ -247,7 +247,7 @@ crosstalk.insertMessage_ = function(post) {
   var stream = $('#stream > .inner');
   stream.append((post.isTweet ? '<div class="message tweet">' : '<div class="message">')
     + '<div class="author">' + post.author.username + '</div>'
-    + '<img class="avatar" src="' + post.author.avatar + '"/>'
+//    + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
     + '  <time>' + post.postedOn + '</time>'
     + linkset.text

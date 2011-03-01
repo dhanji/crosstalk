@@ -23,35 +23,6 @@ function init() {
 	
 		var roomListItems = $('#roomList > li > .anchor');
 		
-		// Find room that's closest to current time (NZ time) and make it active, also make rooms within an hour active
-		var closest = roomListItems.eq(0);
-		var closestDiff = null;
-		var now = new Date();
-		var nowTime = now.getTime();
-		nowTime += (780 + now.getTimezoneOffset()) * 60 * 1000;
-		var oneHourInMilliseconds = 60 * 60 * 1000;
-		
-		roomListItems.each(function() {
-			var time = $('time', this).attr('datetime');
-			var year = time.match(/^([^\-]+)/)[1];
-			var month = time.match(/^[^\-]+-([^-]+)/)[1];
-			var day = time.match(/^[^\-]+-[^-]+-([^T]+)/)[1];
-			var hour = time.match(/T([^:]+)/)[1];
-			var minute = time.match(/:([^+]+)/)[1];
-			var date = new Date(year, parseInt(month) - 1, day, hour, minute);
-			
-			if (closestDiff == null || Math.abs(date.getTime() - nowTime) < closestDiff) {
-				closest = $(this);
-				closestDiff = Math.abs(date.getTime() - nowTime);
-			}
-
-			if (Math.abs(date.getTime() - nowTime) <= oneHourInMilliseconds) {
-				$(this).parents('li').removeClass('inactive').addClass('active');
-			}
-		});
-		
-		closest.parents('li').removeClass('inactive').addClass('active');
-		
 		// Add click handlers to act as anchors for each card
 		roomListItems.click(function() {
 			window.location = $('a', this).get(0).href;
@@ -75,42 +46,9 @@ function init() {
 			$(this).html(modifiedText);
 		});
 		
-		createNav();
-	
-		// Vertically center stuff
-		orientationChange();
-		
-		// Focus on active cards
-		var activeRooms = $('#roomList .active');
-		
-		if (activeRooms.length > 0) {
-			moveRoomListTo(activeRooms.eq(0), activeRooms.eq(activeRooms.length - 1));
-		}
-		else
-		{
-			moveRoomListTo(0);
-		}
-	
-		// Fade-in cards	
-		roomListItems.each(function(index) {
-			var self = this;
-			
-			setTimeout(function() {
-				$(self).parents('li').animate({opacity: 1}, APPEAR_TIME);
-			}, index * 100);
-		});
+    // Setup switcher
+    $('#switcher').click(switchContent)
 
-/*
-		$('#content').get(0).addEventListener('touchmove', touchMove, false);
-		$('#content').get(0).addEventListener('touchstart', touchStart, false);
-		$('#content').get(0).addEventListener('touchend', touchEnd, false);
-		$('#roomList .anchor').each(function() {
-			this.addEventListener('touchstart', cancelEvent, false);
-			this.addEventListener('touchend', cancelEvent, false);
-		});
-*/
-		
-		window.onorientationchange = orientationChange;
 	}
 	else {
 		var roomListItems = $('#roomList > li > .anchor');
@@ -124,279 +62,315 @@ function init() {
 	}
 }
 
-// Center stuff when orientation changes
-function orientationChange() {
-	// Vertically center cards on page
-	var contentTop = ($(window).height() - $('header').outerHeight() - $('#content').outerHeight() - 200) * 0.6;	
-	$('#content').css('top', contentTop + $('header').outerHeight());
-	
-	// Vertically center call to action
-	var headerHeight = $('header').outerHeight();
-	$('#callToAction').css('top', headerHeight + contentTop * 0.4);
+function switchContent() {
+  var ul = $(this);
+
+  if ($('li:first-child', ul).hasClass('on')) {
+    $('li', ul).removeClass('on');
+    $('li:last-child', ul).addClass('on');
+    $('#roomContent').removeClass('on');
+    setTimeout(initTopics, 650);
+  }
+  else {
+    $('li', ul).removeClass('on');
+    $('li:first-child', ul).addClass('on');
+    $('#roomContent').addClass('on');
+    $('#topicContent').removeClass('on');
+  }
+
+  return false;
 }
 
-function cancelEvent(event) {
-	event.preventDefault();
+var WORD_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+
+var topicData = [
+	{
+		title: "HTML5",
+		rank: 1
+	},
+	{
+		title: "Gmail",
+		rank: 2
+	},
+	{
+		title: "Docs",
+		rank: 2
+	},
+	{
+		title: "Blogger",
+		rank: 3
+	},
+	{
+		title: "Hubs",
+		rank: 3
+	},
+	{
+		title: "JAPAC",
+		rank: 3
+	},
+	{
+		title: "Neon Indian",
+		rank: 4
+	},
+	{
+		title: "Eng Summit",
+		rank: 4
+	},
+	{
+		title: "Google Maps",
+		rank: 4
+	},
+	{
+		title: "MacBook Pro",
+		rank: 4
+	},
+	{
+		title: "Alan Eustace",
+		rank: 4
+	},
+	{
+		title: "Short",
+		rank: 4
+	},
+	{
+		title: "Text",
+		rank: 4
+	},
+	{
+		title: "Clock",
+		rank: 4
+	}
+];
+
+var snippetTimer = null;
+var callToActionTimer = null;
+
+function initTopics() {
+  clearTopics();
+  $.ajax({
+    url: '/r/async/topics',
+    type: 'POST',
+    data: {},
+    success: buildTopicCloud,
+    failure: function() {
+      alert("Error: could not contact server.")
+    }
+  });
+	setTimeout(fetchSnippet, 2000);
+
+  $('#topicContent .callToAction').removeClass('off');
+
+	// Fade out the call to action after 20 seconds (so that it doesn't stay on-screen while projecting)
+	callToActionTimer = setTimeout(function() {
+	  $('#topicContent .callToAction').addClass('off');
+	}, 20000);
+
+  $('#topicContent').addClass('on')
 }
 
-function touchStart(event) {
-	event.preventDefault();
+function clearTopics() {
+  clearTimeout(snippetTimer);
+  clearTimeout(callToActionTimer);
 
-	$('#content').addClass('touching');
+  $('#topicList').html('');
+  $('#topicContent .snippet').remove();
+}
 
-	if (touch == null) {
-		touch = {
-			id: event.touches[0].identifier,
-			startX: event.touches[0].pageX,
-			startContentX: $('#content').data('targetX') || 0,
-			startTime: new Date().getTime()
+function buildTopicCloud(data) {
+	var topicList = $('#topicList');
+	var positioned = [];
+
+  // Loaded from server.
+  topicData = eval('(' + data + ')');
+
+	// For each topic, position it so it doesn't overlap any others, but is close to the center
+	for (var i = 0; i < topicData.length; i++) {
+		var newTopic = $('<li class="rank' + topicData[i].rank + '"><a href="/r/chat/'
+        + topicData[i].room + '">' + topicData[i].title + '</a></li>');
+
+		newTopic.appendTo(topicList);
+
+		var x = topicList.outerWidth() / 2 - newTopic.outerWidth() / 2;
+		var y = topicList.outerHeight() / 2 - newTopic.outerHeight() / 2;
+
+
+		var angle = Math.PI * 2 / topicData.length * i;
+		var minSteps = null;
+		var minX = x;
+		var minY = y;
+		var RETRIES = 3;
+
+		// Try x = RETRIES different angles and see which allows the topic to be closest to the center
+		for (var k = 0; k < RETRIES; k++) {
+			newTopic
+				.css('left', x)
+				.css('top', y);
+
+			var numSteps = 0;
+			var newX = null;
+			var newY = null;
+
+			// While the topic is still intersecting with an existing topic
+			while (true) {
+				numSteps++;
+
+				var intersects = false;
+
+				// Check to see whether the topic is intersecting with any of the existing topics, if not: finish the while(true) loop
+				for (var j = 0; j < positioned.length; j++) {
+					if (elementsIntersect(positioned[j], newTopic)) {
+						intersects = true;
+
+						break;
+					}
+				}
+
+				if (!intersects) {
+					break;
+				}
+				else {
+					if (newX == null) {
+						newX = x;
+						newY = y;
+					}
+
+					newX += Math.cos(angle + Math.PI * 2 / RETRIES * k) * 10;
+					newY += Math.sin(angle + Math.PI * 2 / RETRIES * k) * 10;
+
+					newTopic
+						.css('left', newX)
+						.css('top', newY)
+				}
+			}
+
+			if ((minSteps == null || numSteps < minSteps) && newX != null) {
+				minSteps = numSteps;
+				minX = newX;
+				minY = newY;
+			}
 		}
+
+		newTopic
+			.css('left', minX)
+			.css('top', minY)
+
+		positioned.push(newTopic);
 	}
 }
 
-function touchEnd(event) {
-	event.preventDefault();
+function elementsIntersect(el1, el2) {
+	var MARGIN = 13;
+	var el1Offset = el1.offset();
+	var el1x1 = el1Offset.left - MARGIN;
+	var el1x2 = el1x1 + el1.outerWidth() + MARGIN * 2;
+	var el1y1 = el1Offset.top - MARGIN;
+	var el1y2 = el1y1 + el1.outerHeight() + MARGIN * 2;
 
-	for (var i = 0; i < event.changedTouches.length; i++) {
-		if (touch.id == event.changedTouches[i].identifier) {
-			$('#content').removeClass('touching');
-			$('#content').addClass('touchGlide');
-			
-			if (typeof touch.lastX != 'undefined' && typeof touch.secondLastX != 'undefined') {
-				moveRoomListTo((touch.secondLastX - touch.lastX) * 10);
-				setTimeout(function() {
-					$('#content').removeClass('touchGlide');
-				}, 500);
-			}
-			
-			touch = null;
+	var el2Offset = el2.offset();
+	var el2x1 = el2Offset.left;
+	var el2x2 = el2x1 + el2.outerWidth();
+	var el2y1 = el2Offset.top;
+	var el2y2 = el2y1 + el2.outerHeight();
+
+	// If overlapping on x axis
+	if (((el1x1 >= el2x1 && el1x1 <= el2x2) || (el2x1 >= el1x1 && el2x1 <= el1x2))) {
+		// If overlapping on y axis
+		if (((el1y1 >= el2y1 && el1y1 <= el2y2) || (el2y1 >= el1y1 && el2y1 <= el1y2))) {
+			return true;
 		}
 	}
+
+	return false;
 }
 
-function touchMove(event) {
-	event.preventDefault();
-
-	for (var i = 0; i < event.touches.length; i++) {
-		if (touch.id == event.touches[i].identifier) {
-			var targetX = touch.startContentX + (event.touches[i].pageX - touch.startX);
-
-			$('#content').css('-webkit-transform', 'translate3d(' + targetX + 'px,0px,0px)');
-			$('#content').data('targetX', targetX);
-			
-			if (typeof touch.lastX != 'undefined') {
-				touch.secondLastX = touch.lastX;
-			}
-			
-			touch.lastX = event.touches[i].pageX;
-			
-			break;
-		}
-	}
+function fetchSnippet() {
+  $.ajax({
+    url: '/r/async/random_msg',
+    type: 'POST',
+    data: {},
+    success: showSnippets,
+    failure: function() {
+      alert("Error: could not contact server.")
+    }
+  });
 }
 
-function createNav() {
-	var roomListItems = $('#roomList > li');
-	var navOl = $('nav ol');
-	var currDay = null;
-	
-	$('nav').addClass('noIndicator');
-	
-	roomListItems.each(function(index) {
-		var self = this;
-		
-		var listItem = $('<li><a href="#" title="' + $('.anchor > a', this).text() + '">' + $('.anchor > a', this).text() + '</a></li>');
-		
-		if ($(this).hasClass('active')) {
-			listItem.addClass('active');
+function showSnippets(data) {
+	var topicListItems = $('#topicList li');
+	var item = topicListItems.eq(Math.floor(Math.random() * topicListItems.length));
+
+	topicListItems.removeClass('on');
+	item.addClass('on');
+
+  // Rooms are empty. Reset Timer and leave
+  data = eval('(' + data + ')');
+  if (!data.text) {
+    snippetTimer = setTimeout(fetchSnippet, 2000);
+    return;
+  }
+
+	var randomString = data.text;
+	var author = data.author.displayName;
+
+	$('.snippet').each(function() {
+		if ($(this).css('opacity') == '0') {
+			$(this).remove();
 		}
-		
-		listItem.prependTo(navOl);
-		
-		var time = $('time', this).attr('datetime');
-		var year = time.match(/^([^\-]+)/)[1];
-		var month = time.match(/^[^\-]+-([^-]+)/)[1];
-		var day = time.match(/^[^\-]+-[^-]+-([^T]+)/)[1];
-		var hour = time.match(/T([^:]+)/)[1];
-		var minute = time.match(/:([^+]+)/)[1];
-		
-		// Create time marker for every 4th card
-		if (index % 4 == 0) {
-			var adjustedHour = parseInt(hour.replace(/^0/, ''));
-			var adjustedMinute = '';
-			
-			if (minute != '00') {
-				adjustedMinute = ':' + minute;
-			}
-			
-			if (adjustedHour <= 12) {
-				timeName = adjustedHour + adjustedMinute + 'am';
-			}
-			else {
-				timeName = (adjustedHour - 12) + adjustedMinute + 'pm';
-			}
-			
-			var timeMarker = $('<time datetime="' + time + '">' + timeName + '</time>');
-			timeMarker
-				.css('left', index * 100 / (roomListItems.length - 1) + '%')
-				.appendTo(listItem);
-		}
-		
-		// Create day marker for every new day
-		if (currDay != day) {
-			currDay = day;
-			
-			var date = new Date(year, parseInt(month) - 1, day, hour, minute);
-			var dayName = 'Sunday';
-			
-			switch (date.getDay())
-			{
-				case 1: dayName = 'Monday'; break;
-				case 2: dayName = 'Tuesday'; break;
-				case 3: dayName = 'Wednesday'; break;
-				case 4: dayName = 'Thursday'; break;
-				case 5: dayName = 'Friday'; break;
-				case 6: dayName = 'Saturday'; break;
-			}
-			
-			var monthName = 'Jan';
-			
-			switch (date.getMonth())
-			{
-				case 1: monthName = 'Feb'; break;
-				case 1: monthName = 'Mar'; break;
-				case 1: monthName = 'Apr'; break;
-				case 1: monthName = 'May'; break;
-				case 1: monthName = 'Jun'; break;
-				case 1: monthName = 'Jul'; break;
-				case 1: monthName = 'Aug'; break;
-				case 1: monthName = 'Sep'; break;
-				case 1: monthName = 'Oct'; break;
-				case 1: monthName = 'Nov'; break;
-				case 1: monthName = 'Dec'; break;
-			}
-			
-			var timeMarker = $('<time class="day" datetime="' + time + '">' + dayName + ', ' + monthName + ' ' + day + '</time>');
-			timeMarker
-				.css('left', index * 100 / (roomListItems.length - 1) + '%')
-				.appendTo(listItem);
-		}
-		
-		$('a', listItem)
-			.css('left', index * 100 / (roomListItems.length - 1) + '%')
-			.click(function() {
-				moveRoomListTo($(self));
-				
-				return false;
-			})
 	});
 
-	$('nav > div').css('maxWidth', $('li a', navOl).outerWidth() * roomListItems.length * 1.15);
-	
-	$('nav .prev').click(function() {
-		moveRoomListTo(-$(window).width() * 0.6);
-		
-		return false;
-	});
+	$('.snippet').css('opacity', 0);
 
-	$('nav .next').click(function() {
-		moveRoomListTo($(window).width() * 0.6);
-		
-		return false;
-	});
-}
+	var newSnippet = $('<div class="snippet"><img class="cloud" src="images/cloud.png" alt="" /><span class="cloudPointer1"></span><span class="cloudPointer2"></span><div class="content"><img class="avatar" src="images/avatar.png" width="48" height="48" alt="Avatar" /> <strong>' + author + '</strong> <span class="text">' + randomString + '</span></div>');
+	newSnippet.appendTo('#topicContent');
 
-function moveRoomListTo(first, second) {
-	if ($('#content').data('targetX') == null) {
-		$('#content').data('targetX', 0);
-	}
-	
-	var targetX = $('#content').data('targetX');
-	
-	if (typeof first == 'number') {
-		targetX -= first;
-	}
-	else {
-		if (typeof second == 'undefined') {
-			second = first;
-		}
+	newSnippet
+		.css('left', parseInt(item.css('left')) - newSnippet.outerWidth() / 2)
+		.css('top', parseInt(item.css('top')) - newSnippet.outerHeight() - 75)
 
-		var firstX = first.offset().left + -$('#content').offset().left;
-		var secondX = second.offset().left + second.outerWidth() + -$('#content').offset().left;
-		
-		if (secondX - firstX > $(window).width()) {
-			targetX = -firstX + (first.outerWidth() - first.width());
-		}
-		else {
-			targetX = -(firstX - ($(window).width() - (secondX - firstX)) / 2);
-		}
-	}
-	
-	if (targetX > 0) {
-		targetX = 0;
-	}
-	else if (targetX < -($('#content').outerWidth() - $(window).width())) {
-		targetX = -($('#content').outerWidth() - $(window).width());
+  var MIN_LEFT = 40;
+
+  // Snippet is off left side of screen
+	if (parseInt(newSnippet.css('left')) < MIN_LEFT) {
+	  newSnippet.css('left', parseInt(newSnippet.css('left')) + (MIN_LEFT - parseInt(newSnippet.css('left'))));
 	}
 
-	if (typeof first != 'number' && first == second) {
-		var flashTimeout = 1000;
+  var MIN_RIGHT = 30;
 
-		if (targetX == $('#content').data('targetX')) {
-			flashTimeout = 0;
-		}
-				
-		// Flash card when animation finishes
-		setTimeout(function() {
-			first.addClass('hilite');
-			
-			setTimeout(function() {
-				first.removeClass('hilite');
-			}, 2000);
-		}, flashTimeout);
+  // Snippet is off right side of screen
+	if (parseInt(newSnippet.css('left')) + newSnippet.outerWidth() > $(window).width() - MIN_RIGHT) {
+	  newSnippet.css('left', $(window).width() - newSnippet.outerWidth() - MIN_RIGHT);
 	}
 
-	if (TRANSLATE3D) {
-		$('#content').css('-webkit-transform', 'translate3d(' + targetX + 'px,0px,0px)');
-	}
-	else {
-		$('#content').css('left', targetX);
-	}
-	
-	$('#content').data('targetX', targetX);
+	// Snippet is off top of screen
+	if (parseInt(newSnippet.css('top')) < 20) {
+	  newSnippet.addClass('flipped');
 
-	// Position nav indicator correctly
-	var navIndicator = $('#navIndicator');
-	var indicatorWidth = $(window).width() / $('#content').outerWidth();
-
-	if (indicatorWidth >= 1) {
-		$('nav').addClass('noIndicator');
+	  newSnippet.css('left', parseInt(item.css('left')) + item.outerWidth() - newSnippet.outerWidth() / 2);
+	  newSnippet.css('top', parseInt(item.css('top')) + item.outerHeight() + 75);
 	}
-	else {
-		$('nav').removeClass('noIndicator');
-		
-		navIndicator
-			.css('width', indicatorWidth * ($('nav > div').width() + $('nav ol a').width()) - 2)
-		
-		// Account for the extra padding that the navIndicator needs to have at either end of the nav area
-		var totalContentMovement = $('#content').outerWidth() - $(window).width();
-		var extra = 0;
-		
-		if (-targetX > totalContentMovement / 2) {
-			extra = 0;
-		}
-		else {
-			extra = 0;
-		}
 
-		if (TRANSLATE3D) {
-			$('#content').css('-webkit-transform', 'translate3d(' + targetX + 'px,0px,0px)');
-			navIndicator
-				.css('-webkit-transform', 'translate3d(' + (-targetX / totalContentMovement * ($('nav > div').width() - navIndicator.width() + $('nav ol a').width() / 2 + 6 + 7) - 7) + 'px,0px,0px)')
-		}
-		else {
-			navIndicator
-				.css('left', -targetX / totalContentMovement * ($('nav > div').width() - navIndicator.width() + $('nav ol a').width() / 2 + 6 + 7) - 7)
-		}
-	}
+	$('.cloudPointer1', newSnippet).css('opacity', 1);
+
+	setTimeout(function() {
+  	$('.cloudPointer2', newSnippet).css('opacity', 1);
+	}, 700)
+
+	setTimeout(function() {
+  	$('.cloud', newSnippet).css('opacity', 1);
+	}, 1400)
+
+	setTimeout(function() {
+  	$('.content', newSnippet).css('opacity', 1);
+	}, 1800)
+
+	setTimeout(function() {
+  	$('.content .text span', newSnippet).each(function() {
+  	  var self = this;
+  	  setTimeout(function() {
+  	    $(self).css('opacity', 1);
+  	  }, Math.random() * 1000);
+  	});
+	}, 2100)
+
+	snippetTimer = setTimeout(fetchSnippet, 8000);
 }

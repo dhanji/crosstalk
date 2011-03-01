@@ -32,8 +32,17 @@ public class Broadcaster {
       String channelId = roomStore.channelOf(user, room);
 
       if (null != channelId) {
-        channel.sendMessage(new ChannelMessage(channelId, json));
+        try {
+          channel.sendMessage(new ChannelMessage(channelId, json));
+        } catch (Exception e) {
+          log.error("Encountered exception during broadcast.", e);
+
+          // Evict user (probably a stale channel id)
+          log.info("Evicing user {}", user.getName());
+          roomStore.leaveRoom(user, room);
+        }
       } else {
+        log.info("Stale occupancy detected, evicing user {}", user.getName());
         // stale occupancy, remove from room...
         roomStore.leaveRoom(user, room);
       }

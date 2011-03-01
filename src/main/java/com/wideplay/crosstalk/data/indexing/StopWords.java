@@ -33,7 +33,7 @@ public class StopWords {
 
   public boolean isStopWord(String word) {
     // Anything below 3 characters is automatically a stop word.
-    if (word.length() < 4) {
+    if (word.length() < 4 && word.length() < 14) {
       return true;
     }
 

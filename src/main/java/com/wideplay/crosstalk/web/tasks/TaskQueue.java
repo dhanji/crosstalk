@@ -13,6 +13,8 @@ class TaskQueue {
   public TaskQueue(@TwitterMode boolean twitterMode) {
     if (twitterMode) {
       enqueueTweetTask();
+    } else {
+      enqueueBuzzTask();
     }
     enqueueClusterTask();
   }
@@ -21,12 +23,19 @@ class TaskQueue {
     QueueFactory.getDefaultQueue().add(TaskOptions.Builder
         .withUrl("/queue/cluster")
         .method(TaskOptions.Method.GET)
-        .countdownMillis(60 * 1000 /* 1/2 hour */));
+        .countdownMillis(2 * 60 * 1000 /* 1 minute */));
   }
 
   public static void enqueueTweetTask() {
     QueueFactory.getDefaultQueue().add(TaskOptions.Builder
         .withUrl("/queue/tweets")
+        .method(TaskOptions.Method.GET)
+        .countdownMillis(4 * 60 * 1000 /* minutes */));
+  }
+
+  public static void enqueueBuzzTask() {
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder
+        .withUrl("/queue/buzz")
         .method(TaskOptions.Method.GET)
         .countdownMillis(4 * 60 * 1000 /* minutes */));
   }

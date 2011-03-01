@@ -1,6 +1,7 @@
 package com.wideplay.crosstalk.web;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.sitebricks.At;
@@ -12,6 +13,7 @@ import com.googlecode.objectify.Key;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Occupancy;
 import com.wideplay.crosstalk.data.Room;
+import com.wideplay.crosstalk.data.RoomTextIndex;
 import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.MessageStore;
 import com.wideplay.crosstalk.data.store.RoomStore;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -29,6 +32,7 @@ import java.util.UUID;
 @At("/r/async") @Service
 public class AsyncPostService {
   private static final Logger log = LoggerFactory.getLogger(AsyncPostService.class);
+  public static final int MAX_WORDS = 20;
 
   @Inject
   private CurrentUser currentUser;
@@ -157,5 +161,37 @@ public class AsyncPostService {
     }
 
     return Reply.saying().ok();
+  }
+
+  @At("/topics") @Post @Secure
+  Reply<?> topics() {
+    RoomTextIndex index = roomStore.indexOf();
+    if (null == index) {
+      return Reply.with("[]");
+    }
+    List<RoomTextIndex.WordTuple> words = Lists.newArrayList(index.getWords());
+    // Rerank into 5 buckets.
+    if (words.size() > MAX_WORDS) {
+      words = words.subList(0, MAX_WORDS);
+    }
+    words.get(0).setCount(1);
+
+    for (int i = 1; i < MAX_WORDS && i < words.size(); i++) {
+      RoomTextIndex.WordTuple wordTuple = words.get(i);
+      int bucket = (i / 5) + 2;
+      wordTuple.setCount(bucket);
+    }
+
+    return Reply.with(gson.toJson(words));
+  }
+
+  @At("/random_msg") @Post @Secure
+  Reply<?> randomMessage() {
+    List<Message> messages = messageStore.listRecent(10); //get the last 10
+    if (messages.isEmpty()) {
+      return Reply.with("{}");
+    }
+    Message msg = messages.get((int) ((Math.random() * messages.size()) % messages.size()));
+    return Reply.with(gson.toJson(msg));
   }
 }

@@ -1,9 +1,11 @@
 package com.wideplay.crosstalk.data.store;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 import com.wideplay.crosstalk.data.Attachment;
 import com.wideplay.crosstalk.data.Message;
 import com.wideplay.crosstalk.data.Room;
@@ -38,6 +40,12 @@ public class MessageStore {
         .filter("roomKey", new Key<Room>(Room.class, room.getId()))
         .order("postedOn")
         .list();
+    resolveUsers(list);
+
+    return list;
+  }
+
+  private void resolveUsers(List<Message> list) {
     Set<Key<User>> userKeys = Sets.newHashSet();
     for (Message message : list) {
       userKeys.add(message.getAuthorKey());
@@ -49,8 +57,25 @@ public class MessageStore {
     for (Message message : list) {
       message.setAuthor(users.get(message.getAuthorKey()));
     }
+  }
 
-    return list;
+  public List<Message> listRecent(int max) {
+    Query<Message> results = objectify.query(Message.class)
+        .order("postedOn");
+
+    List<Message> picks = Lists.newArrayList();
+    int i = 0;
+    for (Message pick : results) {
+      picks.add(pick);
+      if (i > max) {
+        break;
+      }
+      i++;
+    }
+
+    resolveUsers(picks);
+
+    return picks;
   }
 
   public void save(Attachment attachment) {

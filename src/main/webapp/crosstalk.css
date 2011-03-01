@@ -222,7 +222,7 @@ h1 {
 }
 
 #viewport .message.tweet .author:before {
-  content: 'Tweet from @';
+  content: 'Buzz by ';
 }
 
 .avatar {

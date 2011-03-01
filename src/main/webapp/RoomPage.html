@@ -73,7 +73,7 @@
       @Repeat(items=messages, var="post")
         <div class="message${post.tweet ? ' tweet' : ''}">
           <div class="author">${post.author.username}</div>
-          <img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>
+          <!--<img src="${post.author.avatar}" class="avatar" alt="${post.author.username}"/>-->
           <div class="content">
             <time>${__page.format(post.postedOn)}</time>
             <div class="text">${post.text}</div>
@@ -95,7 +95,7 @@
   <div id="textareaContainer" class="talkbox">
     <div class="inner">
       <div id="youLabel">You</div>
-      <img class="avatar" src="${user.avatar}" alt="${user.username} avatar" />
+      <!--<img class="avatar" src="${user.avatar}" alt="${user.username} avatar" />-->
       <textarea id="talkbox"></textarea>
       <input id="post-message" class="button" type="button" value="Post message">
       <div id="uploadButton"></div>

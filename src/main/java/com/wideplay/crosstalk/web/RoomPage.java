@@ -132,6 +132,9 @@ public class RoomPage {
     return builder.toString();
   }
 
+  public boolean getTwitterMode() {
+    return twitterMode;
+  }
   public boolean isTwitterMode() {
     return twitterMode;
   }

@@ -1,6 +1,7 @@
 package com.wideplay.crosstalk.web;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.sitebricks.At;
 import com.google.sitebricks.Show;
@@ -16,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +40,17 @@ public class HomePage {
 
   @Get
   void displayHome() {
-    rooms = roomStore.list();
+    rooms = Lists.newArrayList(roomStore.list());
+
+    // Remove the JAPAC special room.
+    Iterator<Room> iterator = rooms.iterator();
+    while (iterator.hasNext()) {
+      Room room = iterator.next();
+      if (room.getName().equals("japac")) {
+        iterator.remove();
+        break;
+      }
+    }
   }
 
   public List<Room> getRooms() {

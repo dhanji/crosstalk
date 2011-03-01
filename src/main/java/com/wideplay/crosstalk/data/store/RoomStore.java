@@ -101,6 +101,11 @@ public class RoomStore {
     return objectify.find(RoomTextIndex.class, room.getId());
   }
 
+  // Returns global index.
+  public RoomTextIndex indexOf() {
+    return objectify.find(RoomTextIndex.class, 1L);
+  }
+
   public void save(RoomTextIndex index) {
     objectify.put(index);
   }
