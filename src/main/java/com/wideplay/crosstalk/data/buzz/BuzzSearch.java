@@ -27,7 +27,7 @@ public class BuzzSearch {
     Buzz buzz = items.get((int) ((Math.random() * items.size()) % items.size()));
 
     Message message = new Message();
-    message.setId((long)buzz.id.hashCode()); // UGH HACK.
+    message.setId((long) buzz.id.hashCode()); // UGH HACK.
     message.setText(buzz.title);
     message.setPostedOn(new Date()); // set properly
     message.setTweet(true);
@@ -54,9 +54,30 @@ public class BuzzSearch {
     private String id;
     private String title;
 
+    private Links links;
+
+    public String getArbitraryPermalink() {
+      return links.alternate.isEmpty() ? null : links.alternate.get(0).href;
+    }
+
     public Actor getActor() {
       return actor;
     }
+
+    public String getId() {
+      return id;
+    }
+  }
+
+  public static class Links {
+    private List<Alternate> liked = Lists.newArrayList();
+    private List<Alternate> alternate = Lists.newArrayList();
+  }
+
+  public static class Alternate {
+    private String href;
+    private String type;
+    private String count;
   }
 
   public static class Actor {

@@ -16,6 +16,7 @@ import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
 import com.wideplay.crosstalk.web.auth.twitter.TwitterMode;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -56,7 +57,7 @@ public class RoomPage {
   private final DateFormat messageDateFormat = new SimpleDateFormat(CrosstalkModule.POST_DATE_FORMAT);
 
   @Get
-  String displayRoom(@Named("room") String roomId) {
+  String displayRoom(@Named("room") String roomId, HttpServletResponse response) {
     if (roomId == null || roomId.isEmpty()) {
       return "/";
     }
@@ -68,6 +69,8 @@ public class RoomPage {
     if (null == room) {
       return "/";
     }
+
+    response.setContentType("text/html; charset=utf-8");
 
     // Create channel token specific to this user.
     User user = getUser();

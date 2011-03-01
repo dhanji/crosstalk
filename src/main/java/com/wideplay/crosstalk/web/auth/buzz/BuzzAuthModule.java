@@ -17,6 +17,13 @@ public class BuzzAuthModule extends AbstractModule {
         filter("/r/*").through(BuzzAuthFilter.class);
         filter("/logout").through(BuzzAuthFilter.class);
         filter("/oauth/buzz").through(BuzzAuthFilter.class); // HACK!
+
+        // Secures site only to google.com users by preventing access unless logged in.
+        if (Boolean.valueOf(System.getProperty("supersecure"))) {
+          filter("/r/*").through(GoogleComSecureAuthFilter.class);
+          filter("/").through(GoogleComSecureAuthFilter.class);
+          filter("/r/room_admin").through(GoogleComSecureAuthFilter.class);
+        }
       }
 
     });

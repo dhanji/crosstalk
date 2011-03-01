@@ -13,6 +13,7 @@ import com.wideplay.crosstalk.data.User;
 import com.wideplay.crosstalk.data.store.RoomStore;
 import com.wideplay.crosstalk.data.store.UserStore;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -24,7 +25,7 @@ import java.util.Set;
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-@At("/") @Show("HomePage.xml")
+@At("/r/home") @Show("HomePage.xml")
 public class HomePage {
   @Inject
   private RoomStore roomStore;
@@ -39,7 +40,9 @@ public class HomePage {
   private DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
   @Get
-  void displayHome() {
+  void displayHome(HttpServletResponse response) {
+    response.setContentType("text/html; charset=utf-8");
+
     rooms = Lists.newArrayList(roomStore.list());
 
     // Remove the JAPAC special room.

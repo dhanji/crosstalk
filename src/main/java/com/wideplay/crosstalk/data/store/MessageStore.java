@@ -61,7 +61,7 @@ public class MessageStore {
 
   public List<Message> listRecent(int max) {
     Query<Message> results = objectify.query(Message.class)
-        .order("postedOn");
+        .order("-postedOn");
 
     List<Message> picks = Lists.newArrayList();
     int i = 0;

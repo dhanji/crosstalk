@@ -7,7 +7,7 @@
   <packaging>war</packaging>
   <version>0.1</version>
   <name>crosstalk</name>
-  <url>http://buzz.com/dhanji</url>
+  <url>http://twitter.com/dhanji</url>
 
   <repositories>
     <repository>
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>1.4</version>
+      <version>1.6</version>
     </dependency>
     <dependency>
       <groupId>com.google.sitebricks</groupId>
