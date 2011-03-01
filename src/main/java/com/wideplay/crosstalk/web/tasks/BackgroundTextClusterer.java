@@ -117,7 +117,7 @@ public class BackgroundTextClusterer {
     roomStore.save(globalIndex);
 
     // Chain next instance of this task.
-    TaskQueue.enqueueClusterTask();
+//    TaskQueue.enqueueClusterTask();
 
     return Reply.saying().ok();
   }

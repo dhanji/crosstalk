@@ -106,7 +106,7 @@ public class BackgroundBuzzService {
     }
 
     // Chain next instance of this task.
-    TaskQueue.enqueueBuzzTask();
+//    TaskQueue.enqueueBuzzTask();
 
     return Reply.saying().ok();
   }
