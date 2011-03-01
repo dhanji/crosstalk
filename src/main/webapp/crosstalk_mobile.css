@@ -1,0 +1,179 @@
+
+/* GENERAL ========================================= */
+
+html {
+	height: auto;
+}
+
+body {
+	height: auto;
+	overflow: auto;
+	margin: 0 auto;
+	padding: 0 10px 20px 10px;
+}
+
+#mobileCheck {
+	display: none;
+}
+
+#page {
+	width: auto;
+	height: auto;
+	overflow: auto;
+}
+
+
+
+
+/* HEADER ========================================= */
+
+h1
+{
+	position: static;
+	width: 100%;
+	margin: 0 0 0 -10px;
+	padding: 0 10px;
+	background-color: #ffffff;
+	text-indent: -9999px;
+	height: 41px;
+	background-image: url(/images/logo_mobile.gif);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	-webkit-box-shadow: 0 0 15px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0 0 15px rgba(0,0,0,0.5);
+	box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+#header {
+	position: static;
+	width: auto;
+	max-width: 768px;
+	height: auto;
+	margin: 0 auto;
+}
+
+#header h2 {
+	position: static;
+	margin-top: 20px;
+}
+
+#linkBack {
+	top: 13px;
+}
+
+#linkBack a {
+	color: #4D5158;
+}
+
+#tabs {
+	display: none;
+}
+
+
+
+
+/* CONTENT ========================================= */
+
+#center {
+	position: static;
+	max-width: 768px;
+	margin: 10px auto 0 auto;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+#right {
+	position: static;
+	width: auto;
+	padding: 10px 20px 16px 10px;
+	text-align: left;
+}
+
+#activity-map {
+	display: none;
+}
+
+#right h2 {
+	display: none;
+}
+
+#right h2:first-of-type {
+	display: inline;
+}
+
+.current-contributor-avatars {
+	display: inline;
+}
+
+.current-contributor-avatars img {
+	vertical-align: middle;
+}
+
+#hashtags {
+	display: none;
+}
+
+#viewport {
+	position: static;
+}
+
+#stream > .inner {
+	margin-left: 0;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	padding-bottom: 10px;
+}
+
+#viewport .message .author {
+	position: static;
+	width: auto;
+	text-align: left;
+	margin: 0;
+	border-top: 1px solid #e5e5e5;
+	padding: 1em 0 0 0;
+}
+
+#viewport .message:first-of-type .author {
+	border-top: 0 none #ffffff;
+}
+
+#viewport .message .avatar, #viewport .message.tweet .avatar {
+	top: 0;
+	margin-top: -1.9em;
+}
+
+#viewport .message time {
+	position: relative;
+	top: -1.4em;
+}
+
+#viewport .message .content {
+	padding-top: 0;
+	border-top: 0 none #ffffff !important;
+}
+
+
+
+
+/* FOOTER ========================================= */
+
+#footer {
+	max-width: 768px;
+	margin: 10px auto 0 auto;
+	position: static;
+}
+
+.talkbox {
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 106px;
+	margin: 0;
+}
