@@ -24,7 +24,7 @@ import com.wideplay.crosstalk.web.tasks.BackgroundTasksModule;
  */
 public class CrosstalkModule extends SitebricksModule {
   public static final String POST_DATE_FORMAT = "HH:mm";
-  public static final String SEGMENT_DATE_FORMAT = "HH:m0";
+  public static final String SEGMENT_DATE_FORMAT = "HH:mm";
 
   @Override
   protected void configureSitebricks() {

@@ -19,7 +19,7 @@
 <header>
   <h1>CrossTalk</h1>
   <h2>Real time chat for events</h2>
-  <p id="newRoom"><a href="#">Create a new chat room</a></p>
+  <p id="newRoom"><a href="/r/room_admin">Create a new chat room</a></p>
 </header>
 <ul id="switcher">
   <li class="on"><a href="#">Rooms</a></li>

@@ -26,6 +26,10 @@ public class BuzzSearch {
     // Pick a random buzz.
     Buzz buzz = items.get((int) ((Math.random() * items.size()) % items.size()));
 
+    return toMessage(buzz);
+  }
+
+  public static Message toMessage(Buzz buzz) {
     Message message = new Message();
     message.setId((long) buzz.id.hashCode()); // UGH HACK.
     message.setText(buzz.title);

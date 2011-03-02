@@ -69,32 +69,21 @@ public class BackgroundBuzzService {
         }
 
         term = URLEncoder.encode(term);
-        String result = buzz.call(patsy, "https://www.googleapis.com/buzz/v1/activities/search?alt=json&q=" + term);
+        String result = buzz.call(patsy, "https://www.googleapis.com/buzz/v1/activities/search?alt=json&key=AIzaSyBcWw4qozmY-WkvySl1iyuRNxQgxSh4awg&q=" + term);
         // Call to twitter can fail for various reasons.
         if (result != null && !result.isEmpty()) {
           BuzzSearch buzzes = gson.fromJson(result, BuzzSearch.Data.class).getData();
 
           // Select a tweet and broadcast.
-          Message pick = buzzes.pick();
-
-          log.info("Found {} results for {}, picking buzz...", buzzes.getItems().size(), term);
-          if (null != pick) {
-            // Skip sending this tweet if it already exists in the room.
-            Message message = messageStore.fetchMessage(pick.getId());
-            if (message != null && room.getId().equals(message.getRoomKey().getId())) {
-              continue;
+          if (room.getName().equals("japac")) {
+            for (BuzzSearch.Buzz pick : buzzes.getItems()) {
+              saveMessage(gson, room, term, buzzes, BuzzSearch.toMessage(pick));
             }
+          } else {
 
-            pick.setRoom(room);
-            broadcaster.broadcast(room, null, gson.toJson(
-                ImmutableMap.of(
-                    "rpc", "tweet",
-                    "post", pick)
-            ));
-
-            // If we liked this tweet, insert it into the room log.
-            userStore.createGhost(pick.getAuthor());
-            messageStore.save(pick);
+            Message pick = buzzes.pick();
+            if (saveMessage(gson, room, term, buzzes, pick))
+              continue;
           }
         }
 
@@ -109,6 +98,29 @@ public class BackgroundBuzzService {
 //    TaskQueue.enqueueBuzzTask();
 
     return Reply.saying().ok();
+  }
+
+  private boolean saveMessage(Gson gson, Room room, String term, BuzzSearch buzzes, Message pick) {
+    log.info("Found {} results for {}, picking buzz...", buzzes.getItems().size(), term);
+    if (null != pick) {
+      // Skip sending this tweet if it already exists in the room.
+      Message message = messageStore.fetchMessage(pick.getId());
+      if (message != null && room.getId().equals(message.getRoomKey().getId())) {
+        return true;
+      }
+
+      pick.setRoom(room);
+      broadcaster.broadcast(room, null, gson.toJson(
+          ImmutableMap.of(
+              "rpc", "tweet",
+              "post", pick)
+      ));
+
+      // If we liked this tweet, insert it into the room log.
+      userStore.createGhost(pick.getAuthor());
+      messageStore.save(pick);
+    }
+    return false;
   }
 
 }

@@ -37,6 +37,6 @@ class TaskQueue {
     QueueFactory.getDefaultQueue().add(TaskOptions.Builder
         .withUrl("/queue/buzz")
         .method(TaskOptions.Method.GET)
-        .countdownMillis(4 * 60 * 1000 /* minutes */));
+        .countdownMillis(1 * 60 * 1000 /* minutes */));
   }
 }

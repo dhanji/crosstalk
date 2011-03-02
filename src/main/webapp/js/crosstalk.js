@@ -73,7 +73,7 @@ crosstalk.init_ = function () {
   $('#post-message').click(crosstalk.post_);
   $('#talkbox').keypress(function(event) {
     // If enter key pressed, post.
-    if (event.which == 13) {
+    if (event.which == 13 && !event.shiftKey) {
       crosstalk.post_();
       return false;
     }
@@ -140,7 +140,6 @@ crosstalk.init_ = function () {
 
   // Kick off timer to refresh the index.
   setInterval(crosstalk.refreshIndex, 5 * 60 * 1000 /* 5 minutes */);
-//  setInterval(crosstalk.refreshIndex, 3 * 1000 /* 5 minutes */);
 
   // Kick off timer to ping the server with activity.
   setInterval(crosstalk.ping, 30 * 1000 /* seconds */);
