@@ -252,7 +252,7 @@ crosstalk.insertMessage_ = function(post) {
 //    + '<img class="avatar" src="' + post.author.avatar + '"/>'
     + '<div class="content">'
     + '  <time>' + post.postedOn + '</time>'
-    + linkset.text
+    + linkset.text.replace(/(\n\r)|\n|\r/g, '<br>')
     + '<div class="images"></div><div class="oembed"></div></div></div>');
 
   var msg = $('#stream .message:last'); 
